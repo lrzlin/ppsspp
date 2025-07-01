@@ -600,6 +600,8 @@ source_group(RISCV64 FILES ${CommonRISCV64})
 set(CommonLOONGARCH64
 	${CommonJIT}
 	Common/LoongArchCPUDetect.cpp
+	Common/LoongArch64Emitter.cpp
+	Common/LoongArch64Emitter.h
 	Core/MIPS/fake/FakeJit.cpp
 	Core/MIPS/fake/FakeJit.h
 )
@@ -1825,6 +1827,20 @@ list(APPEND CoreExtra
 	GPU/Common/VertexDecoderRiscV.cpp
 )
 
+list(APPEND CoreExtra
+	Core/MIPS/LoongArch64/LoongArch64Asm.cpp
+	Core/MIPS/LoongArch64/LoongArch64CompALU.cpp
+	Core/MIPS/LoongArch64/LoongArch64CompBranch.cpp
+	Core/MIPS/LoongArch64/LoongArch64CompFPU.cpp
+	Core/MIPS/LoongArch64/LoongArch64CompLoadStore.cpp
+	Core/MIPS/LoongArch64/LoongArch64CompSystem.cpp
+	Core/MIPS/LoongArch64/LoongArch64CompVec.cpp
+	Core/MIPS/LoongArch64/LoongArch64Jit.cpp
+	Core/MIPS/LoongArch64/LoongArch64Jit.h
+	Core/MIPS/LoongArch64/LoongArch64RegCache.cpp
+	Core/MIPS/LoongArch64/LoongArch64RegCache.h
+)
+
 if(NOT MOBILE_DEVICE)
 	set(CoreExtra ${CoreExtra}
 		Core/AVIDump.cpp
@@ -2810,6 +2826,7 @@ if(UNITTEST)
 		unittest/TestVertexJit.cpp
 		unittest/TestVFS.cpp
 		unittest/TestRiscVEmitter.cpp
+		unittest/TestLoongArch64Emitter.cpp
 		unittest/TestSoftwareGPUJit.cpp
 		unittest/TestThreadManager.cpp
 		unittest/JitHarness.cpp
