@@ -81,7 +81,6 @@ void LoongArch64JitBackend::CompIR_Load(IRInst inst) {
 #endif
 	} else if (jo.cachePointers || regs_.IsGPRMappedAsPointer(inst.src1)) {
 		addrReg = regs_.MapGPRAsPointer(inst.src1);
-		ERROR_LOG(Log::JIT, "addrReg=%d, inst.src1=%d", addrReg, inst.src1);
 	} else {
 		SetScratch1ToSrc1Address(inst.src1);
 		addrReg = SCRATCH1;

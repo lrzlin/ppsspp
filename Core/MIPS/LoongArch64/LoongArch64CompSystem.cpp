@@ -53,8 +53,7 @@ void LoongArch64JitBackend::CompIR_Basic(IRInst inst) {
 		if (inst.constant == 0)
 			MOVGR2FR_W(regs_.F(inst.dest), R_ZERO);
 		else
-			// QuickFLI(32, regs_.F(inst.dest), inst.constant, SCRATCH1);
-			CompIR_Generic(inst);
+			QuickFLI(32, regs_.F(inst.dest), inst.constant, SCRATCH1);
 		break;
 
 	case IROp::Downcount:
@@ -87,16 +86,80 @@ void LoongArch64JitBackend::CompIR_Transfer(IRInst inst) {
 
 	switch (inst.op) {
 	case IROp::SetCtrlVFPU:
+		regs_.SetGPRImm(IRREG_VFPU_CTRL_BASE + inst.dest, inst.constant);
+		break;
+
 	case IROp::SetCtrlVFPUReg:
+		regs_.Map(inst);
+		MOVE(regs_.R(IRREG_VFPU_CTRL_BASE + inst.dest), regs_.R(inst.src1));
+		regs_.MarkGPRDirty(IRREG_VFPU_CTRL_BASE + inst.dest, regs_.IsNormalized32(inst.src1));
+		break;
+
 	case IROp::SetCtrlVFPUFReg:
+		regs_.Map(inst);
+		MOVGR2FR_W(regs_.R(IRREG_VFPU_CTRL_BASE + inst.dest), regs_.F(inst.src1));
+		regs_.MarkGPRDirty(IRREG_VFPU_CTRL_BASE + inst.dest, true);
+		break;
+
 	case IROp::FpCondFromReg:
+		regs_.MapWithExtra(inst, { { 'G', IRREG_FPCOND, 1, MIPSMap::NOINIT } });
+		MOVE(regs_.R(IRREG_FPCOND), regs_.R(inst.src1));
+		break;
+
 	case IROp::FpCondToReg:
+		regs_.MapWithExtra(inst, { { 'G', IRREG_FPCOND, 1, MIPSMap::INIT } });
+		MOVE(regs_.R(inst.dest), regs_.R(IRREG_FPCOND));
+		regs_.MarkGPRDirty(inst.dest, regs_.IsNormalized32(IRREG_FPCOND));
+		break;
+
 	case IROp::FpCtrlFromReg:
+		regs_.MapWithExtra(inst, { { 'G', IRREG_FPCOND, 1, MIPSMap::NOINIT } });
+		LI(SCRATCH1, 0x0181FFFF);
+		AND(SCRATCH1, regs_.R(inst.src1), SCRATCH1);
+		// Extract the new fpcond value.
+		BSTRPICK_D(regs_.R(IRREG_FPCOND), regs_.R(IRREG_FPCOND), 23, 23);
+		ST_W(SCRATCH1, CTXREG, IRREG_FCR31 * 4);
+		regs_.MarkGPRDirty(IRREG_FPCOND, true);
+		break;
+
 	case IROp::FpCtrlToReg:
+		regs_.MapWithExtra(inst, { { 'G', IRREG_FPCOND, 1, MIPSMap::INIT } });
+		// Load fcr31 and clear the fpcond bit.
+		LD_W(SCRATCH1, CTXREG, IRREG_FCR31 * 4);
+		LI(SCRATCH2, ~(1 << 23));
+		AND(SCRATCH1, SCRATCH1, SCRATCH2);
+
+		// Now get the correct fpcond bit.
+		ANDI(SCRATCH2, regs_.R(IRREG_FPCOND), 1);
+		SLLI_D(SCRATCH2, SCRATCH2, 23);
+		OR(regs_.R(inst.dest), SCRATCH1, SCRATCH2);
+
+		// Also update mips->fcr31 while we're here.
+		ST_W(regs_.R(inst.dest), CTXREG, IRREG_FCR31 * 4);
+		regs_.MarkGPRDirty(inst.dest, true);
+		break;
+
 	case IROp::VfpuCtrlToReg:
+		regs_.Map(inst);
+		MOVE(regs_.R(inst.dest), regs_.R(IRREG_VFPU_CTRL_BASE + inst.src1));
+		regs_.MarkGPRDirty(inst.dest, regs_.IsNormalized32(IRREG_VFPU_CTRL_BASE + inst.src1));
+		break;
+
 	case IROp::FMovFromGPR:
+		if (regs_.IsGPRImm(inst.src1) && regs_.GetGPRImm(inst.src1) == 0) {
+			regs_.MapFPR(inst.dest, MIPSMap::NOINIT);
+			MOVGR2FR_W(regs_.F(inst.dest), R_ZERO);
+			FFINT_S_W(regs_.F(inst.dest), regs_.F(inst.dest));
+		} else {
+			regs_.Map(inst);
+			MOVGR2FR_W(regs_.F(inst.dest), regs_.R(inst.src1));
+		}
+		break;
+
 	case IROp::FMovToGPR:
-		CompIR_Generic(inst);
+		regs_.Map(inst);
+		MOVFR2GR_S(regs_.R(inst.dest), regs_.F(inst.src1));
+		regs_.MarkGPRDirty(inst.dest, true);
 		break;
 
 	default:
@@ -109,11 +172,64 @@ void LoongArch64JitBackend::CompIR_System(IRInst inst) {
 	CONDITIONAL_DISABLE;
 
 	switch (inst.op) {
-	case IROp::Interpret:
 	case IROp::Syscall:
+		FlushAll();
+		SaveStaticRegisters();
+
+		WriteDebugProfilerStatus(IRProfilerStatus::SYSCALL);
+#ifdef USE_PROFILER
+		// When profiling, we can't skip CallSyscall, since it times syscalls.
+		LI(R4, (int32_t)inst.constant);
+		QuickCallFunction(&CallSyscall, SCRATCH2);
+#else
+		// Skip the CallSyscall where possible.
+		{
+			MIPSOpcode op(inst.constant);
+			void *quickFunc = GetQuickSyscallFunc(op);
+			if (quickFunc) {
+				LI(R4, (uintptr_t)GetSyscallFuncPointer(op));
+				QuickCallFunction((const u8 *)quickFunc, SCRATCH2);
+			} else {
+				LI(R4, (int32_t)inst.constant);
+				QuickCallFunction(&CallSyscall, SCRATCH2);
+			}
+		}
+#endif
+
+		WriteDebugProfilerStatus(IRProfilerStatus::IN_JIT);
+		LoadStaticRegisters();
+		// This is always followed by an ExitToPC, where we check coreState.
+		break;
+
 	case IROp::CallReplacement:
+		FlushAll();
+		SaveStaticRegisters();
+		WriteDebugProfilerStatus(IRProfilerStatus::REPLACEMENT);
+		QuickCallFunction(GetReplacementFunc(inst.constant)->replaceFunc, SCRATCH2);
+		WriteDebugProfilerStatus(IRProfilerStatus::IN_JIT);
+		LoadStaticRegisters();
+
+		regs_.Map(inst);
+		SRAI_W(regs_.R(inst.dest), R4, 31);
+
+		// Absolute value trick: if neg, abs(x) == (x ^ -1) + 1.
+		XOR(R4, R4, regs_.R(inst.dest));
+		SUB_W(R4, R4, regs_.R(inst.dest));
+		SUB_D(DOWNCOUNTREG, DOWNCOUNTREG, R4);
+		break;
+
 	case IROp::Break:
-		CompIR_Generic(inst);
+		FlushAll();
+		// This doesn't naturally have restore/apply around it.
+		RestoreRoundingMode(true);
+		SaveStaticRegisters();
+		MovFromPC(R4);
+		QuickCallFunction(&Core_BreakException, SCRATCH2);
+		LoadStaticRegisters();
+		ApplyRoundingMode(true);
+		MovFromPC(SCRATCH1);
+		ADDI_D(SCRATCH1, SCRATCH1, 4);
+		QuickJ(R_RA, dispatcherPCInSCRATCH1_);
 		break;
 
 	default:

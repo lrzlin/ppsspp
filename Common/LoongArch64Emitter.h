@@ -569,9 +569,9 @@ public:
     void MOVGR2FR_D(LoongArch64Reg fd, LoongArch64Reg rj); // FdJ
     void MOVGR2FRH_W(LoongArch64Reg fd, LoongArch64Reg rj); // FdJ
 
-    void MOVFR2GR_S(LoongArch64Reg rj, LoongArch64Reg fd); // DFj
-    void MOVFR2GR_D(LoongArch64Reg rj, LoongArch64Reg fd); // DFj
-    void MOVFRH2GR_S(LoongArch64Reg rj, LoongArch64Reg fd); // DFj
+    void MOVFR2GR_S(LoongArch64Reg fd, LoongArch64Reg rj); // DFj
+    void MOVFR2GR_D(LoongArch64Reg fd, LoongArch64Reg rj); // DFj
+    void MOVFRH2GR_S(LoongArch64Reg fd, LoongArch64Reg rj); // DFj
 
     void MOVGR2FCSR(LoongArch64FCSR fcsr, LoongArch64Reg rj); // JUd5
     void MOVFCSR2GR(LoongArch64Reg rd, LoongArch64FCSR fcsr); // DUj5
@@ -606,6 +606,10 @@ public:
     void FSTGT_D(LoongArch64Reg fd, LoongArch64Reg rj, LoongArch64Reg rk); // FdJK
     void FSTLE_S(LoongArch64Reg fd, LoongArch64Reg rj, LoongArch64Reg rk); // FdJK
     void FSTLE_D(LoongArch64Reg fd, LoongArch64Reg rj, LoongArch64Reg rk); // FdJK
+
+    void QuickFLI(int bits, LoongArch64Reg fd, double v, LoongArch64Reg scratchReg);
+	void QuickFLI(int bits, LoongArch64Reg fd, uint32_t pattern, LoongArch64Reg scratchReg);
+	void QuickFLI(int bits, LoongArch64Reg fd, float v, LoongArch64Reg scratchReg);
 
 private:
     void SetJumpTarget(FixupBranch &branch, const void *dst);

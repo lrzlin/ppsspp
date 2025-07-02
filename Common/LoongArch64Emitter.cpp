@@ -521,9 +521,6 @@ static inline u32 EncodeDJK(Opcode32 opcode, LoongArch64Reg rd, LoongArch64Reg r
     _assert_msg_(IsGPR(rd), "DJK instruction rd must be GPR");
     _assert_msg_(IsGPR(rj), "DJK instruction rj must be GPR");
     _assert_msg_(IsGPR(rk), "DJK instruction rk must be GPR");
-    if (!IsGPR(rj)) {
-        ERROR_LOG(Log::JIT, "opcode=%x, rd=%d, rj=%d, rk=%d", opcode, rd, rj, rk);
-    }
     return (u32)opcode | ((u32)rk << 10) | ((u32)rj << 5) | (u32)rd;
 }
 
@@ -718,10 +715,10 @@ static inline u32 EncodeFdJ(Opcode32 opcode, LoongArch64Reg fd, LoongArch64Reg r
     return (u32)opcode | ((u32)rj << 5) | (u32)DecodeReg(fd);
 }
 
-static inline u32 EncodeDFj(Opcode32 opcode, LoongArch64Reg rj, LoongArch64Reg fd) {
-    _assert_msg_(IsFPR(fd), "DFj instruction fd must be FPR");
-    _assert_msg_(IsGPR(rj), "DFj instruction rj must be GPR");
-    return (u32)opcode | ((u32)rj << 5) | (u32)DecodeReg(fd);
+static inline u32 EncodeDFj(Opcode32 opcode, LoongArch64Reg rd, LoongArch64Reg fj) {
+    _assert_msg_(IsGPR(rd), "DFj instruction rd must be GPR");
+    _assert_msg_(IsFPR(fj), "DFj instruction fj must be FPR");
+    return (u32)opcode | ((u32)fj << 5) | (u32)DecodeReg(rd);
 }
 
 static inline u32 EncodeJUd5(Opcode32 opcode, LoongArch64FCSR fcsr, LoongArch64Reg rj) {
@@ -2410,16 +2407,16 @@ void LoongArch64Emitter::MOVGR2FRH_W(LoongArch64Reg fd, LoongArch64Reg rj) {
     Write32(EncodeFdJ(Opcode32::MOVGR2FRH_W, fd, rj));
 }
 
-void LoongArch64Emitter::MOVFR2GR_S(LoongArch64Reg rj, LoongArch64Reg fd) {
-    Write32(EncodeDFj(Opcode32::MOVFR2GR_S, rj, fd));
+void LoongArch64Emitter::MOVFR2GR_S(LoongArch64Reg rd, LoongArch64Reg fj) {
+    Write32(EncodeDFj(Opcode32::MOVFR2GR_S, rd, fj));
 }
 
-void LoongArch64Emitter::MOVFR2GR_D(LoongArch64Reg rj, LoongArch64Reg fd) {
-    Write32(EncodeDFj(Opcode32::MOVFR2GR_D, rj, fd));
+void LoongArch64Emitter::MOVFR2GR_D(LoongArch64Reg rd, LoongArch64Reg fj) {
+    Write32(EncodeDFj(Opcode32::MOVFR2GR_D, rd, fj));
 }
 
-void LoongArch64Emitter::MOVFRH2GR_S(LoongArch64Reg rj, LoongArch64Reg fd) {
-    Write32(EncodeDFj(Opcode32::MOVFRH2GR_S, rj, fd));
+void LoongArch64Emitter::MOVFRH2GR_S(LoongArch64Reg rd, LoongArch64Reg fj) {
+    Write32(EncodeDFj(Opcode32::MOVFRH2GR_S, rd, fj));
 }
 
 void LoongArch64Emitter::MOVGR2FCSR(LoongArch64FCSR fcsr, LoongArch64Reg rj) {
@@ -2516,6 +2513,37 @@ void LoongArch64Emitter::FSTLE_S(LoongArch64Reg fd, LoongArch64Reg rj, LoongArch
 
 void LoongArch64Emitter::FSTLE_D(LoongArch64Reg fd, LoongArch64Reg rj, LoongArch64Reg rk) {
     Write32(EncodeFdJK(Opcode32::FSTLE_D, fd, rj, rk));
+}
+
+void LoongArch64Emitter::QuickFLI(int bits, LoongArch64Reg fd, double v, LoongArch64Reg scratchReg) {
+	if (bits == 64) {
+		LI(scratchReg, v);
+		MOVGR2FR_D(fd, scratchReg);
+	} else if (bits <= 32) {
+		QuickFLI(32, fd, (float)v, scratchReg);
+	} else {
+		_assert_msg_(false, "Unsupported QuickFLI bits");
+	}
+}
+
+void LoongArch64Emitter::QuickFLI(int bits, LoongArch64Reg fd, uint32_t pattern, LoongArch64Reg scratchReg) {
+	if (bits == 32) {
+		LI(scratchReg, (int32_t)pattern);
+		MOVGR2FR_W(fd, scratchReg);
+	} else {
+		_assert_msg_(false, "Unsupported QuickFLI bits");
+	}
+}
+
+void LoongArch64Emitter::QuickFLI(int bits, LoongArch64Reg fd, float v, LoongArch64Reg scratchReg) {
+	if (bits == 64) {
+		QuickFLI(32, fd, (double)v, scratchReg);
+	} else if (bits == 32) {
+		LI(scratchReg, v);
+		MOVGR2FR_W(fd, scratchReg);
+	} else {
+		_assert_msg_(false, "Unsupported QuickFLI bits");
+	}
 }
 
 void LoongArch64CodeBlock::PoisonMemory(int offset) {
