@@ -2440,7 +2440,7 @@ void LoongArch64Emitter::MOVGR2CF(LoongArch64CFR cd, LoongArch64Reg rj) {
 }
 
 void LoongArch64Emitter::MOVCF2GR(LoongArch64Reg rd, LoongArch64CFR cj) {
-    Write32(EncodeDCj(Opcode32::MOVGR2CF, rd, cj));
+    Write32(EncodeDCj(Opcode32::MOVCF2GR, rd, cj));
 }
 
 void LoongArch64Emitter::BCEQZ(LoongArch64CFR cj, s32 offs21) {

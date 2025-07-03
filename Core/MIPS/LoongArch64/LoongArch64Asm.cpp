@@ -56,7 +56,6 @@ void LoongArch64JitBackend::GenerateFixedCode(MIPSState *mipsState) {
 
 	const u8 *disasmStart = AlignCodePage();
 	BeginWrite(GetMemoryProtectPageSize());
-
 	if (jo.useStaticAlloc) {
 		saveStaticRegisters_ = AlignCode16();
 		ST_W(DOWNCOUNTREG, CTXREG, offsetof(MIPSState, downcount));
@@ -74,7 +73,7 @@ void LoongArch64JitBackend::GenerateFixedCode(MIPSState *mipsState) {
 
 	applyRoundingMode_ = AlignCode16();
 	{
-		// Not sure if RISC-V has any flush to zero capability?  Leaving it off for now...
+		// Not sure if LoongArch64 has any flush to zero capability?  Leaving it off for now...
 		LD_WU(SCRATCH2, CTXREG, offsetof(MIPSState, fcr31));
 
 		// We can skip if the rounding mode is nearest (0) and flush is not set.

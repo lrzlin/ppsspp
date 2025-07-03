@@ -30,6 +30,8 @@ const LoongArch64Gen::LoongArch64Reg CTXREG = LoongArch64Gen::R30;
 const LoongArch64Gen::LoongArch64Reg MEMBASEREG = LoongArch64Gen::R31;
 const LoongArch64Gen::LoongArch64Reg SCRATCH1 = LoongArch64Gen::R12;
 const LoongArch64Gen::LoongArch64Reg SCRATCH2 = LoongArch64Gen::R13;
+const LoongArch64Gen::LoongArch64Reg SCRATCHF1 = LoongArch64Gen::F8;
+const LoongArch64Gen::LoongArch64Reg SCRATCHF2 = LoongArch64Gen::F9;
 
 } // namespace LoongArch64JitConstants
 

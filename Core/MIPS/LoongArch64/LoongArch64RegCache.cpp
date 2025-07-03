@@ -78,7 +78,7 @@ const int *LoongArch64RegCache::GetAllocationOrder(MIPSLoc type, MIPSMap flags, 
 		static const int allocationOrder[] = {
             F24, F25, F26, F27, F28, F29, F30, F31,
 			F0, F1, F2, F3, F4, F5, F6, F7,
-            F8, F9, F10, F11, F12, F13, F14, F15, F16, F17, F18, F19, F20, F21, F22, F23,
+            F10, F11, F12, F13, F14, F15, F16, F17, F18, F19, F20, F21, F22, F23,
 		};
 
 		count = ARRAY_SIZE(allocationOrder);
@@ -116,7 +116,7 @@ void LoongArch64RegCache::EmitLoadStaticRegisters() {
 			emit_->LD_WU((LoongArch64Reg)allocs[i].nr, CTXREG, offset);
 			emit_->ADD_D((LoongArch64Reg)allocs[i].nr, (LoongArch64Reg)allocs[i].nr, MEMBASEREG);
 		} else {
-			emit_->LD_WU((LoongArch64Reg)allocs[i].nr, CTXREG, offset);
+			emit_->LD_W((LoongArch64Reg)allocs[i].nr, CTXREG, offset);
 		}
 	}
 }
