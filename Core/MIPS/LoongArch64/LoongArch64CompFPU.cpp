@@ -83,7 +83,7 @@ void LoongArch64JitBackend::CompIR_FCondAssign(IRInst inst) {
 	FCMP_COND_S(FCC0, regs_.F(inst.src1), regs_.F(inst.src2), LoongArch64Fcond::CUN);
 	MOVCF2GR(SCRATCH1, FCC0);
 	FixupBranch unordered = BNEZ(SCRATCH1);
-	
+
 	switch (inst.op) {
 	case IROp::FMin:
 		FMIN_S(regs_.F(inst.dest), regs_.F(inst.src1), regs_.F(inst.src2));
@@ -126,7 +126,7 @@ void LoongArch64JitBackend::CompIR_FCondAssign(IRInst inst) {
 	default:
 		INVALIDOP;
 		break;
-	}		
+	}
 	MOVE(SCRATCH1, SCRATCH2);
 	SetJumpTarget(useSrc1);
 
@@ -185,18 +185,35 @@ void LoongArch64JitBackend::CompIR_FAssign(IRInst inst) {
 void LoongArch64JitBackend::CompIR_FRound(IRInst inst) {
 	CONDITIONAL_DISABLE;
 
+	regs_.Map(inst);
+	// FTINT* instruction will convert NAN to zero, tested on 3A6000.
+	QuickFLI(32, SCRATCHF1, (uint32_t)0x7fffffffl, SCRATCH1);
+	FCMP_COND_S(FCC0, regs_.F(inst.src1), regs_.F(inst.src1), LoongArch64Fcond::CUN);
+
 	switch (inst.op) {
 	case IROp::FRound:
+		FTINTRNE_W_S(regs_.F(inst.dest), regs_.F(inst.src1));
+		break;
+
 	case IROp::FTrunc:
+		FTINTRZ_W_S(regs_.F(inst.dest), regs_.F(inst.src1));
+		break;
+
 	case IROp::FCeil:
+		FTINTRP_W_S(regs_.F(inst.dest), regs_.F(inst.src1));
+		break;
+
 	case IROp::FFloor:
-		CompIR_Generic(inst);
+		FTINTRM_W_S(regs_.F(inst.dest), regs_.F(inst.src1));
 		break;
 
 	default:
 		INVALIDOP;
 		break;
 	}
+
+	// Switch to INT_MAX if it was NAN.
+	FSEL(regs_.F(inst.dest), regs_.F(inst.dest), SCRATCHF1, FCC0);
 }
 
 void LoongArch64JitBackend::CompIR_FCvt(IRInst inst) {
@@ -204,10 +221,59 @@ void LoongArch64JitBackend::CompIR_FCvt(IRInst inst) {
 
 	switch (inst.op) {
 	case IROp::FCvtWS:
-	case IROp::FCvtSW:
-	case IROp::FCvtScaledWS:
-	case IROp::FCvtScaledSW:
 		CompIR_Generic(inst);
+		break;
+
+	case IROp::FCvtSW:
+		regs_.Map(inst);
+		FFINT_S_W(regs_.F(inst.dest), regs_.F(inst.src1));
+		break;
+
+	case IROp::FCvtScaledWS:
+		regs_.Map(inst);
+		// Prepare for the NAN result
+		QuickFLI(32, SCRATCHF1, (uint32_t)(0x7FFFFFFF), SCRATCH1);
+		// Prepare the multiplier.
+		QuickFLI(32, SCRATCHF1, (float)(1UL << (inst.src2 & 0x1F)), SCRATCH1);
+
+		switch (inst.src2 >> 6) {
+		case 0: // RNE
+			FCMP_COND_S(FCC0, regs_.F(inst.src1), regs_.F(inst.src1), LoongArch64Fcond::CUN);
+			FMUL_S(regs_.F(inst.dest), regs_.F(inst.src1), SCRATCHF1);
+			FTINTRNE_W_S(regs_.F(inst.dest), regs_.F(inst.dest));
+			FSEL(regs_.F(inst.dest), regs_.F(inst.dest), SCRATCHF2, FCC0);
+			break;
+		case 1: // RZ
+			FCMP_COND_S(FCC0, regs_.F(inst.src1), regs_.F(inst.src1), LoongArch64Fcond::CUN);
+			FMUL_S(regs_.F(inst.dest), regs_.F(inst.src1), SCRATCHF1);
+			FTINTRZ_W_S(regs_.F(inst.dest), regs_.F(inst.dest));
+			FSEL(regs_.F(inst.dest), regs_.F(inst.dest), SCRATCHF2, FCC0);
+			break;
+		case 2: // RP
+			FCMP_COND_S(FCC0, regs_.F(inst.src1), regs_.F(inst.src1), LoongArch64Fcond::CUN);
+			FMUL_S(regs_.F(inst.dest), regs_.F(inst.src1), SCRATCHF1);
+			FTINTRP_W_S(regs_.F(inst.dest), regs_.F(inst.dest));
+			FSEL(regs_.F(inst.dest), regs_.F(inst.dest), SCRATCHF2, FCC0);
+			break;
+		case 3: // RM
+			FCMP_COND_S(FCC0, regs_.F(inst.src1), regs_.F(inst.src1), LoongArch64Fcond::CUN);
+			FMUL_S(regs_.F(inst.dest), regs_.F(inst.src1), SCRATCHF1);
+			FTINTRM_W_S(regs_.F(inst.dest), regs_.F(inst.dest));
+			FSEL(regs_.F(inst.dest), regs_.F(inst.dest), SCRATCHF2, FCC0);
+			break;
+		default:
+			_assert_msg_(false, "Invalid rounding mode for FCvtScaledWS");
+		}
+
+		break;
+
+	case IROp::FCvtScaledSW:
+		regs_.Map(inst);
+		FFINT_S_W(regs_.F(inst.dest), regs_.F(inst.src1));
+
+		// Pre-divide so we can avoid any actual divide.
+		QuickFLI(32, SCRATCHF1, 1.0f / (1UL << (inst.src2 & 0x1F)), SCRATCH1);
+		FMUL_S(regs_.F(inst.dest), regs_.F(inst.dest), SCRATCHF1);
 		break;
 
 	default:
@@ -221,8 +287,22 @@ void LoongArch64JitBackend::CompIR_FSat(IRInst inst) {
 
 	switch (inst.op) {
 	case IROp::FSat0_1:
+		regs_.Map(inst);
+		QuickFLI(32, SCRATCHF1, (float)1.0f, SCRATCH1);
+		// Check whether FMAX takes the larger of the two zeros, which is what we want.
+		QuickFLI(32, SCRATCHF2, (float)0.0f, SCRATCH1);
+
+		FMIN_S(regs_.F(inst.dest), regs_.F(inst.src1), SCRATCHF1);
+		FMAX_S(regs_.F(inst.dest), regs_.F(inst.dest), SCRATCHF2);
+		break;
+
 	case IROp::FSatMinus1_1:
-		CompIR_Generic(inst);
+		regs_.Map(inst);
+		QuickFLI(32, SCRATCHF1, (float)1.0f, SCRATCH1);
+		FNEG_S(SCRATCHF2, SCRATCHF1);
+
+		FMIN_S(regs_.F(inst.dest), regs_.F(inst.src1), SCRATCHF1);
+		FMAX_S(regs_.F(inst.dest), regs_.F(inst.dest), SCRATCHF2);
 		break;
 
 	default:
@@ -234,12 +314,211 @@ void LoongArch64JitBackend::CompIR_FSat(IRInst inst) {
 void LoongArch64JitBackend::CompIR_FCompare(IRInst inst) {
 	CONDITIONAL_DISABLE;
 
+	constexpr IRReg IRREG_VFPU_CC = IRREG_VFPU_CTRL_BASE + VFPU_CTRL_CC;
+
 	switch (inst.op) {
 	case IROp::FCmp:
+		switch (inst.dest) {
+		case IRFpCompareMode::False:
+			regs_.SetGPRImm(IRREG_FPCOND, 0);
+			break;
+
+		case IRFpCompareMode::EitherUnordered:
+			regs_.MapWithExtra(inst, { { 'G', IRREG_FPCOND, 1, MIPSMap::NOINIT } });
+			FCMP_COND_S(FCC0, regs_.F(inst.src1), regs_.F(inst.src2), LoongArch64Fcond::CUN);
+			MOVCF2GR(regs_.R(IRREG_FPCOND), FCC0);
+			regs_.MarkGPRDirty(IRREG_FPCOND, true);
+			break;
+
+		case IRFpCompareMode::EqualOrdered:
+			regs_.MapWithExtra(inst, { { 'G', IRREG_FPCOND, 1, MIPSMap::NOINIT } });
+			FCMP_COND_S(FCC0, regs_.F(inst.src1), regs_.F(inst.src2), LoongArch64Fcond::CEQ);
+			MOVCF2GR(regs_.R(IRREG_FPCOND), FCC0);
+			regs_.MarkGPRDirty(IRREG_FPCOND, true);
+			break;
+
+		case IRFpCompareMode::EqualUnordered:
+			regs_.MapWithExtra(inst, { { 'G', IRREG_FPCOND, 1, MIPSMap::NOINIT } });
+			FCMP_COND_S(FCC0, regs_.F(inst.src1), regs_.F(inst.src2), LoongArch64Fcond::CUEQ);
+			MOVCF2GR(regs_.R(IRREG_FPCOND), FCC0);
+			regs_.MarkGPRDirty(IRREG_FPCOND, true);
+			break;
+
+		case IRFpCompareMode::LessEqualOrdered:
+			regs_.MapWithExtra(inst, { { 'G', IRREG_FPCOND, 1, MIPSMap::NOINIT } });
+			FCMP_COND_S(FCC0, regs_.F(inst.src1), regs_.F(inst.src2), LoongArch64Fcond::CLE);
+			MOVCF2GR(regs_.R(IRREG_FPCOND), FCC0);
+			regs_.MarkGPRDirty(IRREG_FPCOND, true);
+			break;
+
+		case IRFpCompareMode::LessEqualUnordered:
+			regs_.MapWithExtra(inst, { { 'G', IRREG_FPCOND, 1, MIPSMap::NOINIT } });
+			FCMP_COND_S(FCC0, regs_.F(inst.src1), regs_.F(inst.src2), LoongArch64Fcond::CULE);
+			MOVCF2GR(regs_.R(IRREG_FPCOND), FCC0);
+			regs_.MarkGPRDirty(IRREG_FPCOND, true);
+			break;
+
+		case IRFpCompareMode::LessOrdered:
+			regs_.MapWithExtra(inst, { { 'G', IRREG_FPCOND, 1, MIPSMap::NOINIT } });
+			FCMP_COND_S(FCC0, regs_.F(inst.src1), regs_.F(inst.src2), LoongArch64Fcond::CLT);
+			MOVCF2GR(regs_.R(IRREG_FPCOND), FCC0);
+			regs_.MarkGPRDirty(IRREG_FPCOND, true);
+			break;
+
+		case IRFpCompareMode::LessUnordered:
+			regs_.MapWithExtra(inst, { { 'G', IRREG_FPCOND, 1, MIPSMap::NOINIT } });
+			FCMP_COND_S(FCC0, regs_.F(inst.src1), regs_.F(inst.src2), LoongArch64Fcond::CULT);
+			MOVCF2GR(regs_.R(IRREG_FPCOND), FCC0);
+			regs_.MarkGPRDirty(IRREG_FPCOND, true);
+			break;
+
+		default:
+			_assert_msg_(false, "Unexpected IRFpCompareMode %d", inst.dest);
+		}
+		break;
+
 	case IROp::FCmovVfpuCC:
+		regs_.MapWithExtra(inst, { { 'G', IRREG_VFPU_CC, 1, MIPSMap::INIT } });
+		if ((inst.src2 & 0xF) == 0) {
+			ANDI(SCRATCH1, regs_.R(IRREG_VFPU_CC), 1);
+		} else {
+			BSTRPICK_D(SCRATCH1, regs_.R(IRREG_VFPU_CC), inst.src2 & 0xF, inst.src2 & 0xF);
+		}
+		if ((inst.src2 >> 7) & 1) {
+			FixupBranch skip = BEQZ(SCRATCH1);
+			FMOV_S(regs_.F(inst.dest), regs_.F(inst.src1));
+			SetJumpTarget(skip);
+		} else {
+			FixupBranch skip = BNEZ(SCRATCH1);
+			FMOV_S(regs_.F(inst.dest), regs_.F(inst.src1));
+			SetJumpTarget(skip);
+		}
+		break;
+
 	case IROp::FCmpVfpuBit:
+		regs_.MapGPR(IRREG_VFPU_CC, MIPSMap::DIRTY);
+
+		switch (VCondition(inst.dest & 0xF)) {
+		case VC_EQ:
+			regs_.Map(inst);
+			FCMP_COND_S(FCC0, regs_.F(inst.src1), regs_.F(inst.src2), LoongArch64Fcond::CEQ);
+			MOVCF2GR(SCRATCH1, FCC0);
+			break;
+		case VC_NE:
+			regs_.Map(inst);
+			FCMP_COND_S(FCC0, regs_.F(inst.src1), regs_.F(inst.src2), LoongArch64Fcond::CNE);
+			MOVCF2GR(SCRATCH1, FCC0);
+			break;
+		case VC_LT:
+			regs_.Map(inst);
+			FCMP_COND_S(FCC0, regs_.F(inst.src1), regs_.F(inst.src2), LoongArch64Fcond::CLT);
+			MOVCF2GR(SCRATCH1, FCC0);
+			break;
+		case VC_LE:
+			regs_.Map(inst);
+			FCMP_COND_S(FCC0, regs_.F(inst.src1), regs_.F(inst.src2), LoongArch64Fcond::CLE);
+			MOVCF2GR(SCRATCH1, FCC0);
+			break;
+		case VC_GT:
+			regs_.Map(inst);
+			FCMP_COND_S(FCC0, regs_.F(inst.src2), regs_.F(inst.src1), LoongArch64Fcond::CLT);
+			MOVCF2GR(SCRATCH1, FCC0);
+			break;
+		case VC_GE:
+			regs_.Map(inst);
+			FCMP_COND_S(FCC0, regs_.F(inst.src2), regs_.F(inst.src1), LoongArch64Fcond::CLE);
+			MOVCF2GR(SCRATCH1, FCC0);
+			break;
+		case VC_EZ:
+		case VC_NZ:
+			regs_.MapFPR(inst.src1);
+			// Zero is either 0x20 or 0x200.
+			FCLASS_S(SCRATCHF1, regs_.F(inst.src1));
+			MOVFR2GR_S(SCRATCH1, SCRATCHF1);
+			ANDI(SCRATCH1, SCRATCH1, 0x220);
+			if ((inst.dest & 4) == 0)
+				SLTU(SCRATCH1, R_ZERO, SCRATCH1);
+			else
+				SLTUI(SCRATCH1, SCRATCH1, 1);
+			break;
+		case VC_EN:
+		case VC_NN:
+			regs_.MapFPR(inst.src1);
+			// NAN is either 0x1 or 0x2.
+			FCLASS_S(SCRATCHF1, regs_.F(inst.src1));
+			MOVFR2GR_S(SCRATCH1, SCRATCHF1);
+			ANDI(SCRATCH1, SCRATCH1, 0x3);
+			if ((inst.dest & 4) == 0)
+				SLTU(SCRATCH1, R_ZERO, SCRATCH1);
+			else
+				SLTUI(SCRATCH1, SCRATCH1, 1);
+			break;
+		case VC_EI:
+		case VC_NI:
+			regs_.MapFPR(inst.src1);
+			// Infinity is either 0x40 or 0x04.
+			FCLASS_S(SCRATCHF1, regs_.F(inst.src1));
+			MOVFR2GR_S(SCRATCH1, SCRATCHF1);
+			ANDI(SCRATCH1, SCRATCH1, 0x44);
+			if ((inst.dest & 4) == 0)
+				SLTU(SCRATCH1, R_ZERO, SCRATCH1);
+			else
+				SLTUI(SCRATCH1, SCRATCH1, 1);
+			break;
+		case VC_ES:
+		case VC_NS:
+			regs_.MapFPR(inst.src1);
+			// Infinity is either 0x40 or 0x04, NAN is either 0x1 or 0x2.
+			FCLASS_S(SCRATCHF1, regs_.F(inst.src1));
+			MOVFR2GR_S(SCRATCH1, SCRATCHF1);
+			ANDI(SCRATCH1, SCRATCH1, 0x47);
+			if ((inst.dest & 4) == 0)
+				SLTU(SCRATCH1, R_ZERO, SCRATCH1);
+			else
+				SLTUI(SCRATCH1, SCRATCH1, 1);
+			break;
+		case VC_TR:
+			LI(SCRATCH1, 1);
+			break;
+		case VC_FL:
+			LI(SCRATCH1, 0);
+			break;
+		}
+
+		ANDI(regs_.R(IRREG_VFPU_CC), regs_.R(IRREG_VFPU_CC), ~(1 << (inst.dest >> 4)));
+		if ((inst.dest >> 4) != 0)
+			SLLI_D(SCRATCH1, SCRATCH1, inst.dest >> 4);
+		OR(regs_.R(IRREG_VFPU_CC), regs_.R(IRREG_VFPU_CC), SCRATCH1);
+		break;
+
 	case IROp::FCmpVfpuAggregate:
-		CompIR_Generic(inst);
+		regs_.MapGPR(IRREG_VFPU_CC, MIPSMap::DIRTY);
+		if (inst.dest == 1) {
+			ANDI(SCRATCH1, regs_.R(IRREG_VFPU_CC), inst.dest);
+			// Negate so 1 becomes all bits set and zero stays zero, then mask to 0x30.
+			SUB_D(SCRATCH1, R_ZERO, SCRATCH1);
+			ANDI(SCRATCH1, SCRATCH1, 0x30);
+
+			// Reject the old any/all bits and replace them with our own.
+			ANDI(regs_.R(IRREG_VFPU_CC), regs_.R(IRREG_VFPU_CC), ~0x30);
+			OR(regs_.R(IRREG_VFPU_CC), regs_.R(IRREG_VFPU_CC), SCRATCH1);
+		} else {
+			ANDI(SCRATCH1, regs_.R(IRREG_VFPU_CC), inst.dest);
+			FixupBranch skipZero = BEQZ(SCRATCH1);
+
+			// To compare to inst.dest for "all", let's simply subtract it and compare to zero.
+			ADDI_D(SCRATCH1, SCRATCH1, -inst.dest);
+			SLTUI(SCRATCH1, SCRATCH1, 1);
+			// Now we combine with the "any" bit.
+			SLLI_D(SCRATCH1, SCRATCH1, 5);
+			ORI(SCRATCH1, SCRATCH1, 0x10);
+
+			SetJumpTarget(skipZero);
+
+			// Reject the old any/all bits and replace them with our own.
+			ANDI(regs_.R(IRREG_VFPU_CC), regs_.R(IRREG_VFPU_CC), ~0x30);
+			OR(regs_.R(IRREG_VFPU_CC), regs_.R(IRREG_VFPU_CC), SCRATCH1);
+		}
 		break;
 
 	default:
@@ -253,9 +532,15 @@ void LoongArch64JitBackend::CompIR_RoundingMode(IRInst inst) {
 
 	switch (inst.op) {
 	case IROp::RestoreRoundingMode:
+		RestoreRoundingMode();
+		break;
+
 	case IROp::ApplyRoundingMode:
+		ApplyRoundingMode();
+		break;
+
 	case IROp::UpdateRoundingMode:
-		CompIR_Generic(inst);
+		// Do nothing, we don't use any instructions that need updating the rounding mode.
 		break;
 
 	default:
@@ -267,13 +552,50 @@ void LoongArch64JitBackend::CompIR_RoundingMode(IRInst inst) {
 void LoongArch64JitBackend::CompIR_FSpecial(IRInst inst) {
 	CONDITIONAL_DISABLE;
 
+	auto callFuncF_F = [&](float (*func)(float)) {
+		regs_.FlushBeforeCall();
+		WriteDebugProfilerStatus(IRProfilerStatus::MATH_HELPER);
+
+		// It might be in a non-volatile register.
+		// TODO: May have to handle a transfer if SIMD here.
+		if (regs_.IsFPRMapped(inst.src1)) {
+			FMOV_S(F0, regs_.F(inst.src1));
+		} else {
+			int offset = offsetof(MIPSState, f) + inst.src1 * 4;
+			FLD_S(F10, CTXREG, offset);
+		}
+		QuickCallFunction(func, SCRATCH1);
+
+		regs_.MapFPR(inst.dest, MIPSMap::NOINIT);
+		// If it's already F0, we're done - MapReg doesn't actually overwrite the reg in that case.
+		if (regs_.F(inst.dest) != F0) {
+			FMOV_S(regs_.F(inst.dest), F0);
+		}
+
+		WriteDebugProfilerStatus(IRProfilerStatus::IN_JIT);
+	};
+
 	switch (inst.op) {
 	case IROp::FSin:
+		callFuncF_F(&vfpu_sin);
+		break;
+
 	case IROp::FCos:
+		callFuncF_F(&vfpu_cos);
+		break;
+
 	case IROp::FRSqrt:
+		regs_.Map(inst);
+		FRSQRT_S(regs_.F(inst.dest), regs_.F(inst.src1));
+		break;
+
 	case IROp::FRecip:
+		regs_.Map(inst);
+		FRECIP_S(regs_.F(inst.dest), regs_.F(inst.src1));
+		break;
+
 	case IROp::FAsin:
-		CompIR_Generic(inst);
+		callFuncF_F(&vfpu_asin);
 		break;
 
 	default:
