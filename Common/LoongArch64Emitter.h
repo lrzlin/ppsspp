@@ -63,15 +63,6 @@ enum LoongArch64Reg {
     INVALID_REG = 0xFFFFFFFF,
 };
 
-static inline LoongArch64Reg DecodeReg(LoongArch64Reg reg) { return (LoongArch64Reg)(reg & 0x1F); }
-static inline bool IsGPR(LoongArch64Reg reg) { return (reg & ~0x1F) == 0; }
-static inline bool IsFPR(LoongArch64Reg reg) { return (reg & ~0x1F) == 0x20; }
-static inline bool IsVPR(LoongArch64Reg reg) { return (reg & ~0x1F) == 0x40; }
-static inline bool IsXPR(LoongArch64Reg reg) { return (reg & ~0x1F) == 0x60; }
-static inline bool IsCFR(LoongArch64CFR cfr) { return (cfr < 8); }
-static inline bool IsFCSR(LoongArch64FCSR fcsr) { return (fcsr < 4); }
-inline LoongArch64Reg EncodeRegToV(LoongArch64Reg reg) { return DecodeReg(reg) + V0; }
-
 enum LoongArch64CFR {
     // Condition Flag Register
     // The length of CFR is 1 bit.
@@ -116,6 +107,15 @@ enum class LoongArch64Fcond {
     SOR = 0x15,
     SUNE = 0x19,
 };
+
+static inline LoongArch64Reg DecodeReg(LoongArch64Reg reg) { return (LoongArch64Reg)(reg & 0x1F); }
+static inline bool IsGPR(LoongArch64Reg reg) { return (reg & ~0x1F) == 0; }
+static inline bool IsFPR(LoongArch64Reg reg) { return (reg & ~0x1F) == 0x20; }
+static inline bool IsVPR(LoongArch64Reg reg) { return (reg & ~0x1F) == 0x40; }
+static inline bool IsXPR(LoongArch64Reg reg) { return (reg & ~0x1F) == 0x60; }
+static inline bool IsCFR(LoongArch64CFR cfr) { return (cfr < 8); }
+static inline bool IsFCSR(LoongArch64FCSR fcsr) { return (fcsr < 4); }
+inline LoongArch64Reg EncodeRegToV(LoongArch64Reg reg) { return (LoongArch64Reg)(DecodeReg(reg) + V0); }
 
 struct FixupBranch {
 	FixupBranch() {}
@@ -631,12 +631,6 @@ public:
     void VFNMSUB_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk, LoongArch64Reg va); // VdVjVkVa
     void VFCMP_CAF_S(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk); // VdVjVk
     void VFCMP_SAF_S(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk); // VdVjVk
-    void VFCMP_CLT_S(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk); // VdVjVk
-    void VFCMP_SLT_S(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk); // VdVjVk
-    void VFCMP_CEQ_S(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk); // VdVjVk
-    void VFCMP_SEQ_S(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk); // VdVjVk
-    void VFCMP_CLE_S(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk); // VdVjVk
-    void VFCMP_SLE_S(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk); // VdVjVk
     void VFCMP_CLT_S(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk); // VdVjVk
     void VFCMP_SLT_S(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk); // VdVjVk
     void VFCMP_CEQ_S(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk); // VdVjVk

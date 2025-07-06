@@ -115,6 +115,7 @@ void LoongArch64JitBackend::CompIR_VecAssign(IRInst inst) {
 
 	case IROp::Vec4Shuffle:
 		if (inst.dest == inst.src1) {
+			regs_.Map(inst);
 			// Try to find the least swaps needed to move in place, never worse than 6 FMOVs.
 			// Would be better with a vmerge and vector regs.
 			int state[4]{ 0, 1, 2, 3 };
