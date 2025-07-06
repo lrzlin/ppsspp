@@ -48,6 +48,7 @@ public:
 	LoongArch64Gen::LoongArch64Reg MapGPR(IRReg reg, MIPSMap mapFlags = MIPSMap::INIT);
 	LoongArch64Gen::LoongArch64Reg MapGPRAsPointer(IRReg reg);
 	LoongArch64Gen::LoongArch64Reg MapFPR(IRReg reg, MIPSMap mapFlags = MIPSMap::INIT);
+	LoongArch64Gen::LoongArch64Reg MapVec4(IRReg first, MIPSMap mapFlags = MIPSMap::INIT);
 
 	LoongArch64Gen::LoongArch64Reg MapWithFPRTemp(const IRInst &inst);
 
@@ -63,6 +64,7 @@ public:
 	LoongArch64Gen::LoongArch64Reg R(IRReg preg); // Returns a cached register, while checking that it's NOT mapped as a pointer
 	LoongArch64Gen::LoongArch64Reg RPtr(IRReg preg); // Returns a cached register, if it has been mapped as a pointer
 	LoongArch64Gen::LoongArch64Reg F(IRReg preg);
+	LoongArch64Gen::LoongArch64Reg V(IRReg preg);
 
 	// These are called once on startup to generate functions, that you should then call.
 	void EmitLoadStaticRegisters();

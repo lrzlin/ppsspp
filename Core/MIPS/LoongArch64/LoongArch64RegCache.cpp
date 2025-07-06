@@ -261,6 +261,17 @@ LoongArch64Reg LoongArch64RegCache::MapFPR(IRReg mipsReg, MIPSMap mapFlags) {
 	return INVALID_REG;
 }
 
+LoongArch64Reg LoongArch64RegCache::MapVec4(IRReg first, MIPSMap mapFlags) {
+	_dbg_assert_(IsValidFPR(first));
+	_dbg_assert_((first & 3) == 0);
+	_dbg_assert_(mr[first + 32].loc == MIPSLoc::MEM || mr[first + 32].loc == MIPSLoc::FREG);
+
+	IRNativeReg nreg = MapNativeReg(MIPSLoc::FREG, first + 32, 4, mapFlags);
+	if (nreg != -1)
+		return EncodeRegToV((LoongArch64Reg)nreg);
+	return INVALID_REG;
+}
+
 void LoongArch64RegCache::AdjustNativeRegAsPtr(IRNativeReg nreg, bool state) {
 	LoongArch64Reg r = (LoongArch64Reg)(R0 + nreg);
 	_assert_(r >= R0 && r <= R31);
@@ -423,4 +434,8 @@ LoongArch64Reg LoongArch64RegCache::F(IRReg mipsReg) {
 		ERROR_LOG_REPORT(Log::JIT, "Reg %i not in LoongArch64 reg", mipsReg);
 		return INVALID_REG;  // BAAAD
 	}
+}
+
+LoongArch64Reg LoongArch64RegCache::V(IRReg mipsReg) {
+	return EncodeRegToV(F(mipsReg));
 }

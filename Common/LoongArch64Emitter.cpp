@@ -423,6 +423,723 @@ enum class Opcode32 {
     FSTGT_D = 0x38768000,
     FSTLE_S = 0x38770000,
     FSTLE_D = 0x38778000,
+
+    VFMADD_S = 0x09100000,
+    VFMADD_D = 0x09200000,
+    VFMSUB_S = 0x09500000,
+    VFMSUB_D = 0x09600000,
+    VFNMADD_S = 0x09900000,
+    VFNMADD_D = 0x09a00000,
+    VFNMSUB_S = 0x09d00000,
+    VFNMSUB_D = 0x09e00000,
+    VFCMP_CAF_S = 0x0c500000,
+    VFCMP_SAF_S = 0x0c508000,
+    VFCMP_CLT_S = 0x0c510000,
+    VFCMP_SLT_S = 0x0c518000,
+    VFCMP_CEQ_S = 0x0c520000,
+    VFCMP_SEQ_S = 0x0c528000,
+    VFCMP_CLE_S = 0x0c530000,
+    VFCMP_SLE_S = 0x0c538000,
+    VFCMP_CUN_S = 0x0c540000,
+    VFCMP_SUN_S = 0x0c548000,
+    VFCMP_CULT_S = 0x0c550000,
+    VFCMP_SULT_S = 0x0c558000,
+    VFCMP_CUEQ_S = 0x0c560000,
+    VFCMP_SUEQ_S = 0x0c568000,
+    VFCMP_CULE_S = 0x0c570000,
+    VFCMP_SULE_S = 0x0c578000,
+    VFCMP_CNE_S = 0x0c580000,
+    VFCMP_SNE_S = 0x0c588000,
+    VFCMP_COR_S = 0x0c5a0000,
+    VFCMP_SOR_S = 0x0c5a8000,
+    VFCMP_CUNE_S = 0x0c5c0000,
+    VFCMP_SUNE_S = 0x0c5c8000,
+    VFCMP_CAF_D = 0x0c600000,
+    VFCMP_SAF_D = 0x0c608000,
+    VFCMP_CLT_D = 0x0c610000,
+    VFCMP_SLT_D = 0x0c618000,
+    VFCMP_CEQ_D = 0x0c620000,
+    VFCMP_SEQ_D = 0x0c628000,
+    VFCMP_CLE_D = 0x0c630000,
+    VFCMP_SLE_D = 0x0c638000,
+    VFCMP_CUN_D = 0x0c640000,
+    VFCMP_SUN_D = 0x0c648000,
+    VFCMP_CULT_D = 0x0c650000,
+    VFCMP_SULT_D = 0x0c658000,
+    VFCMP_CUEQ_D = 0x0c660000,
+    VFCMP_SUEQ_D = 0x0c668000,
+    VFCMP_CULE_D = 0x0c670000,
+    VFCMP_SULE_D = 0x0c678000,
+    VFCMP_CNE_D = 0x0c680000,
+    VFCMP_SNE_D = 0x0c688000,
+    VFCMP_COR_D = 0x0c6a0000,
+    VFCMP_SOR_D = 0x0c6a8000,
+    VFCMP_CUNE_D = 0x0c6c0000,
+    VFCMP_SUNE_D = 0x0c6c8000,
+    VBITSEL_V = 0x0d100000,
+    VSHUF_B = 0x0d500000,
+    VLD = 0x2c000000,
+    VST = 0x2c400000,
+    VLDREPL_D = 0x30100000,
+    VLDREPL_W = 0x30200000,
+    VLDREPL_H = 0x30400000,
+    VLDREPL_B = 0x30800000,
+    VSTELM_D = 0x31100000,
+    VSTELM_W = 0x31200000,
+    VSTELM_H = 0x31400000,
+    VSTELM_B = 0x31800000,
+    VLDX = 0x38400000,
+    VSTX = 0x38440000,
+    VSEQ_B = 0x70000000,
+    VSEQ_H = 0x70008000,
+    VSEQ_W = 0x70010000,
+    VSEQ_D = 0x70018000,
+    VSLE_B = 0x70020000,
+    VSLE_H = 0x70028000,
+    VSLE_W = 0x70030000,
+    VSLE_D = 0x70038000,
+    VSLE_BU = 0x70040000,
+    VSLE_HU = 0x70048000,
+    VSLE_WU = 0x70050000,
+    VSLE_DU = 0x70058000,
+    VSLT_B = 0x70060000,
+    VSLT_H = 0x70068000,
+    VSLT_W = 0x70070000,
+    VSLT_D = 0x70078000,
+    VSLT_BU = 0x70080000,
+    VSLT_HU = 0x70088000,
+    VSLT_WU = 0x70090000,
+    VSLT_DU = 0x70098000,
+    VADD_B = 0x700a0000,
+    VADD_H = 0x700a8000,
+    VADD_W = 0x700b0000,
+    VADD_D = 0x700b8000,
+    VSUB_B = 0x700c0000,
+    VSUB_H = 0x700c8000,
+    VSUB_W = 0x700d0000,
+    VSUB_D = 0x700d8000,
+    VADDWEV_H_B = 0x701e0000,
+    VADDWEV_W_H = 0x701e8000,
+    VADDWEV_D_W = 0x701f0000,
+    VADDWEV_Q_D = 0x701f8000,
+    VSUBWEV_H_B = 0x70200000,
+    VSUBWEV_W_H = 0x70208000,
+    VSUBWEV_D_W = 0x70210000,
+    VSUBWEV_Q_D = 0x70218000,
+    VADDWOD_H_B = 0x70220000,
+    VADDWOD_W_H = 0x70228000,
+    VADDWOD_D_W = 0x70230000,
+    VADDWOD_Q_D = 0x70238000,
+    VSUBWOD_H_B = 0x70240000,
+    VSUBWOD_W_H = 0x70248000,
+    VSUBWOD_D_W = 0x70250000,
+    VSUBWOD_Q_D = 0x70258000,
+    VADDWEV_H_BU = 0x702e0000,
+    VADDWEV_W_HU = 0x702e8000,
+    VADDWEV_D_WU = 0x702f0000,
+    VADDWEV_Q_DU = 0x702f8000,
+    VSUBWEV_H_BU = 0x70300000,
+    VSUBWEV_W_HU = 0x70308000,
+    VSUBWEV_D_WU = 0x70310000,
+    VSUBWEV_Q_DU = 0x70318000,
+    VADDWOD_H_BU = 0x70320000,
+    VADDWOD_W_HU = 0x70328000,
+    VADDWOD_D_WU = 0x70330000,
+    VADDWOD_Q_DU = 0x70338000,
+    VSUBWOD_H_BU = 0x70340000,
+    VSUBWOD_W_HU = 0x70348000,
+    VSUBWOD_D_WU = 0x70350000,
+    VSUBWOD_Q_DU = 0x70358000,
+    VADDWEV_H_BU_B = 0x703e0000,
+    VADDWEV_W_HU_H = 0x703e8000,
+    VADDWEV_D_WU_W = 0x703f0000,
+    VADDWEV_Q_DU_D = 0x703f8000,
+    VADDWOD_H_BU_B = 0x70400000,
+    VADDWOD_W_HU_H = 0x70408000,
+    VADDWOD_D_WU_W = 0x70410000,
+    VADDWOD_Q_DU_D = 0x70418000,
+    VSADD_B = 0x70460000,
+    VSADD_H = 0x70468000,
+    VSADD_W = 0x70470000,
+    VSADD_D = 0x70478000,
+    VSSUB_B = 0x70480000,
+    VSSUB_H = 0x70488000,
+    VSSUB_W = 0x70490000,
+    VSSUB_D = 0x70498000,
+    VSADD_BU = 0x704a0000,
+    VSADD_HU = 0x704a8000,
+    VSADD_WU = 0x704b0000,
+    VSADD_DU = 0x704b8000,
+    VSSUB_BU = 0x704c0000,
+    VSSUB_HU = 0x704c8000,
+    VSSUB_WU = 0x704d0000,
+    VSSUB_DU = 0x704d8000,
+    VHADDW_H_B = 0x70540000,
+    VHADDW_W_H = 0x70548000,
+    VHADDW_D_W = 0x70550000,
+    VHADDW_Q_D = 0x70558000,
+    VHSUBW_H_B = 0x70560000,
+    VHSUBW_W_H = 0x70568000,
+    VHSUBW_D_W = 0x70570000,
+    VHSUBW_Q_D = 0x70578000,
+    VHADDW_HU_BU = 0x70580000,
+    VHADDW_WU_HU = 0x70588000,
+    VHADDW_DU_WU = 0x70590000,
+    VHADDW_QU_DU = 0x70598000,
+    VHSUBW_HU_BU = 0x705a0000,
+    VHSUBW_WU_HU = 0x705a8000,
+    VHSUBW_DU_WU = 0x705b0000,
+    VHSUBW_QU_DU = 0x705b8000,
+    VADDA_B = 0x705c0000,
+    VADDA_H = 0x705c8000,
+    VADDA_W = 0x705d0000,
+    VADDA_D = 0x705d8000,
+    VABSD_B = 0x70600000,
+    VABSD_H = 0x70608000,
+    VABSD_W = 0x70610000,
+    VABSD_D = 0x70618000,
+    VABSD_BU = 0x70620000,
+    VABSD_HU = 0x70628000,
+    VABSD_WU = 0x70630000,
+    VABSD_DU = 0x70638000,
+    VAVG_B = 0x70640000,
+    VAVG_H = 0x70648000,
+    VAVG_W = 0x70650000,
+    VAVG_D = 0x70658000,
+    VAVG_BU = 0x70660000,
+    VAVG_HU = 0x70668000,
+    VAVG_WU = 0x70670000,
+    VAVG_DU = 0x70678000,
+    VAVGR_B = 0x70680000,
+    VAVGR_H = 0x70688000,
+    VAVGR_W = 0x70690000,
+    VAVGR_D = 0x70698000,
+    VAVGR_BU = 0x706a0000,
+    VAVGR_HU = 0x706a8000,
+    VAVGR_WU = 0x706b0000,
+    VAVGR_DU = 0x706b8000,
+    VMAX_B = 0x70700000,
+    VMAX_H = 0x70708000,
+    VMAX_W = 0x70710000,
+    VMAX_D = 0x70718000,
+    VMIN_B = 0x70720000,
+    VMIN_H = 0x70728000,
+    VMIN_W = 0x70730000,
+    VMIN_D = 0x70738000,
+    VMAX_BU = 0x70740000,
+    VMAX_HU = 0x70748000,
+    VMAX_WU = 0x70750000,
+    VMAX_DU = 0x70758000,
+    VMIN_BU = 0x70760000,
+    VMIN_HU = 0x70768000,
+    VMIN_WU = 0x70770000,
+    VMIN_DU = 0x70778000,
+    VMUL_B = 0x70840000,
+    VMUL_H = 0x70848000,
+    VMUL_W = 0x70850000,
+    VMUL_D = 0x70858000,
+    VMUH_B = 0x70860000,
+    VMUH_H = 0x70868000,
+    VMUH_W = 0x70870000,
+    VMUH_D = 0x70878000,
+    VMUH_BU = 0x70880000,
+    VMUH_HU = 0x70888000,
+    VMUH_WU = 0x70890000,
+    VMUH_DU = 0x70898000,
+    VMULWEV_H_B = 0x70900000,
+    VMULWEV_W_H = 0x70908000,
+    VMULWEV_D_W = 0x70910000,
+    VMULWEV_Q_D = 0x70918000,
+    VMULWOD_H_B = 0x70920000,
+    VMULWOD_W_H = 0x70928000,
+    VMULWOD_D_W = 0x70930000,
+    VMULWOD_Q_D = 0x70938000,
+    VMULWEV_H_BU = 0x70980000,
+    VMULWEV_W_HU = 0x70988000,
+    VMULWEV_D_WU = 0x70990000,
+    VMULWEV_Q_DU = 0x70998000,
+    VMULWOD_H_BU = 0x709a0000,
+    VMULWOD_W_HU = 0x709a8000,
+    VMULWOD_D_WU = 0x709b0000,
+    VMULWOD_Q_DU = 0x709b8000,
+    VMULWEV_H_BU_B = 0x70a00000,
+    VMULWEV_W_HU_H = 0x70a08000,
+    VMULWEV_D_WU_W = 0x70a10000,
+    VMULWEV_Q_DU_D = 0x70a18000,
+    VMULWOD_H_BU_B = 0x70a20000,
+    VMULWOD_W_HU_H = 0x70a28000,
+    VMULWOD_D_WU_W = 0x70a30000,
+    VMULWOD_Q_DU_D = 0x70a38000,
+    VMADD_B = 0x70a80000,
+    VMADD_H = 0x70a88000,
+    VMADD_W = 0x70a90000,
+    VMADD_D = 0x70a98000,
+    VMSUB_B = 0x70aa0000,
+    VMSUB_H = 0x70aa8000,
+    VMSUB_W = 0x70ab0000,
+    VMSUB_D = 0x70ab8000,
+    VMADDWEV_H_B = 0x70ac0000,
+    VMADDWEV_W_H = 0x70ac8000,
+    VMADDWEV_D_W = 0x70ad0000,
+    VMADDWEV_Q_D = 0x70ad8000,
+    VMADDWOD_H_B = 0x70ae0000,
+    VMADDWOD_W_H = 0x70ae8000,
+    VMADDWOD_D_W = 0x70af0000,
+    VMADDWOD_Q_D = 0x70af8000,
+    VMADDWEV_H_BU = 0x70b40000,
+    VMADDWEV_W_HU = 0x70b48000,
+    VMADDWEV_D_WU = 0x70b50000,
+    VMADDWEV_Q_DU = 0x70b58000,
+    VMADDWOD_H_BU = 0x70b60000,
+    VMADDWOD_W_HU = 0x70b68000,
+    VMADDWOD_D_WU = 0x70b70000,
+    VMADDWOD_Q_DU = 0x70b78000,
+    VMADDWEV_H_BU_B = 0x70bc0000,
+    VMADDWEV_W_HU_H = 0x70bc8000,
+    VMADDWEV_D_WU_W = 0x70bd0000,
+    VMADDWEV_Q_DU_D = 0x70bd8000,
+    VMADDWOD_H_BU_B = 0x70be0000,
+    VMADDWOD_W_HU_H = 0x70be8000,
+    VMADDWOD_D_WU_W = 0x70bf0000,
+    VMADDWOD_Q_DU_D = 0x70bf8000,
+    VDIV_B = 0x70e00000,
+    VDIV_H = 0x70e08000,
+    VDIV_W = 0x70e10000,
+    VDIV_D = 0x70e18000,
+    VMOD_B = 0x70e20000,
+    VMOD_H = 0x70e28000,
+    VMOD_W = 0x70e30000,
+    VMOD_D = 0x70e38000,
+    VDIV_BU = 0x70e40000,
+    VDIV_HU = 0x70e48000,
+    VDIV_WU = 0x70e50000,
+    VDIV_DU = 0x70e58000,
+    VMOD_BU = 0x70e60000,
+    VMOD_HU = 0x70e68000,
+    VMOD_WU = 0x70e70000,
+    VMOD_DU = 0x70e78000,
+    VSLL_B = 0x70e80000,
+    VSLL_H = 0x70e88000,
+    VSLL_W = 0x70e90000,
+    VSLL_D = 0x70e98000,
+    VSRL_B = 0x70ea0000,
+    VSRL_H = 0x70ea8000,
+    VSRL_W = 0x70eb0000,
+    VSRL_D = 0x70eb8000,
+    VSRA_B = 0x70ec0000,
+    VSRA_H = 0x70ec8000,
+    VSRA_W = 0x70ed0000,
+    VSRA_D = 0x70ed8000,
+    VROTR_B = 0x70ee0000,
+    VROTR_H = 0x70ee8000,
+    VROTR_W = 0x70ef0000,
+    VROTR_D = 0x70ef8000,
+    VSRLR_B = 0x70f00000,
+    VSRLR_H = 0x70f08000,
+    VSRLR_W = 0x70f10000,
+    VSRLR_D = 0x70f18000,
+    VSRAR_B = 0x70f20000,
+    VSRAR_H = 0x70f28000,
+    VSRAR_W = 0x70f30000,
+    VSRAR_D = 0x70f38000,
+    VSRLN_B_H = 0x70f48000,
+    VSRLN_H_W = 0x70f50000,
+    VSRLN_W_D = 0x70f58000,
+    VSRAN_B_H = 0x70f68000,
+    VSRAN_H_W = 0x70f70000,
+    VSRAN_W_D = 0x70f78000,
+    VSRLRN_B_H = 0x70f88000,
+    VSRLRN_H_W = 0x70f90000,
+    VSRLRN_W_D = 0x70f98000,
+    VSRARN_B_H = 0x70fa8000,
+    VSRARN_H_W = 0x70fb0000,
+    VSRARN_W_D = 0x70fb8000,
+    VSSRLN_B_H = 0x70fc8000,
+    VSSRLN_H_W = 0x70fd0000,
+    VSSRLN_W_D = 0x70fd8000,
+    VSSRAN_B_H = 0x70fe8000,
+    VSSRAN_H_W = 0x70ff0000,
+    VSSRAN_W_D = 0x70ff8000,
+    VSSRLRN_B_H = 0x71008000,
+    VSSRLRN_H_W = 0x71010000,
+    VSSRLRN_W_D = 0x71018000,
+    VSSRARN_B_H = 0x71028000,
+    VSSRARN_H_W = 0x71030000,
+    VSSRARN_W_D = 0x71038000,
+    VSSRLN_BU_H = 0x71048000,
+    VSSRLN_HU_W = 0x71050000,
+    VSSRLN_WU_D = 0x71058000,
+    VSSRAN_BU_H = 0x71068000,
+    VSSRAN_HU_W = 0x71070000,
+    VSSRAN_WU_D = 0x71078000,
+    VSSRLRN_BU_H = 0x71088000,
+    VSSRLRN_HU_W = 0x71090000,
+    VSSRLRN_WU_D = 0x71098000,
+    VSSRARN_BU_H = 0x710a8000,
+    VSSRARN_HU_W = 0x710b0000,
+    VSSRARN_WU_D = 0x710b8000,
+    VBITCLR_B = 0x710c0000,
+    VBITCLR_H = 0x710c8000,
+    VBITCLR_W = 0x710d0000,
+    VBITCLR_D = 0x710d8000,
+    VBITSET_B = 0x710e0000,
+    VBITSET_H = 0x710e8000,
+    VBITSET_W = 0x710f0000,
+    VBITSET_D = 0x710f8000,
+    VBITREV_B = 0x71100000,
+    VBITREV_H = 0x71108000,
+    VBITREV_W = 0x71110000,
+    VBITREV_D = 0x71118000,
+    VPACKEV_B = 0x71160000,
+    VPACKEV_H = 0x71168000,
+    VPACKEV_W = 0x71170000,
+    VPACKEV_D = 0x71178000,
+    VPACKOD_B = 0x71180000,
+    VPACKOD_H = 0x71188000,
+    VPACKOD_W = 0x71190000,
+    VPACKOD_D = 0x71198000,
+    VILVL_B = 0x711a0000,
+    VILVL_H = 0x711a8000,
+    VILVL_W = 0x711b0000,
+    VILVL_D = 0x711b8000,
+    VILVH_B = 0x711c0000,
+    VILVH_H = 0x711c8000,
+    VILVH_W = 0x711d0000,
+    VILVH_D = 0x711d8000,
+    VPICKEV_B = 0x711e0000,
+    VPICKEV_H = 0x711e8000,
+    VPICKEV_W = 0x711f0000,
+    VPICKEV_D = 0x711f8000,
+    VPICKOD_B = 0x71200000,
+    VPICKOD_H = 0x71208000,
+    VPICKOD_W = 0x71210000,
+    VPICKOD_D = 0x71218000,
+    VREPLVE_B = 0x71220000,
+    VREPLVE_H = 0x71228000,
+    VREPLVE_W = 0x71230000,
+    VREPLVE_D = 0x71238000,
+    VAND_V = 0x71260000,
+    VOR_V = 0x71268000,
+    VXOR_V = 0x71270000,
+    VNOR_V = 0x71278000,
+    VANDN_V = 0x71280000,
+    VORN_V = 0x71288000,
+    VFRSTP_B = 0x712b0000,
+    VFRSTP_H = 0x712b8000,
+    VADD_Q = 0x712d0000,
+    VSUB_Q = 0x712d8000,
+    VSIGNCOV_B = 0x712e0000,
+    VSIGNCOV_H = 0x712e8000,
+    VSIGNCOV_W = 0x712f0000,
+    VSIGNCOV_D = 0x712f8000,
+    VFADD_S = 0x71308000,
+    VFADD_D = 0x71310000,
+    VFSUB_S = 0x71328000,
+    VFSUB_D = 0x71330000,
+    VFMUL_S = 0x71388000,
+    VFMUL_D = 0x71390000,
+    VFDIV_S = 0x713a8000,
+    VFDIV_D = 0x713b0000,
+    VFMAX_S = 0x713c8000,
+    VFMAX_D = 0x713d0000,
+    VFMIN_S = 0x713e8000,
+    VFMIN_D = 0x713f0000,
+    VFMAXA_S = 0x71408000,
+    VFMAXA_D = 0x71410000,
+    VFMINA_S = 0x71428000,
+    VFMINA_D = 0x71430000,
+    VFCVT_H_S = 0x71460000,
+    VFCVT_S_D = 0x71468000,
+    VFFINT_S_L = 0x71480000,
+    VFTINT_W_D = 0x71498000,
+    VFTINTRM_W_D = 0x714a0000,
+    VFTINTRP_W_D = 0x714a8000,
+    VFTINTRZ_W_D = 0x714b0000,
+    VFTINTRNE_W_D = 0x714b8000,
+    VSHUF_H = 0x717a8000,
+    VSHUF_W = 0x717b0000,
+    VSHUF_D = 0x717b8000,
+    VSEQI_B = 0x72800000,
+    VSEQI_H = 0x72808000,
+    VSEQI_W = 0x72810000,
+    VSEQI_D = 0x72818000,
+    VSLEI_B = 0x72820000,
+    VSLEI_H = 0x72828000,
+    VSLEI_W = 0x72830000,
+    VSLEI_D = 0x72838000,
+    VSLEI_BU = 0x72840000,
+    VSLEI_HU = 0x72848000,
+    VSLEI_WU = 0x72850000,
+    VSLEI_DU = 0x72858000,
+    VSLTI_B = 0x72860000,
+    VSLTI_H = 0x72868000,
+    VSLTI_W = 0x72870000,
+    VSLTI_D = 0x72878000,
+    VSLTI_BU = 0x72880000,
+    VSLTI_HU = 0x72888000,
+    VSLTI_WU = 0x72890000,
+    VSLTI_DU = 0x72898000,
+    VADDI_BU = 0x728a0000,
+    VADDI_HU = 0x728a8000,
+    VADDI_WU = 0x728b0000,
+    VADDI_DU = 0x728b8000,
+    VSUBI_BU = 0x728c0000,
+    VSUBI_HU = 0x728c8000,
+    VSUBI_WU = 0x728d0000,
+    VSUBI_DU = 0x728d8000,
+    VBSLL_V = 0x728e0000,
+    VBSRL_V = 0x728e8000,
+    VMAXI_B = 0x72900000,
+    VMAXI_H = 0x72908000,
+    VMAXI_W = 0x72910000,
+    VMAXI_D = 0x72918000,
+    VMINI_B = 0x72920000,
+    VMINI_H = 0x72928000,
+    VMINI_W = 0x72930000,
+    VMINI_D = 0x72938000,
+    VMAXI_BU = 0x72940000,
+    VMAXI_HU = 0x72948000,
+    VMAXI_WU = 0x72950000,
+    VMAXI_DU = 0x72958000,
+    VMINI_BU = 0x72960000,
+    VMINI_HU = 0x72968000,
+    VMINI_WU = 0x72970000,
+    VMINI_DU = 0x72978000,
+    VFRSTPI_B = 0x729a0000,
+    VFRSTPI_H = 0x729a8000,
+    VCLO_B = 0x729c0000,
+    VCLO_H = 0x729c0400,
+    VCLO_W = 0x729c0800,
+    VCLO_D = 0x729c0c00,
+    VCLZ_B = 0x729c1000,
+    VCLZ_H = 0x729c1400,
+    VCLZ_W = 0x729c1800,
+    VCLZ_D = 0x729c1c00,
+    VPCNT_B = 0x729c2000,
+    VPCNT_H = 0x729c2400,
+    VPCNT_W = 0x729c2800,
+    VPCNT_D = 0x729c2c00,
+    VNEG_B = 0x729c3000,
+    VNEG_H = 0x729c3400,
+    VNEG_W = 0x729c3800,
+    VNEG_D = 0x729c3c00,
+    VMSKLTZ_B = 0x729c4000,
+    VMSKLTZ_H = 0x729c4400,
+    VMSKLTZ_W = 0x729c4800,
+    VMSKLTZ_D = 0x729c4c00,
+    VMSKGEZ_B = 0x729c5000,
+    VMSKNZ_B = 0x729c6000,
+    VSETEQZ_V = 0x729c9800,
+    VSETNEZ_V = 0x729c9c00,
+    VSETANYEQZ_B = 0x729ca000,
+    VSETANYEQZ_H = 0x729ca400,
+    VSETANYEQZ_W = 0x729ca800,
+    VSETANYEQZ_D = 0x729cac00,
+    VSETALLNEZ_B = 0x729cb000,
+    VSETALLNEZ_H = 0x729cb400,
+    VSETALLNEZ_W = 0x729cb800,
+    VSETALLNEZ_D = 0x729cbc00,
+    VFLOGB_S = 0x729cc400,
+    VFLOGB_D = 0x729cc800,
+    VFCLASS_S = 0x729cd400,
+    VFCLASS_D = 0x729cd800,
+    VFSQRT_S = 0x729ce400,
+    VFSQRT_D = 0x729ce800,
+    VFRECIP_S = 0x729cf400,
+    VFRECIP_D = 0x729cf800,
+    VFRSQRT_S = 0x729d0400,
+    VFRSQRT_D = 0x729d0800,
+    VFRECIPE_S = 0x729d1400,
+    VFRECIPE_D = 0x729d1800,
+    VFRSQRTE_S = 0x729d2400,
+    VFRSQRTE_D = 0x729d2800,
+    VFRINT_S = 0x729d3400,
+    VFRINT_D = 0x729d3800,
+    VFRINTRM_S = 0x729d4400,
+    VFRINTRM_D = 0x729d4800,
+    VFRINTRP_S = 0x729d5400,
+    VFRINTRP_D = 0x729d5800,
+    VFRINTRZ_S = 0x729d6400,
+    VFRINTRZ_D = 0x729d6800,
+    VFRINTRNE_S = 0x729d7400,
+    VFRINTRNE_D = 0x729d7800,
+    VFCVTL_S_H = 0x729de800,
+    VFCVTH_S_H = 0x729dec00,
+    VFCVTL_D_S = 0x729df000,
+    VFCVTH_D_S = 0x729df400,
+    VFFINT_S_W = 0x729e0000,
+    VFFINT_S_WU = 0x729e0400,
+    VFFINT_D_L = 0x729e0800,
+    VFFINT_D_LU = 0x729e0c00,
+    VFFINTL_D_W = 0x729e1000,
+    VFFINTH_D_W = 0x729e1400,
+    VFTINT_W_S = 0x729e3000,
+    VFTINT_L_D = 0x729e3400,
+    VFTINTRM_W_S = 0x729e3800,
+    VFTINTRM_L_D = 0x729e3c00,
+    VFTINTRP_W_S = 0x729e4000,
+    VFTINTRP_L_D = 0x729e4400,
+    VFTINTRZ_W_S = 0x729e4800,
+    VFTINTRZ_L_D = 0x729e4c00,
+    VFTINTRNE_W_S = 0x729e5000,
+    VFTINTRNE_L_D = 0x729e5400,
+    VFTINT_WU_S = 0x729e5800,
+    VFTINT_LU_D = 0x729e5c00,
+    VFTINTRZ_WU_S = 0x729e7000,
+    VFTINTRZ_LU_D = 0x729e7400,
+    VFTINTL_L_S = 0x729e8000,
+    VFTINTH_L_S = 0x729e8400,
+    VFTINTRML_L_S = 0x729e8800,
+    VFTINTRMH_L_S = 0x729e8c00,
+    VFTINTRPL_L_S = 0x729e9000,
+    VFTINTRPH_L_S = 0x729e9400,
+    VFTINTRZL_L_S = 0x729e9800,
+    VFTINTRZH_L_S = 0x729e9c00,
+    VFTINTRNEL_L_S = 0x729ea000,
+    VFTINTRNEH_L_S = 0x729ea400,
+    VEXTH_H_B = 0x729ee000,
+    VEXTH_W_H = 0x729ee400,
+    VEXTH_D_W = 0x729ee800,
+    VEXTH_Q_D = 0x729eec00,
+    VEXTH_HU_BU = 0x729ef000,
+    VEXTH_WU_HU = 0x729ef400,
+    VEXTH_DU_WU = 0x729ef800,
+    VEXTH_QU_DU = 0x729efc00,
+    VREPLGR2VR_B = 0x729f0000,
+    VREPLGR2VR_H = 0x729f0400,
+    VREPLGR2VR_W = 0x729f0800,
+    VREPLGR2VR_D = 0x729f0c00,
+    VROTRI_B = 0x72a02000,
+    VROTRI_H = 0x72a04000,
+    VROTRI_W = 0x72a08000,
+    VROTRI_D = 0x72a10000,
+    VSRLRI_B = 0x72a42000,
+    VSRLRI_H = 0x72a44000,
+    VSRLRI_W = 0x72a48000,
+    VSRLRI_D = 0x72a50000,
+    VSRARI_B = 0x72a82000,
+    VSRARI_H = 0x72a84000,
+    VSRARI_W = 0x72a88000,
+    VSRARI_D = 0x72a90000,
+    VINSGR2VR_B = 0x72eb8000,
+    VINSGR2VR_H = 0x72ebc000,
+    VINSGR2VR_W = 0x72ebe000,
+    VINSGR2VR_D = 0x72ebf000,
+    VPICKVE2GR_B = 0x72ef8000,
+    VPICKVE2GR_H = 0x72efc000,
+    VPICKVE2GR_W = 0x72efe000,
+    VPICKVE2GR_D = 0x72eff000,
+    VPICKVE2GR_BU = 0x72f38000,
+    VPICKVE2GR_HU = 0x72f3c000,
+    VPICKVE2GR_WU = 0x72f3e000,
+    VPICKVE2GR_DU = 0x72f3f000,
+    VREPLVEI_B = 0x72f78000,
+    VREPLVEI_H = 0x72f7c000,
+    VREPLVEI_W = 0x72f7e000,
+    VREPLVEI_D = 0x72f7f000,
+    VSLLWIL_H_B = 0x73082000,
+    VSLLWIL_W_H = 0x73084000,
+    VSLLWIL_D_W = 0x73088000,
+    VEXTL_Q_D = 0x73090000,
+    VSLLWIL_HU_BU = 0x730c2000,
+    VSLLWIL_WU_HU = 0x730c4000,
+    VSLLWIL_DU_WU = 0x730c8000,
+    VEXTL_QU_DU = 0x730d0000,
+    VBITCLRI_B = 0x73102000,
+    VBITCLRI_H = 0x73104000,
+    VBITCLRI_W = 0x73108000,
+    VBITCLRI_D = 0x73110000,
+    VBITSETI_B = 0x73142000,
+    VBITSETI_H = 0x73144000,
+    VBITSETI_W = 0x73148000,
+    VBITSETI_D = 0x73150000,
+    VBITREVI_B = 0x73182000,
+    VBITREVI_H = 0x73184000,
+    VBITREVI_W = 0x73188000,
+    VBITREVI_D = 0x73190000,
+    VSAT_B = 0x73242000,
+    VSAT_H = 0x73244000,
+    VSAT_W = 0x73248000,
+    VSAT_D = 0x73250000,
+    VSAT_BU = 0x73282000,
+    VSAT_HU = 0x73284000,
+    VSAT_WU = 0x73288000,
+    VSAT_DU = 0x73290000,
+    VSLLI_B = 0x732c2000,
+    VSLLI_H = 0x732c4000,
+    VSLLI_W = 0x732c8000,
+    VSLLI_D = 0x732d0000,
+    VSRLI_B = 0x73302000,
+    VSRLI_H = 0x73304000,
+    VSRLI_W = 0x73308000,
+    VSRLI_D = 0x73310000,
+    VSRAI_B = 0x73342000,
+    VSRAI_H = 0x73344000,
+    VSRAI_W = 0x73348000,
+    VSRAI_D = 0x73350000,
+    VSRLNI_B_H = 0x73404000,
+    VSRLNI_H_W = 0x73408000,
+    VSRLNI_W_D = 0x73410000,
+    VSRLNI_D_Q = 0x73420000,
+    VSRLRNI_B_H = 0x73444000,
+    VSRLRNI_H_W = 0x73448000,
+    VSRLRNI_W_D = 0x73450000,
+    VSRLRNI_D_Q = 0x73460000,
+    VSSRLNI_B_H = 0x73484000,
+    VSSRLNI_H_W = 0x73488000,
+    VSSRLNI_W_D = 0x73490000,
+    VSSRLNI_D_Q = 0x734a0000,
+    VSSRLNI_BU_H = 0x734c4000,
+    VSSRLNI_HU_W = 0x734c8000,
+    VSSRLNI_WU_D = 0x734d0000,
+    VSSRLNI_DU_Q = 0x734e0000,
+    VSSRLRNI_B_H = 0x73504000,
+    VSSRLRNI_H_W = 0x73508000,
+    VSSRLRNI_W_D = 0x73510000,
+    VSSRLRNI_D_Q = 0x73520000,
+    VSSRLRNI_BU_H = 0x73544000,
+    VSSRLRNI_HU_W = 0x73548000,
+    VSSRLRNI_WU_D = 0x73550000,
+    VSSRLRNI_DU_Q = 0x73560000,
+    VSRANI_B_H = 0x73584000,
+    VSRANI_H_W = 0x73588000,
+    VSRANI_W_D = 0x73590000,
+    VSRANI_D_Q = 0x735a0000,
+    VSRARNI_B_H = 0x735c4000,
+    VSRARNI_H_W = 0x735c8000,
+    VSRARNI_W_D = 0x735d0000,
+    VSRARNI_D_Q = 0x735e0000,
+    VSSRANI_B_H = 0x73604000,
+    VSSRANI_H_W = 0x73608000,
+    VSSRANI_W_D = 0x73610000,
+    VSSRANI_D_Q = 0x73620000,
+    VSSRANI_BU_H = 0x73644000,
+    VSSRANI_HU_W = 0x73648000,
+    VSSRANI_WU_D = 0x73650000,
+    VSSRANI_DU_Q = 0x73660000,
+    VSSRARNI_B_H = 0x73684000,
+    VSSRARNI_H_W = 0x73688000,
+    VSSRARNI_W_D = 0x73690000,
+    VSSRARNI_D_Q = 0x736a0000,
+    VSSRARNI_BU_H = 0x736c4000,
+    VSSRARNI_HU_W = 0x736c8000,
+    VSSRARNI_WU_D = 0x736d0000,
+    VSSRARNI_DU_Q = 0x736e0000,
+    VEXTRINS_D = 0x73800000,
+    VEXTRINS_W = 0x73840000,
+    VEXTRINS_H = 0x73880000,
+    VEXTRINS_B = 0x738c0000,
+    VSHUF4I_B = 0x73900000,
+    VSHUF4I_H = 0x73940000,
+    VSHUF4I_W = 0x73980000,
+    VSHUF4I_D = 0x739c0000,
+    VBITSELI_B = 0x73c40000,
+    VANDI_B = 0x73d00000,
+    VORI_B = 0x73d40000,
+    VXORI_B = 0x73d80000,
+    VNORI_B = 0x73dc0000,
+    VLDI = 0x73e00000,
+    VPERMI_W = 0x73e40000,
 };
 
 static inline s32 SignReduce32(s32 v, int width) {
@@ -490,14 +1207,6 @@ static inline bool SupportsLBT_MIPS() {
 static inline bool SupportsPTW() {
     return cpu_info.LOONGARCH_PTW;
 }
-
-static inline LoongArch64Reg DecodeReg(LoongArch64Reg reg) { return (LoongArch64Reg)(reg & 0x1F); }
-static inline bool IsGPR(LoongArch64Reg reg) { return (reg & ~0x1F) == 0; }
-static inline bool IsFPR(LoongArch64Reg reg) { return (reg & ~0x1F) == 0x20; }
-static inline bool IsVPR(LoongArch64Reg reg) { return (reg & ~0x1F) == 0x40; }
-static inline bool IsXPR(LoongArch64Reg reg) { return (reg & ~0x1F) == 0x60; }
-static inline bool IsCFR(LoongArch64CFR cfr) { return (cfr < 8); }
-static inline bool IsFCSR(LoongArch64FCSR fcsr) { return (fcsr < 4); }
 
 LoongArch64Emitter::LoongArch64Emitter(const u8 *ptr, u8 *writePtr) {
     SetCodePointer(ptr, writePtr);
@@ -777,6 +1486,195 @@ static inline u32 EncodeFdJK(Opcode32 opcode, LoongArch64Reg fd, LoongArch64Reg 
     return (u32)opcode | ((u32)rk << 10) | ((u32)rj << 5) | (u32)DecodeReg(fd);
 }
 
+static inline u32 EncodeVdVjVkVa(Opcode32 opcode, LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk, LoongArch64Reg va) {
+    _assert_msg_(IsVPR(vd), "VdVjVkVa instruction vd must be VPR");
+    _assert_msg_(IsVPR(vj), "VdVjVkVa instruction vj must be VPR");
+    _assert_msg_(IsVPR(vk), "VdVjVkVa instruction vk must be VPR");
+    _assert_msg_(IsVPR(va), "VdVjVkVa instruction vk must be VPR");
+    return (u32)opcode | ((u32)DecodeReg(va) << 15) | ((u32)DecodeReg(vk) << 10) | ((u32)DecodeReg(vj) << 5) | (u32)DecodeReg(vd);
+}
+
+static inline u32 EncodeVdVjVk(Opcode32 opcode, LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+    _assert_msg_(IsVPR(vd), "VdVjVk instruction vd must be VPR");
+    _assert_msg_(IsVPR(vj), "VdVjVk instruction vj must be VPR");
+    _assert_msg_(IsVPR(vk), "VdVjVk instruction vk must be VPR");
+    return (u32)opcode | ((u32)DecodeReg(vk) << 10) | ((u32)DecodeReg(vj) << 5) | (u32)DecodeReg(vd);
+}
+
+static inline u32 EncodeVdJSk12(Opcode32 opcode, LoongArch64Reg vd, LoongArch64Reg rj, s16 si12) {
+    _assert_msg_(IsVPR(vd), "VdJSk12 instruction vd must be VPR");
+    _assert_msg_(IsGPR(rj), "VdJSk12 instruction rj must be GPR");
+    return (u32)opcode | ((u32)(si12 & 0xFFF) << 10) | ((u32)DecodeReg(rj) << 5) | (u32)DecodeReg(vd);
+}
+
+static inline u32 EncodeVdJSk11(Opcode32 opcode, LoongArch64Reg vd, LoongArch64Reg rj, s16 si11) {
+    _assert_msg_(IsVPR(vd), "VdJSk11 instruction vd must be VPR");
+    _assert_msg_(IsGPR(rj), "VdJSk11 instruction rj must be GPR");
+    return (u32)opcode | ((u32)((si11 >> 1) & 0x7FF) << 10) | ((u32)DecodeReg(rj) << 5) | (u32)DecodeReg(vd);
+}
+
+static inline u32 EncodeVdJSk10(Opcode32 opcode, LoongArch64Reg vd, LoongArch64Reg rj, s16 si10) {
+    _assert_msg_(IsVPR(vd), "VdJSk10 instruction vd must be VPR");
+    _assert_msg_(IsGPR(rj), "VdJSk10 instruction rj must be GPR");
+    return (u32)opcode | ((u32)((si10 >> 2) & 0x3FF) << 10) | ((u32)DecodeReg(rj) << 5) | (u32)DecodeReg(vd);
+}
+
+static inline u32 EncodeVdJSk9(Opcode32 opcode, LoongArch64Reg vd, LoongArch64Reg rj, s16 si9) {
+    _assert_msg_(IsVPR(vd), "VdJSk9 instruction vd must be VPR");
+    _assert_msg_(IsGPR(rj), "VdJSk9 instruction rj must be GPR");
+    return (u32)opcode | ((u32)((si9 >> 3) & 0x1FF) << 10) | ((u32)DecodeReg(rj) << 5) | (u32)DecodeReg(vd);
+}
+
+static inline u32 EncodeVdJSk8Un1(Opcode32 opcode, LoongArch64Reg vd, LoongArch64Reg rj, s16 si8, u8 idx1) {
+    _assert_msg_(IsVPR(vd), "VdJSk8Un1 instruction vd must be VPR");
+    _assert_msg_(IsGPR(rj), "VdJSk8Un1 instruction rj must be GPR");
+    return (u32)opcode | (u32)((idx1 & 0x1) << 18) | ((u32)((si8 >> 3) & 0xFF) << 10) | ((u32)DecodeReg(rj) << 5) | (u32)DecodeReg(vd);
+}
+
+static inline u32 EncodeVdJSk8Un2(Opcode32 opcode, LoongArch64Reg vd, LoongArch64Reg rj, s16 si8, u8 idx2) {
+    _assert_msg_(IsVPR(vd), "VdJSk8Un2 instruction vd must be VPR");
+    _assert_msg_(IsGPR(rj), "VdJSk8Un2 instruction rj must be GPR");
+    return (u32)opcode | (u32)((idx2 & 0x3) << 18) | ((u32)((si8 >> 2) & 0xFF) << 10) | ((u32)DecodeReg(rj) << 5) | (u32)DecodeReg(vd);
+}
+
+static inline u32 EncodeVdJSk8Un3(Opcode32 opcode, LoongArch64Reg vd, LoongArch64Reg rj, s16 si8, u8 idx3) {
+    _assert_msg_(IsVPR(vd), "VdJSk8Un3 instruction vd must be VPR");
+    _assert_msg_(IsGPR(rj), "VdJSk8Un3 instruction rj must be GPR");
+    return (u32)opcode | (u32)((idx3 & 0x7) << 18) | ((u32)((si8 >> 1) & 0xFF) << 10) | ((u32)DecodeReg(rj) << 5) | (u32)DecodeReg(vd);
+}
+
+static inline u32 EncodeVdJSk8Un4(Opcode32 opcode, LoongArch64Reg vd, LoongArch64Reg rj, s16 si8, u8 idx4) {
+    _assert_msg_(IsVPR(vd), "VdJSk8Un4 instruction vd must be VPR");
+    _assert_msg_(IsGPR(rj), "VdJSk8Un4 instruction rj must be GPR");
+    return (u32)opcode | (u32)((idx4 & 0xF) << 18) | ((u32)(si8 & 0xFF) << 10) | ((u32)DecodeReg(rj) << 5) | (u32)DecodeReg(vd);
+}
+
+static inline u32 EncodeVdJK(Opcode32 opcode, LoongArch64Reg vd, LoongArch64Reg rj, LoongArch64Reg rk) {
+    _assert_msg_(IsVPR(vd), "VdJK instruction vd must be VPR");
+    _assert_msg_(IsGPR(rj), "VdJK instruction rj must be GPR");
+    _assert_msg_(IsGPR(rk), "VdJK instruction rk must be GPR");
+    return (u32)opcode | ((u32)DecodeReg(rk) << 10) | ((u32)DecodeReg(rj) << 5) | (u32)DecodeReg(vd);
+}
+
+static inline u32 EncodVdVjSk5(Opcode32 opcode, LoongArch64Reg vd, LoongArch64Reg vj, s8 si5) {
+    _assert_msg_(IsVPR(vd), "VdVjSk5 instruction vd must be VPR");
+    _assert_msg_(IsVPR(vj), "VdVjSk5 instruction vj must be VPR");
+    return (u32)opcode | ((u32)(si5 & 0x1F) << 10) | ((u32)DecodeReg(vj) << 5) | (u32)DecodeReg(vd);
+}
+
+static inline u32 EncodVdVjUk1(Opcode32 opcode, LoongArch64Reg vd, LoongArch64Reg vj, u8 ui1) {
+    _assert_msg_(IsVPR(vd), "VdVjUk1 instruction vd must be VPR");
+    _assert_msg_(IsVPR(vj), "VdVjUk1 instruction vj must be VPR");
+    return (u32)opcode | ((u32)(ui1 & 0x1) << 10) | ((u32)DecodeReg(vj) << 5) | (u32)DecodeReg(vd);
+}
+
+static inline u32 EncodVdVjUk2(Opcode32 opcode, LoongArch64Reg vd, LoongArch64Reg vj, u8 ui2) {
+    _assert_msg_(IsVPR(vd), "VdVjUk2 instruction vd must be VPR");
+    _assert_msg_(IsVPR(vj), "VdVjUk2 instruction vj must be VPR");
+    return (u32)opcode | ((u32)(ui2 & 0x3) << 10) | ((u32)DecodeReg(vj) << 5) | (u32)DecodeReg(vd);
+}
+
+static inline u32 EncodVdVjUk3(Opcode32 opcode, LoongArch64Reg vd, LoongArch64Reg vj, u8 ui3) {
+    _assert_msg_(IsVPR(vd), "VdVjUk3 instruction vd must be VPR");
+    _assert_msg_(IsVPR(vj), "VdVjUk3 instruction vj must be VPR");
+    return (u32)opcode | ((u32)(ui3 & 0x7) << 10) | ((u32)DecodeReg(vj) << 5) | (u32)DecodeReg(vd);
+}
+
+static inline u32 EncodVdVjUk4(Opcode32 opcode, LoongArch64Reg vd, LoongArch64Reg vj, u8 ui4) {
+    _assert_msg_(IsVPR(vd), "VdVjUk4 instruction vd must be VPR");
+    _assert_msg_(IsVPR(vj), "VdVjUk4 instruction vj must be VPR");
+    return (u32)opcode | ((u32)(ui4 & 0xF) << 10) | ((u32)DecodeReg(vj) << 5) | (u32)DecodeReg(vd);
+}
+
+static inline u32 EncodVdVjUk5(Opcode32 opcode, LoongArch64Reg vd, LoongArch64Reg vj, u8 ui5) {
+    _assert_msg_(IsVPR(vd), "VdVjUk5 instruction vd must be VPR");
+    _assert_msg_(IsVPR(vj), "VdVjUk5 instruction vj must be VPR");
+    return (u32)opcode | ((u32)(ui5 & 0x1F) << 10) | ((u32)DecodeReg(vj) << 5) | (u32)DecodeReg(vd);
+}
+
+static inline u32 EncodVdVjUk6(Opcode32 opcode, LoongArch64Reg vd, LoongArch64Reg vj, u8 ui6) {
+    _assert_msg_(IsVPR(vd), "VdVjUk6 instruction vd must be VPR");
+    _assert_msg_(IsVPR(vj), "VdVjUk6 instruction vj must be VPR");
+    return (u32)opcode | ((u32)(ui6 & 0x3F) << 10) | ((u32)DecodeReg(vj) << 5) | (u32)DecodeReg(vd);
+}
+
+static inline u32 EncodVdVjUk7(Opcode32 opcode, LoongArch64Reg vd, LoongArch64Reg vj, u8 ui7) {
+    _assert_msg_(IsVPR(vd), "VdVjUk7 instruction vd must be VPR");
+    _assert_msg_(IsVPR(vj), "VdVjUk7 instruction vj must be VPR");
+    return (u32)opcode | ((u32)(ui7 & 0x7F) << 10) | ((u32)DecodeReg(vj) << 5) | (u32)DecodeReg(vd);
+}
+
+static inline u32 EncodVdVjUk8(Opcode32 opcode, LoongArch64Reg vd, LoongArch64Reg vj, u8 ui8) {
+    _assert_msg_(IsVPR(vd), "VdVjUk8 instruction vd must be VPR");
+    _assert_msg_(IsVPR(vj), "VdVjUk8 instruction vj must be VPR");
+    return (u32)opcode | ((u32)(ui8 & 0xFF) << 10) | ((u32)DecodeReg(vj) << 5) | (u32)DecodeReg(vd);
+}
+
+static inline u32 EncodVdVj(Opcode32 opcode, LoongArch64Reg vd, LoongArch64Reg vj) {
+    _assert_msg_(IsVPR(vd), "VdVj instruction vd must be VPR");
+    _assert_msg_(IsVPR(vj), "VdVj instruction vj must be VPR");
+    return (u32)opcode | ((u32)DecodeReg(vj) << 5) | (u32)DecodeReg(vd);
+}
+
+static inline u32 EncodCdVj(Opcode32 opcode, LoongArch64CFR cd, LoongArch64Reg vj) {
+    _assert_msg_(IsCFR(cd), "CdVj instruction cd must be CFR");
+    _assert_msg_(IsVPR(vj), "CdVj instruction vj must be VPR");
+    return (u32)opcode | ((u32)DecodeReg(vj) << 5) | (u32)(cd & 0x7);
+}
+
+static inline u32 EncodVdJUk1(Opcode32 opcode, LoongArch64Reg vd, LoongArch64Reg rj, u8 ui1) {
+    _assert_msg_(IsVPR(vd), "VdJUk1 instruction vd must be VPR");
+    _assert_msg_(IsGPR(rj), "VdJUk1 instruction rj must be GPR");
+    return (u32)opcode | ((u32)(ui1 & 0x1) << 10) | ((u32)DecodeReg(rj) << 5) | (u32)DecodeReg(vd);
+}
+
+static inline u32 EncodVdJUk2(Opcode32 opcode, LoongArch64Reg vd, LoongArch64Reg rj, u8 ui2) {
+    _assert_msg_(IsVPR(vd), "VdJUk2 instruction vd must be VPR");
+    _assert_msg_(IsGPR(rj), "VdJUk2 instruction rj must be GPR");
+    return (u32)opcode | ((u32)(ui2 & 0x3) << 10) | ((u32)DecodeReg(rj) << 5) | (u32)DecodeReg(vd);
+}
+
+static inline u32 EncodVdJUk3(Opcode32 opcode, LoongArch64Reg vd, LoongArch64Reg rj, u8 ui3) {
+    _assert_msg_(IsVPR(vd), "VdJUk3 instruction vd must be VPR");
+    _assert_msg_(IsGPR(rj), "VdJUk3 instruction rj must be GPR");
+    return (u32)opcode | ((u32)(ui3 & 0x7) << 10) | ((u32)DecodeReg(rj) << 5) | (u32)DecodeReg(vd);
+}
+
+static inline u32 EncodVdJUk4(Opcode32 opcode, LoongArch64Reg vd, LoongArch64Reg rj, u8 ui4) {
+    _assert_msg_(IsVPR(vd), "VdJUk4 instruction vd must be VPR");
+    _assert_msg_(IsGPR(rj), "VdJUk4 instruction rj must be GPR");
+    return (u32)opcode | ((u32)(ui4 & 0xF) << 10) | ((u32)DecodeReg(rj) << 5) | (u32)DecodeReg(vd);
+}
+
+static inline u32 EncodDVjUk1(Opcode32 opcode, LoongArch64Reg rd, LoongArch64Reg vj, u8 ui1) {
+    _assert_msg_(IsGPR(rd), "DVjUk1 instruction rd must be GPR");
+    _assert_msg_(IsVPR(vj), "DVjUk1 instruction vj must be VPR");
+    return (u32)opcode | ((u32)(ui1 & 0x1) << 10) | ((u32)DecodeReg(vj) << 5) | (u32)DecodeReg(rd);
+}
+
+static inline u32 EncodDVjUk2(Opcode32 opcode, LoongArch64Reg rd, LoongArch64Reg vj, u8 ui2) {
+    _assert_msg_(IsGPR(rd), "DVjUk2 instruction rd must be GPR");
+    _assert_msg_(IsVPR(vj), "DVjUk2 instruction vj must be VPR");
+    return (u32)opcode | ((u32)(ui2 & 0x3) << 10) | ((u32)DecodeReg(vj) << 5) | (u32)DecodeReg(rd);
+}
+
+static inline u32 EncodDVjUk3(Opcode32 opcode, LoongArch64Reg rd, LoongArch64Reg vj, u8 ui3) {
+    _assert_msg_(IsGPR(rd), "DVjUk3 instruction rd must be GPR");
+    _assert_msg_(IsVPR(vj), "DVjUk3 instruction vj must be VPR");
+    return (u32)opcode | ((u32)(ui3 & 0x7) << 10) | ((u32)DecodeReg(vj) << 5) | (u32)DecodeReg(rd);
+}
+
+static inline u32 EncodDVjUk4(Opcode32 opcode, LoongArch64Reg rd, LoongArch64Reg vj, u8 ui4) {
+    _assert_msg_(IsGPR(rd), "DVjUk4 instruction rd must be GPR");
+    _assert_msg_(IsVPR(vj), "DVjUk4 instruction vj must be VPR");
+    return (u32)opcode | ((u32)(ui4 & 0xF) << 10) | ((u32)DecodeReg(vj) << 5) | (u32)DecodeReg(rd);
+}
+
+static inline u32 EncodeVdSj13(Opcode32 opcode, LoongArch64Reg vd, s16 i13) {
+    _assert_msg_(IsVPR(vd), "VdJUk4 instruction vd must be VPR");
+    return (u32)opcode | ((u32)(i13 & 0x1FFF) << 5) | (u32)DecodeReg(vd);
+}
+
 void LoongArch64Emitter::ReserveCodeSpace(u32 bytes)
 {
 	for (u32 i = 0; i < bytes / 4; i++)
@@ -910,12 +1808,12 @@ void LoongArch64Emitter::QuickJump(LoongArch64Reg scratchreg, LoongArch64Reg rd,
 	if (!JumpInRange(GetCodePointer(), dst)) {
 		int32_t lower = (int32_t)SignReduce64((int64_t)dst, 18);
 		static_assert(sizeof(intptr_t) <= sizeof(int64_t));
-        LI(scratchreg, dst - lower);
+ LI(scratchreg, dst - lower);
 		JIRL(rd, scratchreg, lower);
 	} else if (rd != R_ZERO) {
 		BL(dst);
 	} else {
-        B(dst);
+ B(dst);
     }
 }
 
@@ -930,16 +1828,16 @@ void LoongArch64Emitter::SetRegToImmediate(LoongArch64Reg rd, uint64_t value) {
 	}
 
 	if (svalue <= 0x7fffffffl && svalue >= -0x80000000l) {
-        // Use lu12i.w/ori to load 32-bits immediate.
+ // Use lu12i.w/ori to load 32-bits immediate.
 		LU12I_W(rd, (s32)((svalue & 0xffffffff) >> 12));
 		ORI(rd, rd, (s16)(svalue & 0xFFF));
-        return;
+ return;
 	} else if (svalue <= 0x7ffffffffffffl && svalue >= -0x8000000000000l) {
-        // Use lu12i.w/ori/lu32i.d to load 52-bits immediate.
+ // Use lu12i.w/ori/lu32i.d to load 52-bits immediate.
 		LU12I_W(rd, (s32)((svalue & 0xffffffff) >> 12));
 		ORI(rd, rd, (s16)(svalue & 0xFFF));
 		LU32I_D(rd, (s32)((svalue >> 32) & 0xfffff));
-        return;
+ return;
 	}
     // Use lu12i.w/ori/lu32i.d/lu52i.d to load 64-bits immediate.
 	LU12I_W(rd, (s32)((svalue & 0xffffffff) >> 12));
