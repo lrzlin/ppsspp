@@ -215,7 +215,7 @@ LoongArch64Reg LoongArch64RegCache::TryMapTempImm(IRReg r) {
 			return R_ZERO;
 		}
 
-		// Try our luck - check for an exact match in another rvreg.
+		// Try our luck - check for an exact match in another LoongArch reg.
 		for (int i = 0; i < TOTAL_MAPPABLE_IRREGS; ++i) {
 			if (mr[i].loc == MIPSLoc::REG_IMM && mr[i].imm == mr[r].imm) {
 				// Awesome, let's just use this reg.

@@ -73,7 +73,7 @@ void LoongArch64JitBackend::GenerateFixedCode(MIPSState *mipsState) {
 
 	applyRoundingMode_ = AlignCode16();
 	{
-		// Not sure if LoongArch64 has any flush to zero capability?  Leaving it off for now...
+		// LoongArch64 does not have any flush to zero capability, so leaving it off
 		LD_WU(SCRATCH2, CTXREG, offsetof(MIPSState, fcr31));
 
 		// We can skip if the rounding mode is nearest (0) and flush is not set.

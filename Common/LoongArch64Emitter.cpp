@@ -1556,115 +1556,128 @@ static inline u32 EncodeVdJK(Opcode32 opcode, LoongArch64Reg vd, LoongArch64Reg 
     return (u32)opcode | ((u32)DecodeReg(rk) << 10) | ((u32)DecodeReg(rj) << 5) | (u32)DecodeReg(vd);
 }
 
-static inline u32 EncodVdVjSk5(Opcode32 opcode, LoongArch64Reg vd, LoongArch64Reg vj, s8 si5) {
+static inline u32 EncodeVdVjSk5(Opcode32 opcode, LoongArch64Reg vd, LoongArch64Reg vj, s8 si5) {
     _assert_msg_(IsVPR(vd), "VdVjSk5 instruction vd must be VPR");
     _assert_msg_(IsVPR(vj), "VdVjSk5 instruction vj must be VPR");
     return (u32)opcode | ((u32)(si5 & 0x1F) << 10) | ((u32)DecodeReg(vj) << 5) | (u32)DecodeReg(vd);
 }
 
-static inline u32 EncodVdVjUk1(Opcode32 opcode, LoongArch64Reg vd, LoongArch64Reg vj, u8 ui1) {
+static inline u32 EncodeVdVjUk1(Opcode32 opcode, LoongArch64Reg vd, LoongArch64Reg vj, u8 ui1) {
     _assert_msg_(IsVPR(vd), "VdVjUk1 instruction vd must be VPR");
     _assert_msg_(IsVPR(vj), "VdVjUk1 instruction vj must be VPR");
     return (u32)opcode | ((u32)(ui1 & 0x1) << 10) | ((u32)DecodeReg(vj) << 5) | (u32)DecodeReg(vd);
 }
 
-static inline u32 EncodVdVjUk2(Opcode32 opcode, LoongArch64Reg vd, LoongArch64Reg vj, u8 ui2) {
+static inline u32 EncodeVdVjUk2(Opcode32 opcode, LoongArch64Reg vd, LoongArch64Reg vj, u8 ui2) {
     _assert_msg_(IsVPR(vd), "VdVjUk2 instruction vd must be VPR");
     _assert_msg_(IsVPR(vj), "VdVjUk2 instruction vj must be VPR");
     return (u32)opcode | ((u32)(ui2 & 0x3) << 10) | ((u32)DecodeReg(vj) << 5) | (u32)DecodeReg(vd);
 }
 
-static inline u32 EncodVdVjUk3(Opcode32 opcode, LoongArch64Reg vd, LoongArch64Reg vj, u8 ui3) {
+static inline u32 EncodeVdVjUk3(Opcode32 opcode, LoongArch64Reg vd, LoongArch64Reg vj, u8 ui3) {
     _assert_msg_(IsVPR(vd), "VdVjUk3 instruction vd must be VPR");
     _assert_msg_(IsVPR(vj), "VdVjUk3 instruction vj must be VPR");
     return (u32)opcode | ((u32)(ui3 & 0x7) << 10) | ((u32)DecodeReg(vj) << 5) | (u32)DecodeReg(vd);
 }
 
-static inline u32 EncodVdVjUk4(Opcode32 opcode, LoongArch64Reg vd, LoongArch64Reg vj, u8 ui4) {
+static inline u32 EncodeVdVjUk4(Opcode32 opcode, LoongArch64Reg vd, LoongArch64Reg vj, u8 ui4) {
     _assert_msg_(IsVPR(vd), "VdVjUk4 instruction vd must be VPR");
     _assert_msg_(IsVPR(vj), "VdVjUk4 instruction vj must be VPR");
     return (u32)opcode | ((u32)(ui4 & 0xF) << 10) | ((u32)DecodeReg(vj) << 5) | (u32)DecodeReg(vd);
 }
 
-static inline u32 EncodVdVjUk5(Opcode32 opcode, LoongArch64Reg vd, LoongArch64Reg vj, u8 ui5) {
+static inline u32 EncodeVdVjUk5(Opcode32 opcode, LoongArch64Reg vd, LoongArch64Reg vj, u8 ui5) {
     _assert_msg_(IsVPR(vd), "VdVjUk5 instruction vd must be VPR");
     _assert_msg_(IsVPR(vj), "VdVjUk5 instruction vj must be VPR");
     return (u32)opcode | ((u32)(ui5 & 0x1F) << 10) | ((u32)DecodeReg(vj) << 5) | (u32)DecodeReg(vd);
 }
 
-static inline u32 EncodVdVjUk6(Opcode32 opcode, LoongArch64Reg vd, LoongArch64Reg vj, u8 ui6) {
+static inline u32 EncodeVdVjUk6(Opcode32 opcode, LoongArch64Reg vd, LoongArch64Reg vj, u8 ui6) {
     _assert_msg_(IsVPR(vd), "VdVjUk6 instruction vd must be VPR");
     _assert_msg_(IsVPR(vj), "VdVjUk6 instruction vj must be VPR");
     return (u32)opcode | ((u32)(ui6 & 0x3F) << 10) | ((u32)DecodeReg(vj) << 5) | (u32)DecodeReg(vd);
 }
 
-static inline u32 EncodVdVjUk7(Opcode32 opcode, LoongArch64Reg vd, LoongArch64Reg vj, u8 ui7) {
+static inline u32 EncodeVdVjUk7(Opcode32 opcode, LoongArch64Reg vd, LoongArch64Reg vj, u8 ui7) {
     _assert_msg_(IsVPR(vd), "VdVjUk7 instruction vd must be VPR");
     _assert_msg_(IsVPR(vj), "VdVjUk7 instruction vj must be VPR");
     return (u32)opcode | ((u32)(ui7 & 0x7F) << 10) | ((u32)DecodeReg(vj) << 5) | (u32)DecodeReg(vd);
 }
 
-static inline u32 EncodVdVjUk8(Opcode32 opcode, LoongArch64Reg vd, LoongArch64Reg vj, u8 ui8) {
+static inline u32 EncodeVdVjUk8(Opcode32 opcode, LoongArch64Reg vd, LoongArch64Reg vj, u8 ui8) {
     _assert_msg_(IsVPR(vd), "VdVjUk8 instruction vd must be VPR");
     _assert_msg_(IsVPR(vj), "VdVjUk8 instruction vj must be VPR");
     return (u32)opcode | ((u32)(ui8 & 0xFF) << 10) | ((u32)DecodeReg(vj) << 5) | (u32)DecodeReg(vd);
 }
 
-static inline u32 EncodVdVj(Opcode32 opcode, LoongArch64Reg vd, LoongArch64Reg vj) {
+static inline u32 EncodeVdVj(Opcode32 opcode, LoongArch64Reg vd, LoongArch64Reg vj) {
     _assert_msg_(IsVPR(vd), "VdVj instruction vd must be VPR");
     _assert_msg_(IsVPR(vj), "VdVj instruction vj must be VPR");
     return (u32)opcode | ((u32)DecodeReg(vj) << 5) | (u32)DecodeReg(vd);
 }
 
-static inline u32 EncodCdVj(Opcode32 opcode, LoongArch64CFR cd, LoongArch64Reg vj) {
+static inline u32 EncodeVdVjK(Opcode32 opcode, LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg rk) {
+    _assert_msg_(IsVPR(vd), "VdVjK instruction vd must be VPR");
+    _assert_msg_(IsVPR(vj), "VdVjK instruction vj must be VPR");
+    _assert_msg_(IsGPR(rk), "VdVjK instruction rk must be GPR");
+    return (u32)opcode | ((u32)DecodeReg(rk) << 10) | ((u32)DecodeReg(vj) << 5) | (u32)DecodeReg(vd);
+}
+
+static inline u32 EncodeCdVj(Opcode32 opcode, LoongArch64CFR cd, LoongArch64Reg vj) {
     _assert_msg_(IsCFR(cd), "CdVj instruction cd must be CFR");
     _assert_msg_(IsVPR(vj), "CdVj instruction vj must be VPR");
     return (u32)opcode | ((u32)DecodeReg(vj) << 5) | (u32)(cd & 0x7);
 }
 
-static inline u32 EncodVdJUk1(Opcode32 opcode, LoongArch64Reg vd, LoongArch64Reg rj, u8 ui1) {
+static inline u32 EncodeVdJ(Opcode32 opcode, LoongArch64Reg vd, LoongArch64Reg rj) {
+    _assert_msg_(IsVPR(vd), "VdJ instruction vd must be VPR");
+    _assert_msg_(IsGPR(rj), "VdJ instruction rj must be GPR");
+    return (u32)opcode | ((u32)DecodeReg(rj) << 5) | (u32)DecodeReg(vd);
+}
+
+static inline u32 EncodeVdJUk1(Opcode32 opcode, LoongArch64Reg vd, LoongArch64Reg rj, u8 ui1) {
     _assert_msg_(IsVPR(vd), "VdJUk1 instruction vd must be VPR");
     _assert_msg_(IsGPR(rj), "VdJUk1 instruction rj must be GPR");
     return (u32)opcode | ((u32)(ui1 & 0x1) << 10) | ((u32)DecodeReg(rj) << 5) | (u32)DecodeReg(vd);
 }
 
-static inline u32 EncodVdJUk2(Opcode32 opcode, LoongArch64Reg vd, LoongArch64Reg rj, u8 ui2) {
+static inline u32 EncodeVdJUk2(Opcode32 opcode, LoongArch64Reg vd, LoongArch64Reg rj, u8 ui2) {
     _assert_msg_(IsVPR(vd), "VdJUk2 instruction vd must be VPR");
     _assert_msg_(IsGPR(rj), "VdJUk2 instruction rj must be GPR");
     return (u32)opcode | ((u32)(ui2 & 0x3) << 10) | ((u32)DecodeReg(rj) << 5) | (u32)DecodeReg(vd);
 }
 
-static inline u32 EncodVdJUk3(Opcode32 opcode, LoongArch64Reg vd, LoongArch64Reg rj, u8 ui3) {
+static inline u32 EncodeVdJUk3(Opcode32 opcode, LoongArch64Reg vd, LoongArch64Reg rj, u8 ui3) {
     _assert_msg_(IsVPR(vd), "VdJUk3 instruction vd must be VPR");
     _assert_msg_(IsGPR(rj), "VdJUk3 instruction rj must be GPR");
     return (u32)opcode | ((u32)(ui3 & 0x7) << 10) | ((u32)DecodeReg(rj) << 5) | (u32)DecodeReg(vd);
 }
 
-static inline u32 EncodVdJUk4(Opcode32 opcode, LoongArch64Reg vd, LoongArch64Reg rj, u8 ui4) {
+static inline u32 EncodeVdJUk4(Opcode32 opcode, LoongArch64Reg vd, LoongArch64Reg rj, u8 ui4) {
     _assert_msg_(IsVPR(vd), "VdJUk4 instruction vd must be VPR");
     _assert_msg_(IsGPR(rj), "VdJUk4 instruction rj must be GPR");
     return (u32)opcode | ((u32)(ui4 & 0xF) << 10) | ((u32)DecodeReg(rj) << 5) | (u32)DecodeReg(vd);
 }
 
-static inline u32 EncodDVjUk1(Opcode32 opcode, LoongArch64Reg rd, LoongArch64Reg vj, u8 ui1) {
+static inline u32 EncodeDVjUk1(Opcode32 opcode, LoongArch64Reg rd, LoongArch64Reg vj, u8 ui1) {
     _assert_msg_(IsGPR(rd), "DVjUk1 instruction rd must be GPR");
     _assert_msg_(IsVPR(vj), "DVjUk1 instruction vj must be VPR");
     return (u32)opcode | ((u32)(ui1 & 0x1) << 10) | ((u32)DecodeReg(vj) << 5) | (u32)DecodeReg(rd);
 }
 
-static inline u32 EncodDVjUk2(Opcode32 opcode, LoongArch64Reg rd, LoongArch64Reg vj, u8 ui2) {
+static inline u32 EncodeDVjUk2(Opcode32 opcode, LoongArch64Reg rd, LoongArch64Reg vj, u8 ui2) {
     _assert_msg_(IsGPR(rd), "DVjUk2 instruction rd must be GPR");
     _assert_msg_(IsVPR(vj), "DVjUk2 instruction vj must be VPR");
     return (u32)opcode | ((u32)(ui2 & 0x3) << 10) | ((u32)DecodeReg(vj) << 5) | (u32)DecodeReg(rd);
 }
 
-static inline u32 EncodDVjUk3(Opcode32 opcode, LoongArch64Reg rd, LoongArch64Reg vj, u8 ui3) {
+static inline u32 EncodeDVjUk3(Opcode32 opcode, LoongArch64Reg rd, LoongArch64Reg vj, u8 ui3) {
     _assert_msg_(IsGPR(rd), "DVjUk3 instruction rd must be GPR");
     _assert_msg_(IsVPR(vj), "DVjUk3 instruction vj must be VPR");
     return (u32)opcode | ((u32)(ui3 & 0x7) << 10) | ((u32)DecodeReg(vj) << 5) | (u32)DecodeReg(rd);
 }
 
-static inline u32 EncodDVjUk4(Opcode32 opcode, LoongArch64Reg rd, LoongArch64Reg vj, u8 ui4) {
+static inline u32 EncodeDVjUk4(Opcode32 opcode, LoongArch64Reg rd, LoongArch64Reg vj, u8 ui4) {
     _assert_msg_(IsGPR(rd), "DVjUk4 instruction rd must be GPR");
     _assert_msg_(IsVPR(vj), "DVjUk4 instruction vj must be VPR");
     return (u32)opcode | ((u32)(ui4 & 0xF) << 10) | ((u32)DecodeReg(vj) << 5) | (u32)DecodeReg(rd);
@@ -3442,6 +3455,2894 @@ void LoongArch64Emitter::QuickFLI(int bits, LoongArch64Reg fd, float v, LoongArc
 	} else {
 		_assert_msg_(false, "Unsupported QuickFLI bits");
 	}
+}
+
+void LoongArch64Emitter::VFMADD_S(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk, LoongArch64Reg va) {
+    Write32(EncodeVdVjVkVa(Opcode32::VFMADD_S, vd, vj, vk, va));
+}
+
+void LoongArch64Emitter::VFMADD_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk, LoongArch64Reg va) {
+	Write32(EncodeVdVjVkVa(Opcode32::VFMADD_D, vd, vj, vk, va));
+}
+
+void LoongArch64Emitter::VFMSUB_S(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk, LoongArch64Reg va) {
+	Write32(EncodeVdVjVkVa(Opcode32::VFMSUB_S, vd, vj, vk, va));
+}
+
+void LoongArch64Emitter::VFMSUB_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk, LoongArch64Reg va) {
+	Write32(EncodeVdVjVkVa(Opcode32::VFMSUB_D, vd, vj, vk, va));
+}
+
+void LoongArch64Emitter::VFNMADD_S(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk, LoongArch64Reg va) {
+	Write32(EncodeVdVjVkVa(Opcode32::VFNMADD_S, vd, vj, vk, va));
+}
+
+void LoongArch64Emitter::VFNMADD_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk, LoongArch64Reg va) {
+	Write32(EncodeVdVjVkVa(Opcode32::VFNMADD_D, vd, vj, vk, va));
+}
+
+void LoongArch64Emitter::VFNMSUB_S(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk, LoongArch64Reg va) {
+	Write32(EncodeVdVjVkVa(Opcode32::VFNMSUB_S, vd, vj, vk, va));
+}
+
+void LoongArch64Emitter::VFNMSUB_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk, LoongArch64Reg va) {
+	Write32(EncodeVdVjVkVa(Opcode32::VFNMSUB_D, vd, vj, vk, va));
+}
+
+void LoongArch64Emitter::VFCMP_CAF_S(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VFCMP_CAF_S, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VFCMP_SAF_S(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VFCMP_SAF_S, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VFCMP_CLT_S(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VFCMP_CLT_S, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VFCMP_SLT_S(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VFCMP_SLT_S, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VFCMP_CEQ_S(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VFCMP_CEQ_S, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VFCMP_SEQ_S(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VFCMP_SEQ_S, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VFCMP_CLE_S(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VFCMP_CLE_S, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VFCMP_SLE_S(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VFCMP_SLE_S, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VFCMP_CLT_S(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VFCMP_CLT_S, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VFCMP_SLT_S(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VFCMP_SLT_S, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VFCMP_CEQ_S(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VFCMP_CEQ_S, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VFCMP_SEQ_S(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VFCMP_SEQ_S, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VFCMP_CLE_S(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VFCMP_CLE_S, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VFCMP_SLE_S(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VFCMP_SLE_S, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VFCMP_CUN_S(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VFCMP_CUN_S, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VFCMP_SUN_S(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VFCMP_SUN_S, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VFCMP_CULT_S(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VFCMP_CULT_S, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VFCMP_SULT_S(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VFCMP_SULT_S, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VFCMP_CUEQ_S(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VFCMP_CUEQ_S, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VFCMP_SUEQ_S(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VFCMP_SUEQ_S, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VFCMP_CULE_S(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VFCMP_CULE_S, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VFCMP_SULE_S(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VFCMP_SULE_S, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VFCMP_CNE_S(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VFCMP_CNE_S, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VFCMP_SNE_S(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VFCMP_SNE_S, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VFCMP_COR_S(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VFCMP_COR_S, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VFCMP_SOR_S(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VFCMP_SOR_S, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VFCMP_CUNE_S(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VFCMP_CUNE_S, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VFCMP_SUNE_S(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VFCMP_SUNE_S, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VFCMP_CAF_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VFCMP_CAF_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VFCMP_SAF_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VFCMP_SAF_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VFCMP_CLT_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VFCMP_CLT_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VFCMP_SLT_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VFCMP_SLT_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VFCMP_CEQ_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VFCMP_CEQ_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VFCMP_SEQ_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VFCMP_SEQ_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VFCMP_CLE_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VFCMP_CLE_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VFCMP_SLE_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VFCMP_SLE_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VFCMP_CUN_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VFCMP_CUN_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VFCMP_SUN_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VFCMP_SUN_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VFCMP_CULT_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VFCMP_CULT_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VFCMP_SULT_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VFCMP_SULT_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VFCMP_CUEQ_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VFCMP_CUEQ_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VFCMP_SUEQ_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VFCMP_SUEQ_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VFCMP_CULE_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VFCMP_CULE_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VFCMP_SULE_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VFCMP_SULE_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VFCMP_CNE_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VFCMP_CNE_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VFCMP_SNE_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VFCMP_SNE_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VFCMP_COR_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VFCMP_COR_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VFCMP_SOR_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VFCMP_SOR_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VFCMP_CUNE_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VFCMP_CUNE_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VFCMP_SUNE_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VFCMP_SUNE_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VBITSEL_V(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk, LoongArch64Reg va) {
+	Write32(EncodeVdVjVkVa(Opcode32::VBITSEL_V, vd, vj, vk, va));
+}
+
+void LoongArch64Emitter::VSHUF_B(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk, LoongArch64Reg va) {
+	Write32(EncodeVdVjVkVa(Opcode32::VSHUF_B, vd, vj, vk, va));
+}
+
+void LoongArch64Emitter::VLD(LoongArch64Reg vd, LoongArch64Reg rj, s16 si12) {
+	Write32(EncodeVdJSk12(Opcode32::VLD, vd, rj, si12));
+}
+
+void LoongArch64Emitter::VST(LoongArch64Reg vd, LoongArch64Reg rj, s16 si12) {
+	Write32(EncodeVdJSk12(Opcode32::VST, vd, rj, si12));
+}
+
+void LoongArch64Emitter::VLDREPL_D(LoongArch64Reg vd, LoongArch64Reg rj, s16 si9) {
+	Write32(EncodeVdJSk9(Opcode32::VLDREPL_D, vd, rj, si9));
+}
+
+void LoongArch64Emitter::VLDREPL_W(LoongArch64Reg vd, LoongArch64Reg rj, s16 si10) {
+	Write32(EncodeVdJSk10(Opcode32::VLDREPL_W, vd, rj, si10));
+}
+
+void LoongArch64Emitter::VLDREPL_H(LoongArch64Reg vd, LoongArch64Reg rj, s16 si11) {
+	Write32(EncodeVdJSk11(Opcode32::VLDREPL_H, vd, rj, si11));
+}
+
+void LoongArch64Emitter::VLDREPL_B(LoongArch64Reg vd, LoongArch64Reg rj, s16 si12) {
+	Write32(EncodeVdJSk12(Opcode32::VLDREPL_B, vd, rj, si12));
+}
+
+void LoongArch64Emitter::VSTELM_D(LoongArch64Reg vd, LoongArch64Reg rj, s16 si8, u8 idx1) {
+	Write32(EncodeVdJSk8Un1(Opcode32::VSTELM_D, vd, rj, si8, idx1));
+}
+
+void LoongArch64Emitter::VSTELM_W(LoongArch64Reg vd, LoongArch64Reg rj, s16 si8, u8 idx2) {
+	Write32(EncodeVdJSk8Un2(Opcode32::VSTELM_W, vd, rj, si8, idx2));
+}
+
+void LoongArch64Emitter::VSTELM_H(LoongArch64Reg vd, LoongArch64Reg rj, s16 si8, u8 idx3) {
+	Write32(EncodeVdJSk8Un3(Opcode32::VSTELM_H, vd, rj, si8, idx3));
+}
+
+void LoongArch64Emitter::VSTELM_B(LoongArch64Reg vd, LoongArch64Reg rj, s16 si8, u8 idx4) {
+	Write32(EncodeVdJSk8Un4(Opcode32::VSTELM_B, vd, rj, si8, idx4));
+}
+
+void LoongArch64Emitter::VLDX(LoongArch64Reg vd, LoongArch64Reg rj, LoongArch64Reg rk) {
+    Write32(EncodeVdJK(Opcode32::VLDX, vd, rj, rk));
+}
+
+void LoongArch64Emitter::VSTX(LoongArch64Reg vd, LoongArch64Reg rj, LoongArch64Reg rk) {
+    Write32(EncodeVdJK(Opcode32::VSTX, vd, rj, rk));
+}
+
+void LoongArch64Emitter::VSEQ_B(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSEQ_B, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSEQ_H(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSEQ_H, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSEQ_W(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSEQ_W, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSEQ_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSEQ_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSLE_B(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSLE_B, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSLE_H(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSLE_H, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSLE_W(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSLE_W, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSLE_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSLE_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSLE_BU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSLE_BU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSLE_HU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSLE_HU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSLE_WU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSLE_WU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSLE_DU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSLE_DU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSLT_B(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSLT_B, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSLT_H(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSLT_H, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSLT_W(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSLT_W, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSLT_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSLT_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSLT_BU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSLT_BU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSLT_HU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSLT_HU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSLT_WU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSLT_WU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSLT_DU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSLT_DU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VADD_B(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VADD_B, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VADD_H(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VADD_H, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VADD_W(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VADD_W, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VADD_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VADD_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSUB_B(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSUB_B, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSUB_H(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSUB_H, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSUB_W(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSUB_W, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSUB_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSUB_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VADDWEV_H_B(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VADDWEV_H_B, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VADDWEV_W_H(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VADDWEV_W_H, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VADDWEV_D_W(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VADDWEV_D_W, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VADDWEV_Q_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VADDWEV_Q_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSUBWEV_H_B(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSUBWEV_H_B, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSUBWEV_W_H(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSUBWEV_W_H, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSUBWEV_D_W(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSUBWEV_D_W, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSUBWEV_Q_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSUBWEV_Q_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VADDWOD_H_B(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VADDWOD_H_B, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VADDWOD_W_H(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VADDWOD_W_H, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VADDWOD_D_W(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VADDWOD_D_W, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VADDWOD_Q_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VADDWOD_Q_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSUBWOD_H_B(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSUBWOD_H_B, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSUBWOD_W_H(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSUBWOD_W_H, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSUBWOD_D_W(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSUBWOD_D_W, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSUBWOD_Q_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSUBWOD_Q_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VADDWEV_H_BU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VADDWEV_H_BU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VADDWEV_W_HU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VADDWEV_W_HU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VADDWEV_D_WU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VADDWEV_D_WU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VADDWEV_Q_DU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VADDWEV_Q_DU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSUBWEV_H_BU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSUBWEV_H_BU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSUBWEV_W_HU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSUBWEV_W_HU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSUBWEV_D_WU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSUBWEV_D_WU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSUBWEV_Q_DU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSUBWEV_Q_DU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VADDWOD_H_BU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VADDWOD_H_BU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VADDWOD_W_HU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VADDWOD_W_HU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VADDWOD_D_WU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VADDWOD_D_WU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VADDWOD_Q_DU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VADDWOD_Q_DU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSUBWOD_H_BU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSUBWOD_H_BU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSUBWOD_W_HU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSUBWOD_W_HU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSUBWOD_D_WU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSUBWOD_D_WU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSUBWOD_Q_DU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSUBWOD_Q_DU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VADDWEV_H_BU_B(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VADDWEV_H_BU_B, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VADDWEV_W_HU_H(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VADDWEV_W_HU_H, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VADDWEV_D_WU_W(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VADDWEV_D_WU_W, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VADDWEV_Q_DU_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VADDWEV_Q_DU_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VADDWOD_H_BU_B(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VADDWOD_H_BU_B, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VADDWOD_W_HU_H(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VADDWOD_W_HU_H, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VADDWOD_D_WU_W(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VADDWOD_D_WU_W, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VADDWOD_Q_DU_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VADDWOD_Q_DU_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSADD_B(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSADD_B, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSADD_H(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSADD_H, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSADD_W(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSADD_W, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSADD_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSADD_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSSUB_B(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSSUB_B, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSSUB_H(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSSUB_H, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSSUB_W(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSSUB_W, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSSUB_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSSUB_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSADD_BU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSADD_BU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSADD_HU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSADD_HU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSADD_WU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSADD_WU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSADD_DU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSADD_DU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSSUB_BU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSSUB_BU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSSUB_HU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSSUB_HU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSSUB_WU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSSUB_WU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSSUB_DU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSSUB_DU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VHADDW_H_B(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VHADDW_H_B, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VHADDW_W_H(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VHADDW_W_H, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VHADDW_D_W(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VHADDW_D_W, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VHADDW_Q_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VHADDW_Q_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VHSUBW_H_B(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VHSUBW_H_B, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VHSUBW_W_H(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VHSUBW_W_H, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VHSUBW_D_W(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VHSUBW_D_W, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VHSUBW_Q_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VHSUBW_Q_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VHADDW_HU_BU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VHADDW_HU_BU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VHADDW_WU_HU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VHADDW_WU_HU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VHADDW_DU_WU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VHADDW_DU_WU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VHADDW_QU_DU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VHADDW_QU_DU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VHSUBW_HU_BU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VHSUBW_HU_BU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VHSUBW_WU_HU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VHSUBW_WU_HU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VHSUBW_DU_WU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VHSUBW_DU_WU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VHSUBW_QU_DU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VHSUBW_QU_DU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VADDA_B(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VADDA_B, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VADDA_H(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VADDA_H, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VADDA_W(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VADDA_W, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VADDA_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VADDA_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VABSD_B(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VABSD_B, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VABSD_H(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VABSD_H, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VABSD_W(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VABSD_W, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VABSD_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VABSD_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VABSD_BU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VABSD_BU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VABSD_HU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VABSD_HU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VABSD_WU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VABSD_WU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VABSD_DU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VABSD_DU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VAVG_B(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VAVG_B, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VAVG_H(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VAVG_H, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VAVG_W(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VAVG_W, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VAVG_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VAVG_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VAVG_BU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VAVG_BU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VAVG_HU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VAVG_HU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VAVG_WU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VAVG_WU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VAVG_DU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VAVG_DU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VAVGR_B(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VAVGR_B, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VAVGR_H(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VAVGR_H, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VAVGR_W(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VAVGR_W, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VAVGR_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VAVGR_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VAVGR_BU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VAVGR_BU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VAVGR_HU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VAVGR_HU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VAVGR_WU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VAVGR_WU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VAVGR_DU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VAVGR_DU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMAX_B(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMAX_B, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMAX_H(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMAX_H, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMAX_W(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMAX_W, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMAX_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMAX_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMIN_B(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMIN_B, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMIN_H(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMIN_H, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMIN_W(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMIN_W, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMIN_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMIN_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMAX_BU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMAX_BU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMAX_HU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMAX_HU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMAX_WU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMAX_WU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMAX_DU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMAX_DU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMIN_BU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMIN_BU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMIN_HU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMIN_HU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMIN_WU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMIN_WU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMIN_DU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMIN_DU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMUL_B(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMUL_B, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMUL_H(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMUL_H, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMUL_W(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMUL_W, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMUL_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMUL_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMUH_B(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMUH_B, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMUH_H(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMUH_H, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMUH_W(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMUH_W, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMUH_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMUH_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMUH_BU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMUH_BU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMUH_HU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMUH_HU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMUH_WU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMUH_WU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMUH_DU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMUH_DU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMULWEV_H_B(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMULWEV_H_B, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMULWEV_W_H(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMULWEV_W_H, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMULWEV_D_W(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMULWEV_D_W, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMULWEV_Q_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMULWEV_Q_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMULWOD_H_B(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMULWOD_H_B, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMULWOD_W_H(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMULWOD_W_H, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMULWOD_D_W(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMULWOD_D_W, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMULWOD_Q_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMULWOD_Q_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMULWEV_H_BU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMULWEV_H_BU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMULWEV_W_HU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMULWEV_W_HU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMULWEV_D_WU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMULWEV_D_WU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMULWEV_Q_DU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMULWEV_Q_DU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMULWOD_H_BU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMULWOD_H_BU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMULWOD_W_HU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMULWOD_W_HU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMULWOD_D_WU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMULWOD_D_WU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMULWOD_Q_DU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMULWOD_Q_DU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMULWEV_H_BU_B(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMULWEV_H_BU_B, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMULWEV_W_HU_H(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMULWEV_W_HU_H, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMULWEV_D_WU_W(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMULWEV_D_WU_W, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMULWEV_Q_DU_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMULWEV_Q_DU_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMULWOD_H_BU_B(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMULWOD_H_BU_B, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMULWOD_W_HU_H(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMULWOD_W_HU_H, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMULWOD_D_WU_W(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMULWOD_D_WU_W, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMULWOD_Q_DU_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMULWOD_Q_DU_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMADD_B(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMADD_B, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMADD_H(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMADD_H, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMADD_W(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMADD_W, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMADD_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMADD_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMSUB_B(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMSUB_B, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMSUB_H(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMSUB_H, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMSUB_W(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMSUB_W, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMSUB_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMSUB_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMADDWEV_H_B(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMADDWEV_H_B, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMADDWEV_W_H(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMADDWEV_W_H, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMADDWEV_D_W(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMADDWEV_D_W, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMADDWEV_Q_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMADDWEV_Q_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMADDWOD_H_B(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMADDWOD_H_B, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMADDWOD_W_H(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMADDWOD_W_H, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMADDWOD_D_W(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMADDWOD_D_W, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMADDWOD_Q_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMADDWOD_Q_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMADDWEV_H_BU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMADDWEV_H_BU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMADDWEV_W_HU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMADDWEV_W_HU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMADDWEV_D_WU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMADDWEV_D_WU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMADDWEV_Q_DU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMADDWEV_Q_DU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMADDWOD_H_BU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMADDWOD_H_BU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMADDWOD_W_HU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMADDWOD_W_HU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMADDWOD_D_WU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMADDWOD_D_WU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMADDWOD_Q_DU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMADDWOD_Q_DU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMADDWEV_H_BU_B(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMADDWEV_H_BU_B, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMADDWEV_W_HU_H(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMADDWEV_W_HU_H, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMADDWEV_D_WU_W(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMADDWEV_D_WU_W, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMADDWEV_Q_DU_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMADDWEV_Q_DU_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMADDWOD_H_BU_B(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMADDWOD_H_BU_B, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMADDWOD_W_HU_H(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMADDWOD_W_HU_H, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMADDWOD_D_WU_W(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMADDWOD_D_WU_W, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMADDWOD_Q_DU_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMADDWOD_Q_DU_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VDIV_B(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VDIV_B, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VDIV_H(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VDIV_H, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VDIV_W(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VDIV_W, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VDIV_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VDIV_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMOD_B(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMOD_B, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMOD_H(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMOD_H, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMOD_W(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMOD_W, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMOD_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMOD_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VDIV_BU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VDIV_BU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VDIV_HU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VDIV_HU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VDIV_WU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VDIV_WU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VDIV_DU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VDIV_DU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMOD_BU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMOD_BU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMOD_HU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMOD_HU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMOD_WU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMOD_WU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VMOD_DU(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VMOD_DU, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSLL_B(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSLL_B, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSLL_H(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSLL_H, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSLL_W(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSLL_W, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSLL_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSLL_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSRL_B(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSRL_B, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSRL_H(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSRL_H, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSRL_W(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSRL_W, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSRL_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSRL_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSRA_B(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSRA_B, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSRA_H(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSRA_H, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSRA_W(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSRA_W, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSRA_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSRA_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VROTR_B(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VROTR_B, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VROTR_H(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VROTR_H, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VROTR_W(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VROTR_W, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VROTR_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VROTR_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSRLR_B(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSRLR_B, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSRLR_H(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSRLR_H, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSRLR_W(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSRLR_W, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSRLR_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSRLR_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSRAR_B(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSRAR_B, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSRAR_H(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSRAR_H, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSRAR_W(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSRAR_W, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSRAR_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSRAR_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSRLN_B_H(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSRLN_B_H, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSRLN_H_W(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSRLN_H_W, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSRLN_W_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSRLN_W_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSRAN_B_H(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSRAN_B_H, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSRAN_H_W(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSRAN_H_W, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSRAN_W_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSRAN_W_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSRLRN_B_H(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSRLRN_B_H, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSRLRN_H_W(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSRLRN_H_W, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSRLRN_W_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSRLRN_W_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSRARN_B_H(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSRARN_B_H, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSRARN_H_W(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSRARN_H_W, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSRARN_W_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSRARN_W_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSSRLN_B_H(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSSRLN_B_H, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSSRLN_H_W(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSSRLN_H_W, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSSRLN_W_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSSRLN_W_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSSRAN_B_H(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSSRAN_B_H, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSSRAN_H_W(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSSRAN_H_W, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSSRAN_W_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSSRAN_W_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSSRLRN_B_H(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSSRLRN_B_H, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSSRLRN_H_W(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSSRLRN_H_W, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSSRLRN_W_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSSRLRN_W_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSSRARN_B_H(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSSRARN_B_H, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSSRARN_H_W(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSSRARN_H_W, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSSRARN_W_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSSRARN_W_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSSRLN_BU_H(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSSRLN_BU_H, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSSRLN_HU_W(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSSRLN_HU_W, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSSRLN_WU_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSSRLN_WU_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSSRAN_BU_H(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSSRAN_BU_H, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSSRAN_HU_W(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSSRAN_HU_W, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSSRAN_WU_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSSRAN_WU_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSSRLRN_BU_H(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSSRLRN_BU_H, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSSRLRN_HU_W(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSSRLRN_HU_W, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSSRLRN_WU_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSSRLRN_WU_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSSRARN_BU_H(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSSRARN_BU_H, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSSRARN_HU_W(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSSRARN_HU_W, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSSRARN_WU_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSSRARN_WU_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VBITCLR_B(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VBITCLR_B, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VBITCLR_H(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VBITCLR_H, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VBITCLR_W(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VBITCLR_W, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VBITCLR_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VBITCLR_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VBITSET_B(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VBITSET_B, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VBITSET_H(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VBITSET_H, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VBITSET_W(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VBITSET_W, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VBITSET_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VBITSET_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VBITREV_B(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VBITREV_B, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VBITREV_H(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VBITREV_H, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VBITREV_W(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VBITREV_W, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VBITREV_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VBITREV_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VPACKEV_B(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VPACKEV_B, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VPACKEV_H(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VPACKEV_H, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VPACKEV_W(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VPACKEV_W, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VPACKEV_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VPACKEV_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VPACKOD_B(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VPACKOD_B, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VPACKOD_H(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VPACKOD_H, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VPACKOD_W(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VPACKOD_W, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VPACKOD_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VPACKOD_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VILVL_B(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VILVL_B, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VILVL_H(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VILVL_H, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VILVL_W(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VILVL_W, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VILVL_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VILVL_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VILVH_B(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VILVH_B, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VILVH_H(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VILVH_H, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VILVH_W(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VILVH_W, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VILVH_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VILVH_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VPICKEV_B(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VPICKEV_B, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VPICKEV_H(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VPICKEV_H, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VPICKEV_W(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VPICKEV_W, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VPICKEV_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VPICKEV_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VPICKOD_B(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VPICKOD_B, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VPICKOD_H(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VPICKOD_H, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VPICKOD_W(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VPICKOD_W, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VPICKOD_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VPICKOD_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VREPLVE_B(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg rk) {
+	Write32(EncodeVdVjK(Opcode32::VREPLVE_B, vd, vj, rk));
+}
+
+void LoongArch64Emitter::VREPLVE_H(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg rk) {
+	Write32(EncodeVdVjK(Opcode32::VREPLVE_H, vd, vj, rk));
+}
+
+void LoongArch64Emitter::VREPLVE_W(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg rk) {
+	Write32(EncodeVdVjK(Opcode32::VREPLVE_W, vd, vj, rk));
+}
+
+void LoongArch64Emitter::VREPLVE_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg rk) {
+	Write32(EncodeVdVjK(Opcode32::VREPLVE_D, vd, vj, rk));
+}
+
+void LoongArch64Emitter::VAND_V(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VAND_V, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VOR_V(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VOR_V, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VXOR_V(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VXOR_V, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VNOR_V(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VNOR_V, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VANDN_V(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VANDN_V, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VORN_V(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VORN_V, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VFRSTP_B(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VFRSTP_B, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VFRSTP_H(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VFRSTP_H, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VADD_Q(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VADD_Q, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSUB_Q(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSUB_Q, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSIGNCOV_B(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSIGNCOV_B, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSIGNCOV_H(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSIGNCOV_H, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSIGNCOV_W(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSIGNCOV_W, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSIGNCOV_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSIGNCOV_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VFADD_S(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VFADD_S, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VFADD_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VFADD_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VFSUB_S(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VFSUB_S, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VFSUB_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VFSUB_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VFMUL_S(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VFMUL_S, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VFMUL_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VFMUL_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VFDIV_S(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VFDIV_S, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VFDIV_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VFDIV_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VFMAX_S(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VFMAX_S, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VFMAX_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VFMAX_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VFMIN_S(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VFMIN_S, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VFMIN_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VFMIN_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VFMAXA_S(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VFMAXA_S, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VFMAXA_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VFMAXA_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VFMINA_S(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VFMINA_S, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VFMINA_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VFMINA_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VFCVT_H_S(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VFCVT_H_S, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VFCVT_S_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VFCVT_S_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VFFINT_S_L(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VFFINT_S_L, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VFTINT_W_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VFTINT_W_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VFTINTRM_W_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VFTINTRM_W_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VFTINTRP_W_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VFTINTRP_W_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VFTINTRZ_W_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VFTINTRZ_W_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VFTINTRNE_W_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VFTINTRNE_W_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSHUF_H(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSHUF_H, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSHUF_W(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSHUF_W, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSHUF_D(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
+	Write32(EncodeVdVjVk(Opcode32::VSHUF_D, vd, vj, vk));
+}
+
+void LoongArch64Emitter::VSEQI_B(LoongArch64Reg vd, LoongArch64Reg vj, s8 si5) {
+	Write32(EncodeVdVjSk5(Opcode32::VSEQI_B, vd, vj, si5));
+}
+
+void LoongArch64Emitter::VSEQI_H(LoongArch64Reg vd, LoongArch64Reg vj, s8 si5) {
+	Write32(EncodeVdVjSk5(Opcode32::VSEQI_H, vd, vj, si5));
+}
+
+void LoongArch64Emitter::VSEQI_W(LoongArch64Reg vd, LoongArch64Reg vj, s8 si5) {
+	Write32(EncodeVdVjSk5(Opcode32::VSEQI_W, vd, vj, si5));
+}
+
+void LoongArch64Emitter::VSEQI_D(LoongArch64Reg vd, LoongArch64Reg vj, s8 si5) {
+	Write32(EncodeVdVjSk5(Opcode32::VSEQI_D, vd, vj, si5));
+}
+
+void LoongArch64Emitter::VSLEI_B(LoongArch64Reg vd, LoongArch64Reg vj, s8 si5) {
+	Write32(EncodeVdVjSk5(Opcode32::VSLEI_B, vd, vj, si5));
+}
+
+void LoongArch64Emitter::VSLEI_H(LoongArch64Reg vd, LoongArch64Reg vj, s8 si5) {
+	Write32(EncodeVdVjSk5(Opcode32::VSLEI_H, vd, vj, si5));
+}
+
+void LoongArch64Emitter::VSLEI_W(LoongArch64Reg vd, LoongArch64Reg vj, s8 si5) {
+	Write32(EncodeVdVjSk5(Opcode32::VSLEI_W, vd, vj, si5));
+}
+
+void LoongArch64Emitter::VSLEI_D(LoongArch64Reg vd, LoongArch64Reg vj, s8 si5) {
+	Write32(EncodeVdVjSk5(Opcode32::VSLEI_D, vd, vj, si5));
+}
+
+void LoongArch64Emitter::VSLEI_BU(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui5) {
+	Write32(EncodeVdVjUk5(Opcode32::VSLEI_BU, vd, vj, ui5));
+}
+
+void LoongArch64Emitter::VSLEI_HU(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui5) {
+	Write32(EncodeVdVjUk5(Opcode32::VSLEI_HU, vd, vj, ui5));
+}
+
+void LoongArch64Emitter::VSLEI_WU(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui5) {
+	Write32(EncodeVdVjUk5(Opcode32::VSLEI_WU, vd, vj, ui5));
+}
+
+void LoongArch64Emitter::VSLEI_DU(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui5) {
+	Write32(EncodeVdVjUk5(Opcode32::VSLEI_DU, vd, vj, ui5));
+}
+
+void LoongArch64Emitter::VSLTI_B(LoongArch64Reg vd, LoongArch64Reg vj, s8 si5) {
+	Write32(EncodeVdVjSk5(Opcode32::VSLTI_B, vd, vj, si5));
+}
+
+void LoongArch64Emitter::VSLTI_H(LoongArch64Reg vd, LoongArch64Reg vj, s8 si5) {
+	Write32(EncodeVdVjSk5(Opcode32::VSLTI_H, vd, vj, si5));
+}
+
+void LoongArch64Emitter::VSLTI_W(LoongArch64Reg vd, LoongArch64Reg vj, s8 si5) {
+	Write32(EncodeVdVjSk5(Opcode32::VSLTI_W, vd, vj, si5));
+}
+
+void LoongArch64Emitter::VSLTI_D(LoongArch64Reg vd, LoongArch64Reg vj, s8 si5) {
+	Write32(EncodeVdVjSk5(Opcode32::VSLTI_D, vd, vj, si5));
+}
+
+void LoongArch64Emitter::VSLTI_BU(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui5) {
+	Write32(EncodeVdVjUk5(Opcode32::VSLTI_BU, vd, vj, ui5));
+}
+
+void LoongArch64Emitter::VSLTI_HU(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui5) {
+	Write32(EncodeVdVjUk5(Opcode32::VSLTI_HU, vd, vj, ui5));
+}
+
+void LoongArch64Emitter::VSLTI_WU(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui5) {
+	Write32(EncodeVdVjUk5(Opcode32::VSLTI_WU, vd, vj, ui5));
+}
+
+void LoongArch64Emitter::VSLTI_DU(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui5) {
+	Write32(EncodeVdVjUk5(Opcode32::VSLTI_DU, vd, vj, ui5));
+}
+
+void LoongArch64Emitter::VADDI_BU(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui5) {
+	Write32(EncodeVdVjUk5(Opcode32::VADDI_BU, vd, vj, ui5));
+}
+
+void LoongArch64Emitter::VADDI_HU(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui5) {
+	Write32(EncodeVdVjUk5(Opcode32::VADDI_HU, vd, vj, ui5));
+}
+
+void LoongArch64Emitter::VADDI_WU(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui5) {
+	Write32(EncodeVdVjUk5(Opcode32::VADDI_WU, vd, vj, ui5));
+}
+
+void LoongArch64Emitter::VADDI_DU(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui5) {
+	Write32(EncodeVdVjUk5(Opcode32::VADDI_DU, vd, vj, ui5));
+}
+
+void LoongArch64Emitter::VSUBI_BU(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui5) {
+	Write32(EncodeVdVjUk5(Opcode32::VSUBI_BU, vd, vj, ui5));
+}
+
+void LoongArch64Emitter::VSUBI_HU(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui5) {
+	Write32(EncodeVdVjUk5(Opcode32::VSUBI_HU, vd, vj, ui5));
+}
+
+void LoongArch64Emitter::VSUBI_WU(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui5) {
+	Write32(EncodeVdVjUk5(Opcode32::VSUBI_WU, vd, vj, ui5));
+}
+
+void LoongArch64Emitter::VSUBI_DU(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui5) {
+	Write32(EncodeVdVjUk5(Opcode32::VSUBI_DU, vd, vj, ui5));
+}
+
+void LoongArch64Emitter::VBSLL_V(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui5) {
+	Write32(EncodeVdVjUk5(Opcode32::VBSLL_V, vd, vj, ui5));
+}
+
+void LoongArch64Emitter::VBSRL_V(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui5) {
+	Write32(EncodeVdVjUk5(Opcode32::VBSRL_V, vd, vj, ui5));
+}
+
+void LoongArch64Emitter::VMAXI_B(LoongArch64Reg vd, LoongArch64Reg vj, s8 si5) {
+	Write32(EncodeVdVjSk5(Opcode32::VMAXI_B, vd, vj, si5));
+}
+
+void LoongArch64Emitter::VMAXI_H(LoongArch64Reg vd, LoongArch64Reg vj, s8 si5) {
+	Write32(EncodeVdVjSk5(Opcode32::VMAXI_H, vd, vj, si5));
+}
+
+void LoongArch64Emitter::VMAXI_W(LoongArch64Reg vd, LoongArch64Reg vj, s8 si5) {
+	Write32(EncodeVdVjSk5(Opcode32::VMAXI_W, vd, vj, si5));
+}
+
+void LoongArch64Emitter::VMAXI_D(LoongArch64Reg vd, LoongArch64Reg vj, s8 si5) {
+	Write32(EncodeVdVjSk5(Opcode32::VMAXI_D, vd, vj, si5));
+}
+
+void LoongArch64Emitter::VMINI_B(LoongArch64Reg vd, LoongArch64Reg vj, s8 si5) {
+	Write32(EncodeVdVjSk5(Opcode32::VMINI_B, vd, vj, si5));
+}
+
+void LoongArch64Emitter::VMINI_H(LoongArch64Reg vd, LoongArch64Reg vj, s8 si5) {
+	Write32(EncodeVdVjSk5(Opcode32::VMINI_H, vd, vj, si5));
+}
+
+void LoongArch64Emitter::VMINI_W(LoongArch64Reg vd, LoongArch64Reg vj, s8 si5) {
+	Write32(EncodeVdVjSk5(Opcode32::VMINI_W, vd, vj, si5));
+}
+
+void LoongArch64Emitter::VMINI_D(LoongArch64Reg vd, LoongArch64Reg vj, s8 si5) {
+	Write32(EncodeVdVjSk5(Opcode32::VMINI_D, vd, vj, si5));
+}
+
+void LoongArch64Emitter::VMAXI_BU(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui5) {
+	Write32(EncodeVdVjUk5(Opcode32::VMAXI_BU, vd, vj, ui5));
+}
+
+void LoongArch64Emitter::VMAXI_HU(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui5) {
+	Write32(EncodeVdVjUk5(Opcode32::VMAXI_HU, vd, vj, ui5));
+}
+
+void LoongArch64Emitter::VMAXI_WU(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui5) {
+	Write32(EncodeVdVjUk5(Opcode32::VMAXI_WU, vd, vj, ui5));
+}
+
+void LoongArch64Emitter::VMAXI_DU(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui5) {
+	Write32(EncodeVdVjUk5(Opcode32::VMAXI_DU, vd, vj, ui5));
+}
+
+void LoongArch64Emitter::VMINI_BU(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui5) {
+	Write32(EncodeVdVjUk5(Opcode32::VMINI_BU, vd, vj, ui5));
+}
+
+void LoongArch64Emitter::VMINI_HU(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui5) {
+	Write32(EncodeVdVjUk5(Opcode32::VMINI_HU, vd, vj, ui5));
+}
+
+void LoongArch64Emitter::VMINI_WU(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui5) {
+	Write32(EncodeVdVjUk5(Opcode32::VMINI_WU, vd, vj, ui5));
+}
+
+void LoongArch64Emitter::VMINI_DU(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui5) {
+	Write32(EncodeVdVjUk5(Opcode32::VMINI_DU, vd, vj, ui5));
+}
+
+void LoongArch64Emitter::VFRSTPI_B(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui5) {
+	Write32(EncodeVdVjUk5(Opcode32::VFRSTPI_B, vd, vj, ui5));
+}
+
+void LoongArch64Emitter::VFRSTPI_H(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui5) {
+	Write32(EncodeVdVjUk5(Opcode32::VFRSTPI_H, vd, vj, ui5));
+}
+
+void LoongArch64Emitter::VCLO_B(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VCLO_B, vd, vj));
+}
+
+void LoongArch64Emitter::VCLO_H(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VCLO_H, vd, vj));
+}
+
+void LoongArch64Emitter::VCLO_W(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VCLO_W, vd, vj));
+}
+
+void LoongArch64Emitter::VCLO_D(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VCLO_D, vd, vj));
+}
+
+void LoongArch64Emitter::VCLZ_B(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VCLZ_B, vd, vj));
+}
+
+void LoongArch64Emitter::VCLZ_H(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VCLZ_H, vd, vj));
+}
+
+void LoongArch64Emitter::VCLZ_W(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VCLZ_W, vd, vj));
+}
+
+void LoongArch64Emitter::VCLZ_D(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VCLZ_D, vd, vj));
+}
+
+void LoongArch64Emitter::VPCNT_B(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VPCNT_B, vd, vj));
+}
+
+void LoongArch64Emitter::VPCNT_H(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VPCNT_H, vd, vj));
+}
+
+void LoongArch64Emitter::VPCNT_W(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VPCNT_W, vd, vj));
+}
+
+void LoongArch64Emitter::VPCNT_D(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VPCNT_D, vd, vj));
+}
+
+void LoongArch64Emitter::VNEG_B(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VNEG_B, vd, vj));
+}
+
+void LoongArch64Emitter::VNEG_H(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VNEG_H, vd, vj));
+}
+
+void LoongArch64Emitter::VNEG_W(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VNEG_W, vd, vj));
+}
+
+void LoongArch64Emitter::VNEG_D(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VNEG_D, vd, vj));
+}
+
+void LoongArch64Emitter::VMSKLTZ_B(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VMSKLTZ_B, vd, vj));
+}
+
+void LoongArch64Emitter::VMSKLTZ_H(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VMSKLTZ_H, vd, vj));
+}
+
+void LoongArch64Emitter::VMSKLTZ_W(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VMSKLTZ_W, vd, vj));
+}
+
+void LoongArch64Emitter::VMSKLTZ_D(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VMSKLTZ_D, vd, vj));
+}
+
+void LoongArch64Emitter::VMSKGEZ_B(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VMSKGEZ_B, vd, vj));
+}
+
+void LoongArch64Emitter::VMSKNZ_B(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VMSKNZ_B, vd, vj));
+}
+
+void LoongArch64Emitter::VSETEQZ_V(LoongArch64CFR cd, LoongArch64Reg vj) {
+	Write32(EncodeCdVj(Opcode32::VSETEQZ_V, cd, vj));
+}
+
+void LoongArch64Emitter::VSETNEZ_V(LoongArch64CFR cd, LoongArch64Reg vj) {
+	Write32(EncodeCdVj(Opcode32::VSETNEZ_V, cd, vj));
+}
+
+void LoongArch64Emitter::VSETANYEQZ_B(LoongArch64CFR cd, LoongArch64Reg vj) {
+	Write32(EncodeCdVj(Opcode32::VSETANYEQZ_B, cd, vj));
+}
+
+void LoongArch64Emitter::VSETANYEQZ_H(LoongArch64CFR cd, LoongArch64Reg vj) {
+	Write32(EncodeCdVj(Opcode32::VSETANYEQZ_H, cd, vj));
+}
+
+void LoongArch64Emitter::VSETANYEQZ_W(LoongArch64CFR cd, LoongArch64Reg vj) {
+	Write32(EncodeCdVj(Opcode32::VSETANYEQZ_W, cd, vj));
+}
+
+void LoongArch64Emitter::VSETANYEQZ_D(LoongArch64CFR cd, LoongArch64Reg vj) {
+	Write32(EncodeCdVj(Opcode32::VSETANYEQZ_D, cd, vj));
+}
+
+void LoongArch64Emitter::VSETALLNEZ_B(LoongArch64CFR cd, LoongArch64Reg vj) {
+	Write32(EncodeCdVj(Opcode32::VSETALLNEZ_B, cd, vj));
+}
+
+void LoongArch64Emitter::VSETALLNEZ_H(LoongArch64CFR cd, LoongArch64Reg vj) {
+	Write32(EncodeCdVj(Opcode32::VSETALLNEZ_H, cd, vj));
+}
+
+void LoongArch64Emitter::VSETALLNEZ_W(LoongArch64CFR cd, LoongArch64Reg vj) {
+	Write32(EncodeCdVj(Opcode32::VSETALLNEZ_W, cd, vj));
+}
+
+void LoongArch64Emitter::VSETALLNEZ_D(LoongArch64CFR cd, LoongArch64Reg vj) {
+	Write32(EncodeCdVj(Opcode32::VSETALLNEZ_D, cd, vj));
+}
+
+void LoongArch64Emitter::VFLOGB_S(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VFLOGB_S, vd, vj));
+}
+
+void LoongArch64Emitter::VFLOGB_D(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VFLOGB_D, vd, vj));
+}
+
+void LoongArch64Emitter::VFCLASS_S(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VFCLASS_S, vd, vj));
+}
+
+void LoongArch64Emitter::VFCLASS_D(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VFCLASS_D, vd, vj));
+}
+
+void LoongArch64Emitter::VFSQRT_S(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VFSQRT_S, vd, vj));
+}
+
+void LoongArch64Emitter::VFSQRT_D(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VFSQRT_D, vd, vj));
+}
+
+void LoongArch64Emitter::VFRECIP_S(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VFRECIP_S, vd, vj));
+}
+
+void LoongArch64Emitter::VFRECIP_D(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VFRECIP_D, vd, vj));
+}
+
+void LoongArch64Emitter::VFRSQRT_S(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VFRSQRT_S, vd, vj));
+}
+
+void LoongArch64Emitter::VFRSQRT_D(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VFRSQRT_D, vd, vj));
+}
+
+void LoongArch64Emitter::VFRECIPE_S(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VFRECIPE_S, vd, vj));
+}
+
+void LoongArch64Emitter::VFRECIPE_D(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VFRECIPE_D, vd, vj));
+}
+
+void LoongArch64Emitter::VFRSQRTE_S(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VFRSQRTE_S, vd, vj));
+}
+
+void LoongArch64Emitter::VFRSQRTE_D(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VFRSQRTE_D, vd, vj));
+}
+
+void LoongArch64Emitter::VFRINT_S(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VFRINT_S, vd, vj));
+}
+
+void LoongArch64Emitter::VFRINT_D(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VFRINT_D, vd, vj));
+}
+
+void LoongArch64Emitter::VFRINTRM_S(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VFRINTRM_S, vd, vj));
+}
+
+void LoongArch64Emitter::VFRINTRM_D(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VFRINTRM_D, vd, vj));
+}
+
+void LoongArch64Emitter::VFRINTRP_S(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VFRINTRP_S, vd, vj));
+}
+
+void LoongArch64Emitter::VFRINTRP_D(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VFRINTRP_D, vd, vj));
+}
+
+void LoongArch64Emitter::VFRINTRZ_S(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VFRINTRZ_S, vd, vj));
+}
+
+void LoongArch64Emitter::VFRINTRZ_D(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VFRINTRZ_D, vd, vj));
+}
+
+void LoongArch64Emitter::VFRINTRNE_S(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VFRINTRNE_S, vd, vj));
+}
+
+void LoongArch64Emitter::VFRINTRNE_D(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VFRINTRNE_D, vd, vj));
+}
+
+void LoongArch64Emitter::VFCVTL_S_H(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VFCVTL_S_H, vd, vj));
+}
+
+void LoongArch64Emitter::VFCVTH_S_H(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VFCVTH_S_H, vd, vj));
+}
+
+void LoongArch64Emitter::VFCVTL_D_S(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VFCVTL_D_S, vd, vj));
+}
+
+void LoongArch64Emitter::VFCVTH_D_S(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VFCVTH_D_S, vd, vj));
+}
+
+void LoongArch64Emitter::VFFINT_S_W(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VFFINT_S_W, vd, vj));
+}
+
+void LoongArch64Emitter::VFFINT_S_WU(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VFFINT_S_WU, vd, vj));
+}
+
+void LoongArch64Emitter::VFFINT_D_L(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VFFINT_D_L, vd, vj));
+}
+
+void LoongArch64Emitter::VFFINT_D_LU(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VFFINT_D_LU, vd, vj));
+}
+
+void LoongArch64Emitter::VFFINTL_D_W(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VFFINTL_D_W, vd, vj));
+}
+
+void LoongArch64Emitter::VFFINTH_D_W(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VFFINTH_D_W, vd, vj));
+}
+
+void LoongArch64Emitter::VFTINT_W_S(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VFTINT_W_S, vd, vj));
+}
+
+void LoongArch64Emitter::VFTINT_L_D(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VFTINT_L_D, vd, vj));
+}
+
+void LoongArch64Emitter::VFTINTRM_W_S(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VFTINTRM_W_S, vd, vj));
+}
+
+void LoongArch64Emitter::VFTINTRM_L_D(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VFTINTRM_L_D, vd, vj));
+}
+
+void LoongArch64Emitter::VFTINTRP_W_S(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VFTINTRP_W_S, vd, vj));
+}
+
+void LoongArch64Emitter::VFTINTRP_L_D(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VFTINTRP_L_D, vd, vj));
+}
+
+void LoongArch64Emitter::VFTINTRZ_W_S(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VFTINTRZ_W_S, vd, vj));
+}
+
+void LoongArch64Emitter::VFTINTRZ_L_D(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VFTINTRZ_L_D, vd, vj));
+}
+
+void LoongArch64Emitter::VFTINTRNE_W_S(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VFTINTRNE_W_S, vd, vj));
+}
+
+void LoongArch64Emitter::VFTINTRNE_L_D(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VFTINTRNE_L_D, vd, vj));
+}
+
+void LoongArch64Emitter::VFTINT_WU_S(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VFTINT_WU_S, vd, vj));
+}
+
+void LoongArch64Emitter::VFTINT_LU_D(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VFTINT_LU_D, vd, vj));
+}
+
+void LoongArch64Emitter::VFTINTRZ_WU_S(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VFTINTRZ_WU_S, vd, vj));
+}
+
+void LoongArch64Emitter::VFTINTRZ_LU_D(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VFTINTRZ_LU_D, vd, vj));
+}
+
+void LoongArch64Emitter::VFTINTL_L_S(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VFTINTL_L_S, vd, vj));
+}
+
+void LoongArch64Emitter::VFTINTH_L_S(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VFTINTH_L_S, vd, vj));
+}
+
+void LoongArch64Emitter::VFTINTRML_L_S(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VFTINTRML_L_S, vd, vj));
+}
+
+void LoongArch64Emitter::VFTINTRMH_L_S(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VFTINTRMH_L_S, vd, vj));
+}
+
+void LoongArch64Emitter::VFTINTRPL_L_S(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VFTINTRPL_L_S, vd, vj));
+}
+
+void LoongArch64Emitter::VFTINTRPH_L_S(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VFTINTRPH_L_S, vd, vj));
+}
+
+void LoongArch64Emitter::VFTINTRZL_L_S(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VFTINTRZL_L_S, vd, vj));
+}
+
+void LoongArch64Emitter::VFTINTRZH_L_S(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VFTINTRZH_L_S, vd, vj));
+}
+
+void LoongArch64Emitter::VFTINTRNEL_L_S(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VFTINTRNEL_L_S, vd, vj));
+}
+
+void LoongArch64Emitter::VFTINTRNEH_L_S(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VFTINTRNEH_L_S, vd, vj));
+}
+
+void LoongArch64Emitter::VEXTH_H_B(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VEXTH_H_B, vd, vj));
+}
+
+void LoongArch64Emitter::VEXTH_W_H(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VEXTH_W_H, vd, vj));
+}
+
+void LoongArch64Emitter::VEXTH_D_W(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VEXTH_D_W, vd, vj));
+}
+
+void LoongArch64Emitter::VEXTH_Q_D(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VEXTH_Q_D, vd, vj));
+}
+
+void LoongArch64Emitter::VEXTH_HU_BU(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VEXTH_HU_BU, vd, vj));
+}
+
+void LoongArch64Emitter::VEXTH_WU_HU(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VEXTH_WU_HU, vd, vj));
+}
+
+void LoongArch64Emitter::VEXTH_DU_WU(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VEXTH_DU_WU, vd, vj));
+}
+
+void LoongArch64Emitter::VEXTH_QU_DU(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VEXTH_QU_DU, vd, vj));
+}
+
+void LoongArch64Emitter::VREPLGR2VR_B(LoongArch64Reg vd, LoongArch64Reg rj) {
+	Write32(EncodeVdJ(Opcode32::VREPLGR2VR_B, vd, rj));
+}
+
+void LoongArch64Emitter::VREPLGR2VR_H(LoongArch64Reg vd, LoongArch64Reg rj) {
+	Write32(EncodeVdJ(Opcode32::VREPLGR2VR_H, vd, rj));
+}
+
+void LoongArch64Emitter::VREPLGR2VR_W(LoongArch64Reg vd, LoongArch64Reg rj) {
+	Write32(EncodeVdJ(Opcode32::VREPLGR2VR_W, vd, rj));
+}
+
+void LoongArch64Emitter::VREPLGR2VR_D(LoongArch64Reg vd, LoongArch64Reg rj) {
+	Write32(EncodeVdJ(Opcode32::VREPLGR2VR_D, vd, rj));
+}
+
+void LoongArch64Emitter::VROTRI_B(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui3) {
+	Write32(EncodeVdVjUk3(Opcode32::VROTRI_B, vd, vj, ui3));
+}
+
+void LoongArch64Emitter::VROTRI_H(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui4) {
+	Write32(EncodeVdVjUk4(Opcode32::VROTRI_H, vd, vj, ui4));
+}
+
+void LoongArch64Emitter::VROTRI_W(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui5) {
+	Write32(EncodeVdVjUk5(Opcode32::VROTRI_W, vd, vj, ui5));
+}
+
+void LoongArch64Emitter::VROTRI_D(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui6) {
+	Write32(EncodeVdVjUk6(Opcode32::VROTRI_D, vd, vj, ui6));
+}
+
+void LoongArch64Emitter::VSRLRI_B(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui3) {
+	Write32(EncodeVdVjUk3(Opcode32::VSRLRI_B, vd, vj, ui3));
+}
+
+void LoongArch64Emitter::VSRLRI_H(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui4) {
+	Write32(EncodeVdVjUk4(Opcode32::VSRLRI_H, vd, vj, ui4));
+}
+
+void LoongArch64Emitter::VSRLRI_W(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui5) {
+	Write32(EncodeVdVjUk5(Opcode32::VSRLRI_W, vd, vj, ui5));
+}
+
+void LoongArch64Emitter::VSRLRI_D(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui6) {
+	Write32(EncodeVdVjUk6(Opcode32::VSRLRI_D, vd, vj, ui6));
+}
+
+void LoongArch64Emitter::VSRARI_B(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui3) {
+	Write32(EncodeVdVjUk3(Opcode32::VSRARI_B, vd, vj, ui3));
+}
+
+void LoongArch64Emitter::VSRARI_H(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui4) {
+	Write32(EncodeVdVjUk4(Opcode32::VSRARI_H, vd, vj, ui4));
+}
+
+void LoongArch64Emitter::VSRARI_W(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui5) {
+	Write32(EncodeVdVjUk5(Opcode32::VSRARI_W, vd, vj, ui5));
+}
+
+void LoongArch64Emitter::VSRARI_D(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui6) {
+	Write32(EncodeVdVjUk6(Opcode32::VSRARI_D, vd, vj, ui6));
+}
+
+void LoongArch64Emitter::VINSGR2VR_B(LoongArch64Reg vd, LoongArch64Reg rj, u8 ui4) {
+	Write32(EncodeVdJUk4(Opcode32::VINSGR2VR_B, vd, rj, ui4));
+}
+
+void LoongArch64Emitter::VINSGR2VR_H(LoongArch64Reg vd, LoongArch64Reg rj, u8 ui3) {
+	Write32(EncodeVdJUk3(Opcode32::VINSGR2VR_H, vd, rj, ui3));
+}
+
+void LoongArch64Emitter::VINSGR2VR_W(LoongArch64Reg vd, LoongArch64Reg rj, u8 ui2) {
+	Write32(EncodeVdJUk2(Opcode32::VINSGR2VR_W, vd, rj, ui2));
+}
+
+void LoongArch64Emitter::VINSGR2VR_D(LoongArch64Reg vd, LoongArch64Reg rj, u8 ui1) {
+	Write32(EncodeVdJUk1(Opcode32::VINSGR2VR_D, vd, rj, ui1));
+}
+
+void LoongArch64Emitter::VPICKVE2GR_B(LoongArch64Reg rd, LoongArch64Reg vj, u8 ui4) {
+	Write32(EncodeDVjUk4(Opcode32::VPICKVE2GR_B, rd, vj, ui4));
+}
+
+void LoongArch64Emitter::VPICKVE2GR_H(LoongArch64Reg rd, LoongArch64Reg vj, u8 ui3) {
+	Write32(EncodeDVjUk3(Opcode32::VPICKVE2GR_H, rd, vj, ui3));
+}
+
+void LoongArch64Emitter::VPICKVE2GR_W(LoongArch64Reg rd, LoongArch64Reg vj, u8 ui2) {
+	Write32(EncodeDVjUk2(Opcode32::VPICKVE2GR_W, rd, vj, ui2));
+}
+
+void LoongArch64Emitter::VPICKVE2GR_D(LoongArch64Reg rd, LoongArch64Reg vj, u8 ui1) {
+	Write32(EncodeDVjUk1(Opcode32::VPICKVE2GR_D, rd, vj, ui1));
+}
+
+void LoongArch64Emitter::VPICKVE2GR_BU(LoongArch64Reg rd, LoongArch64Reg vj, u8 ui4) {
+	Write32(EncodeDVjUk4(Opcode32::VPICKVE2GR_BU, rd, vj, ui4));
+}
+
+void LoongArch64Emitter::VPICKVE2GR_HU(LoongArch64Reg rd, LoongArch64Reg vj, u8 ui3) {
+	Write32(EncodeDVjUk3(Opcode32::VPICKVE2GR_HU, rd, vj, ui3));
+}
+
+void LoongArch64Emitter::VPICKVE2GR_WU(LoongArch64Reg rd, LoongArch64Reg vj, u8 ui2) {
+	Write32(EncodeDVjUk2(Opcode32::VPICKVE2GR_WU, rd, vj, ui2));
+}
+
+void LoongArch64Emitter::VPICKVE2GR_DU(LoongArch64Reg rd, LoongArch64Reg vj, u8 ui1) {
+	Write32(EncodeDVjUk1(Opcode32::VPICKVE2GR_DU, rd, vj, ui1));
+}
+
+void LoongArch64Emitter::VREPLVEI_B(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui4) {
+	Write32(EncodeVdVjUk4(Opcode32::VREPLVEI_B, vd, vj, ui4));
+}
+
+void LoongArch64Emitter::VREPLVEI_H(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui3) {
+	Write32(EncodeVdVjUk3(Opcode32::VREPLVEI_H, vd, vj, ui3));
+}
+
+void LoongArch64Emitter::VREPLVEI_W(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui2) {
+	Write32(EncodeVdVjUk2(Opcode32::VREPLVEI_W, vd, vj, ui2));
+}
+
+void LoongArch64Emitter::VREPLVEI_D(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui1) {
+	Write32(EncodeVdVjUk1(Opcode32::VREPLVEI_D, vd, vj, ui1));
+}
+
+void LoongArch64Emitter::VSLLWIL_H_B(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui3) {
+	Write32(EncodeVdVjUk3(Opcode32::VSLLWIL_H_B, vd, vj, ui3));
+}
+
+void LoongArch64Emitter::VSLLWIL_W_H(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui4) {
+	Write32(EncodeVdVjUk4(Opcode32::VSLLWIL_W_H, vd, vj, ui4));
+}
+
+void LoongArch64Emitter::VSLLWIL_D_W(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui5) {
+	Write32(EncodeVdVjUk5(Opcode32::VSLLWIL_D_W, vd, vj, ui5));
+}
+
+void LoongArch64Emitter::VEXTL_Q_D(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VEXTL_Q_D, vd, vj));
+}
+
+void LoongArch64Emitter::VSLLWIL_HU_BU(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui3) {
+	Write32(EncodeVdVjUk3(Opcode32::VSLLWIL_HU_BU, vd, vj, ui3));
+}
+
+void LoongArch64Emitter::VSLLWIL_WU_HU(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui4) {
+	Write32(EncodeVdVjUk4(Opcode32::VSLLWIL_WU_HU, vd, vj, ui4));
+}
+
+void LoongArch64Emitter::VSLLWIL_DU_WU(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui5) {
+	Write32(EncodeVdVjUk5(Opcode32::VSLLWIL_DU_WU, vd, vj, ui5));
+}
+
+void LoongArch64Emitter::VEXTL_QU_DU(LoongArch64Reg vd, LoongArch64Reg vj) {
+	Write32(EncodeVdVj(Opcode32::VEXTL_QU_DU, vd, vj));
+}
+
+void LoongArch64Emitter::VBITCLRI_B(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui3) {
+	Write32(EncodeVdVjUk3(Opcode32::VBITCLRI_B, vd, vj, ui3));
+}
+
+void LoongArch64Emitter::VBITCLRI_H(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui4) {
+	Write32(EncodeVdVjUk4(Opcode32::VBITCLRI_H, vd, vj, ui4));
+}
+
+void LoongArch64Emitter::VBITCLRI_W(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui5) {
+	Write32(EncodeVdVjUk5(Opcode32::VBITCLRI_W, vd, vj, ui5));
+}
+
+void LoongArch64Emitter::VBITCLRI_D(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui6) {
+	Write32(EncodeVdVjUk6(Opcode32::VBITCLRI_D, vd, vj, ui6));
+}
+
+void LoongArch64Emitter::VBITSETI_B(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui3) {
+	Write32(EncodeVdVjUk3(Opcode32::VBITSETI_B, vd, vj, ui3));
+}
+
+void LoongArch64Emitter::VBITSETI_H(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui4) {
+	Write32(EncodeVdVjUk4(Opcode32::VBITSETI_H, vd, vj, ui4));
+}
+
+void LoongArch64Emitter::VBITSETI_W(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui5) {
+	Write32(EncodeVdVjUk5(Opcode32::VBITSETI_W, vd, vj, ui5));
+}
+
+void LoongArch64Emitter::VBITSETI_D(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui6) {
+	Write32(EncodeVdVjUk6(Opcode32::VBITSETI_D, vd, vj, ui6));
+}
+
+void LoongArch64Emitter::VBITREVI_B(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui3) {
+	Write32(EncodeVdVjUk3(Opcode32::VBITREVI_B, vd, vj, ui3));
+}
+
+void LoongArch64Emitter::VBITREVI_H(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui4) {
+	Write32(EncodeVdVjUk4(Opcode32::VBITREVI_H, vd, vj, ui4));
+}
+
+void LoongArch64Emitter::VBITREVI_W(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui5) {
+	Write32(EncodeVdVjUk5(Opcode32::VBITREVI_W, vd, vj, ui5));
+}
+
+void LoongArch64Emitter::VBITREVI_D(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui6) {
+	Write32(EncodeVdVjUk6(Opcode32::VBITREVI_D, vd, vj, ui6));
+}
+
+void LoongArch64Emitter::VSAT_B(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui3) {
+	Write32(EncodeVdVjUk3(Opcode32::VSAT_B, vd, vj, ui3));
+}
+
+void LoongArch64Emitter::VSAT_H(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui4) {
+	Write32(EncodeVdVjUk4(Opcode32::VSAT_H, vd, vj, ui4));
+}
+
+void LoongArch64Emitter::VSAT_W(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui5) {
+	Write32(EncodeVdVjUk5(Opcode32::VSAT_W, vd, vj, ui5));
+}
+
+void LoongArch64Emitter::VSAT_D(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui6) {
+	Write32(EncodeVdVjUk6(Opcode32::VSAT_D, vd, vj, ui6));
+}
+
+void LoongArch64Emitter::VSAT_BU(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui3) {
+    Write32(EncodeVdVjUk3(Opcode32::VSAT_BU, vd, vj, ui3));
+}
+
+void LoongArch64Emitter::VSAT_HU(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui4) {
+    Write32(EncodeVdVjUk4(Opcode32::VSAT_HU, vd, vj, ui4));
+}
+
+void LoongArch64Emitter::VSAT_WU(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui5) {
+    Write32(EncodeVdVjUk5(Opcode32::VSAT_WU, vd, vj, ui5));
+}
+
+void LoongArch64Emitter::VSAT_DU(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui6) {
+    Write32(EncodeVdVjUk6(Opcode32::VSAT_DU, vd, vj, ui6));
+}
+
+void LoongArch64Emitter::VSLLI_B(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui3) {
+	Write32(EncodeVdVjUk3(Opcode32::VSLLI_B, vd, vj, ui3));
+}
+
+void LoongArch64Emitter::VSLLI_H(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui4) {
+	Write32(EncodeVdVjUk4(Opcode32::VSLLI_H, vd, vj, ui4));
+}
+
+void LoongArch64Emitter::VSLLI_W(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui5) {
+	Write32(EncodeVdVjUk5(Opcode32::VSLLI_W, vd, vj, ui5));
+}
+
+void LoongArch64Emitter::VSLLI_D(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui6) {
+	Write32(EncodeVdVjUk6(Opcode32::VSLLI_D, vd, vj, ui6));
+}
+
+void LoongArch64Emitter::VSRLI_B(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui3) {
+	Write32(EncodeVdVjUk3(Opcode32::VSRLI_B, vd, vj, ui3));
+}
+
+void LoongArch64Emitter::VSRLI_H(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui4) {
+	Write32(EncodeVdVjUk4(Opcode32::VSRLI_H, vd, vj, ui4));
+}
+
+void LoongArch64Emitter::VSRLI_W(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui5) {
+	Write32(EncodeVdVjUk5(Opcode32::VSRLI_W, vd, vj, ui5));
+}
+
+void LoongArch64Emitter::VSRLI_D(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui6) {
+	Write32(EncodeVdVjUk6(Opcode32::VSRLI_D, vd, vj, ui6));
+}
+
+void LoongArch64Emitter::VSRAI_B(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui3) {
+	Write32(EncodeVdVjUk3(Opcode32::VSRAI_B, vd, vj, ui3));
+}
+
+void LoongArch64Emitter::VSRAI_H(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui4) {
+	Write32(EncodeVdVjUk4(Opcode32::VSRAI_H, vd, vj, ui4));
+}
+
+void LoongArch64Emitter::VSRAI_W(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui5) {
+	Write32(EncodeVdVjUk5(Opcode32::VSRAI_W, vd, vj, ui5));
+}
+
+void LoongArch64Emitter::VSRAI_D(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui6) {
+	Write32(EncodeVdVjUk6(Opcode32::VSRAI_D, vd, vj, ui6));
+}
+
+void LoongArch64Emitter::VSRLNI_B_H(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui4) {
+	Write32(EncodeVdVjUk4(Opcode32::VSRLNI_B_H, vd, vj, ui4));
+}
+
+void LoongArch64Emitter::VSRLNI_H_W(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui5) {
+	Write32(EncodeVdVjUk5(Opcode32::VSRLNI_H_W, vd, vj, ui5));
+}
+
+void LoongArch64Emitter::VSRLNI_W_D(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui6) {
+	Write32(EncodeVdVjUk6(Opcode32::VSRLNI_W_D, vd, vj, ui6));
+}
+
+void LoongArch64Emitter::VSRLNI_D_Q(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui7) {
+	Write32(EncodeVdVjUk7(Opcode32::VSRLNI_D_Q, vd, vj, ui7));
+}
+
+void LoongArch64Emitter::VSRLRNI_B_H(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui4) {
+	Write32(EncodeVdVjUk4(Opcode32::VSRLRNI_B_H, vd, vj, ui4));
+}
+
+void LoongArch64Emitter::VSRLRNI_H_W(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui5) {
+	Write32(EncodeVdVjUk5(Opcode32::VSRLRNI_H_W, vd, vj, ui5));
+}
+
+void LoongArch64Emitter::VSRLRNI_W_D(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui6) {
+	Write32(EncodeVdVjUk6(Opcode32::VSRLRNI_W_D, vd, vj, ui6));
+}
+
+void LoongArch64Emitter::VSRLRNI_D_Q(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui7) {
+	Write32(EncodeVdVjUk7(Opcode32::VSRLRNI_D_Q, vd, vj, ui7));
+}
+
+void LoongArch64Emitter::VSSRLNI_B_H(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui4) {
+	Write32(EncodeVdVjUk4(Opcode32::VSSRLNI_B_H, vd, vj, ui4));
+}
+
+void LoongArch64Emitter::VSSRLNI_H_W(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui5) {
+	Write32(EncodeVdVjUk5(Opcode32::VSSRLNI_H_W, vd, vj, ui5));
+}
+
+void LoongArch64Emitter::VSSRLNI_W_D(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui6) {
+	Write32(EncodeVdVjUk6(Opcode32::VSSRLNI_W_D, vd, vj, ui6));
+}
+
+void LoongArch64Emitter::VSSRLNI_D_Q(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui7) {
+	Write32(EncodeVdVjUk7(Opcode32::VSSRLNI_D_Q, vd, vj, ui7));
+}
+
+void LoongArch64Emitter::VSSRLNI_BU_H(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui4) {
+	Write32(EncodeVdVjUk4(Opcode32::VSSRLNI_BU_H, vd, vj, ui4));
+}
+
+void LoongArch64Emitter::VSSRLNI_HU_W(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui5) {
+	Write32(EncodeVdVjUk5(Opcode32::VSSRLNI_HU_W, vd, vj, ui5));
+}
+
+void LoongArch64Emitter::VSSRLNI_WU_D(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui6) {
+	Write32(EncodeVdVjUk6(Opcode32::VSSRLNI_WU_D, vd, vj, ui6));
+}
+
+void LoongArch64Emitter::VSSRLNI_DU_Q(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui7) {
+	Write32(EncodeVdVjUk7(Opcode32::VSSRLNI_DU_Q, vd, vj, ui7));
+}
+
+void LoongArch64Emitter::VSSRLRNI_B_H(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui4) {
+	Write32(EncodeVdVjUk4(Opcode32::VSSRLRNI_B_H, vd, vj, ui4));
+}
+
+void LoongArch64Emitter::VSSRLRNI_H_W(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui5) {
+	Write32(EncodeVdVjUk5(Opcode32::VSSRLRNI_H_W, vd, vj, ui5));
+}
+
+void LoongArch64Emitter::VSSRLRNI_W_D(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui6) {
+	Write32(EncodeVdVjUk6(Opcode32::VSSRLRNI_W_D, vd, vj, ui6));
+}
+
+void LoongArch64Emitter::VSSRLRNI_D_Q(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui7) {
+	Write32(EncodeVdVjUk7(Opcode32::VSSRLRNI_D_Q, vd, vj, ui7));
+}
+
+void LoongArch64Emitter::VSSRLRNI_BU_H(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui4) {
+	Write32(EncodeVdVjUk4(Opcode32::VSSRLRNI_BU_H, vd, vj, ui4));
+}
+
+void LoongArch64Emitter::VSSRLRNI_HU_W(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui5) {
+	Write32(EncodeVdVjUk5(Opcode32::VSSRLRNI_HU_W, vd, vj, ui5));
+}
+
+void LoongArch64Emitter::VSSRLRNI_WU_D(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui6) {
+	Write32(EncodeVdVjUk6(Opcode32::VSSRLRNI_WU_D, vd, vj, ui6));
+}
+
+void LoongArch64Emitter::VSSRLRNI_DU_Q(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui7) {
+	Write32(EncodeVdVjUk7(Opcode32::VSSRLRNI_DU_Q, vd, vj, ui7));
+}
+
+void LoongArch64Emitter::VSRANI_B_H(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui4) {
+	Write32(EncodeVdVjUk4(Opcode32::VSRANI_B_H, vd, vj, ui4));
+}
+
+void LoongArch64Emitter::VSRANI_H_W(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui5) {
+	Write32(EncodeVdVjUk5(Opcode32::VSRANI_H_W, vd, vj, ui5));
+}
+
+void LoongArch64Emitter::VSRANI_W_D(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui6) {
+	Write32(EncodeVdVjUk6(Opcode32::VSRANI_W_D, vd, vj, ui6));
+}
+
+void LoongArch64Emitter::VSRANI_D_Q(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui7) {
+	Write32(EncodeVdVjUk7(Opcode32::VSRANI_D_Q, vd, vj, ui7));
+}
+
+void LoongArch64Emitter::VSRARNI_B_H(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui4) {
+	Write32(EncodeVdVjUk4(Opcode32::VSRARNI_B_H, vd, vj, ui4));
+}
+
+void LoongArch64Emitter::VSRARNI_H_W(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui5) {
+	Write32(EncodeVdVjUk5(Opcode32::VSRARNI_H_W, vd, vj, ui5));
+}
+
+void LoongArch64Emitter::VSRARNI_W_D(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui6) {
+	Write32(EncodeVdVjUk6(Opcode32::VSRARNI_W_D, vd, vj, ui6));
+}
+
+void LoongArch64Emitter::VSRARNI_D_Q(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui7) {
+	Write32(EncodeVdVjUk7(Opcode32::VSRARNI_D_Q, vd, vj, ui7));
+}
+
+void LoongArch64Emitter::VSSRANI_B_H(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui4) {
+	Write32(EncodeVdVjUk4(Opcode32::VSSRANI_B_H, vd, vj, ui4));
+}
+
+void LoongArch64Emitter::VSSRANI_H_W(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui5) {
+	Write32(EncodeVdVjUk5(Opcode32::VSSRANI_H_W, vd, vj, ui5));
+}
+
+void LoongArch64Emitter::VSSRANI_W_D(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui6) {
+	Write32(EncodeVdVjUk6(Opcode32::VSSRANI_W_D, vd, vj, ui6));
+}
+
+void LoongArch64Emitter::VSSRANI_D_Q(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui7) {
+	Write32(EncodeVdVjUk7(Opcode32::VSSRANI_D_Q, vd, vj, ui7));
+}
+
+void LoongArch64Emitter::VSSRANI_BU_H(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui4) {
+	Write32(EncodeVdVjUk4(Opcode32::VSSRANI_BU_H, vd, vj, ui4));
+}
+
+void LoongArch64Emitter::VSSRANI_HU_W(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui5) {
+	Write32(EncodeVdVjUk5(Opcode32::VSSRANI_HU_W, vd, vj, ui5));
+}
+
+void LoongArch64Emitter::VSSRANI_WU_D(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui6) {
+	Write32(EncodeVdVjUk6(Opcode32::VSSRANI_WU_D, vd, vj, ui6));
+}
+
+void LoongArch64Emitter::VSSRANI_DU_Q(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui7) {
+	Write32(EncodeVdVjUk7(Opcode32::VSSRANI_DU_Q, vd, vj, ui7));
+}
+
+void LoongArch64Emitter::VSSRARNI_B_H(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui4) {
+	Write32(EncodeVdVjUk4(Opcode32::VSSRARNI_B_H, vd, vj, ui4));
+}
+
+void LoongArch64Emitter::VSSRARNI_H_W(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui5) {
+	Write32(EncodeVdVjUk5(Opcode32::VSSRARNI_H_W, vd, vj, ui5));
+}
+
+void LoongArch64Emitter::VSSRARNI_W_D(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui6) {
+	Write32(EncodeVdVjUk6(Opcode32::VSSRARNI_W_D, vd, vj, ui6));
+}
+
+void LoongArch64Emitter::VSSRARNI_D_Q(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui7) {
+	Write32(EncodeVdVjUk7(Opcode32::VSSRARNI_D_Q, vd, vj, ui7));
+}
+
+void LoongArch64Emitter::VSSRARNI_BU_H(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui4) {
+	Write32(EncodeVdVjUk4(Opcode32::VSSRARNI_BU_H, vd, vj, ui4));
+}
+
+void LoongArch64Emitter::VSSRARNI_HU_W(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui5) {
+	Write32(EncodeVdVjUk5(Opcode32::VSSRARNI_HU_W, vd, vj, ui5));
+}
+
+void LoongArch64Emitter::VSSRARNI_WU_D(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui6) {
+	Write32(EncodeVdVjUk6(Opcode32::VSSRARNI_WU_D, vd, vj, ui6));
+}
+
+void LoongArch64Emitter::VSSRARNI_DU_Q(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui7) {
+	Write32(EncodeVdVjUk7(Opcode32::VSSRARNI_DU_Q, vd, vj, ui7));
+}
+
+void LoongArch64Emitter::VEXTRINS_D(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui8) {
+	Write32(EncodeVdVjUk8(Opcode32::VEXTRINS_D, vd, vj, ui8));
+}
+
+void LoongArch64Emitter::VEXTRINS_W(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui8) {
+	Write32(EncodeVdVjUk8(Opcode32::VEXTRINS_W, vd, vj, ui8));
+}
+
+void LoongArch64Emitter::VEXTRINS_H(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui8) {
+	Write32(EncodeVdVjUk8(Opcode32::VEXTRINS_H, vd, vj, ui8));
+}
+
+void LoongArch64Emitter::VEXTRINS_B(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui8) {
+	Write32(EncodeVdVjUk8(Opcode32::VEXTRINS_B, vd, vj, ui8));
+}
+
+void LoongArch64Emitter::VSHUF4I_B(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui8) {
+	Write32(EncodeVdVjUk8(Opcode32::VSHUF4I_B, vd, vj, ui8));
+}
+
+void LoongArch64Emitter::VSHUF4I_H(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui8) {
+	Write32(EncodeVdVjUk8(Opcode32::VSHUF4I_H, vd, vj, ui8));
+}
+
+void LoongArch64Emitter::VSHUF4I_W(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui8) {
+	Write32(EncodeVdVjUk8(Opcode32::VSHUF4I_W, vd, vj, ui8));
+}
+
+void LoongArch64Emitter::VSHUF4I_D(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui8) {
+	Write32(EncodeVdVjUk8(Opcode32::VSHUF4I_D, vd, vj, ui8));
+}
+
+void LoongArch64Emitter::VBITSELI_B(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui8) {
+	Write32(EncodeVdVjUk8(Opcode32::VBITSELI_B, vd, vj, ui8));
+}
+
+void LoongArch64Emitter::VANDI_B(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui8) {
+	Write32(EncodeVdVjUk8(Opcode32::VANDI_B, vd, vj, ui8));
+}
+
+void LoongArch64Emitter::VORI_B(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui8) {
+	Write32(EncodeVdVjUk8(Opcode32::VORI_B, vd, vj, ui8));
+}
+
+void LoongArch64Emitter::VXORI_B(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui8) {
+	Write32(EncodeVdVjUk8(Opcode32::VXORI_B, vd, vj, ui8));
+}
+
+void LoongArch64Emitter::VNORI_B(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui8) {
+	Write32(EncodeVdVjUk8(Opcode32::VNORI_B, vd, vj, ui8));
+}
+
+void LoongArch64Emitter::VLDI(LoongArch64Reg vd, s16 i13) {
+	Write32(EncodeVdSj13(Opcode32::VLDI, vd, i13));
+}
+
+void LoongArch64Emitter::VPERMI_W(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui8) {
+	Write32(EncodeVdVjUk8(Opcode32::VPERMI_W, vd, vj, ui8));
 }
 
 void LoongArch64CodeBlock::PoisonMemory(int offset) {

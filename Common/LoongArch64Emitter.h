@@ -183,7 +183,7 @@ public:
 
     void ALSL_W(LoongArch64Reg rd, LoongArch64Reg rj, LoongArch64Reg rk, u8 sa2); // DJKUa2pp1
     void ALSL_D(LoongArch64Reg rd, LoongArch64Reg rj, LoongArch64Reg rk, u8 sa2); // DJKUa2pp1
-    void ALSL_WU(LoongArch64Reg rd, LoongArch64Reg rj, LoongArch64Reg rk, u8 sa2);// DJKUa2pp1
+    void ALSL_WU(LoongArch64Reg rd, LoongArch64Reg rj, LoongArch64Reg rk, u8 sa2); // DJKUa2pp1
 
     void LU12I_W(LoongArch64Reg rd, s32 si20); // DSj20
     void LU32I_D(LoongArch64Reg rd, s32 si20); // DSj20
@@ -685,8 +685,8 @@ public:
     void VSTELM_W(LoongArch64Reg vd, LoongArch64Reg rj, s16 si8, u8 idx2); // VdJSk8Un2
     void VSTELM_H(LoongArch64Reg vd, LoongArch64Reg rj, s16 si8, u8 idx3); // VdJSk8Un3
     void VSTELM_B(LoongArch64Reg vd, LoongArch64Reg rj, s16 si8, u8 idx4); // VdJSk8Un4
-    void VLDX(LoongArch64Reg vd, LoongArch64Reg rj, LoongArch64Reg rk);// VdJK
-    void VSTX(LoongArch64Reg vd, LoongArch64Reg rj, LoongArch64Reg rk);// VdJK
+    void VLDX(LoongArch64Reg vd, LoongArch64Reg rj, LoongArch64Reg rk); // VdJK
+    void VSTX(LoongArch64Reg vd, LoongArch64Reg rj, LoongArch64Reg rk); // VdJK
     void VSEQ_B(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk); // VdVjVk
     void VSEQ_H(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk); // VdVjVk
     void VSEQ_W(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk); // VdVjVk
@@ -1258,10 +1258,10 @@ public:
     void VSAT_H(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui4); // VdVjUk4
     void VSAT_W(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui5); // VdVjUk5
     void VSAT_D(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui6); // VdVjUk6
-    void VSAT_BU(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui3);  // VdVjUk3
-    void VSAT_HU(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui4);  // VdVjUk4
-    void VSAT_WU(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui5);  // VdVjUk5
-    void VSAT_DU(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui6);  // VdVjUk6
+    void VSAT_BU(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui3); // VdVjUk3
+    void VSAT_HU(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui4); // VdVjUk4
+    void VSAT_WU(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui5); // VdVjUk5
+    void VSAT_DU(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui6); // VdVjUk6
     void VSLLI_B(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui3); // VdVjUk3
     void VSLLI_H(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui4); // VdVjUk4
     void VSLLI_W(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui5); // VdVjUk5
@@ -1306,10 +1306,10 @@ public:
     void VSRARNI_H_W(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui5); // VdVjUk5
     void VSRARNI_W_D(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui6); // VdVjUk6
     void VSRARNI_D_Q(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui7); // VdVjUk7
-    void VSSRANI_B_(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui4); // VdVjUk4
-    void VSSRANI_H_(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui5); // VdVjUk5
-    void VSSRANI_W_(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui6); // VdVjUk6
-    void VSSRANI_D_(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui7); // VdVjUk7
+    void VSSRANI_B_H(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui4); // VdVjUk4
+    void VSSRANI_H_W(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui5); // VdVjUk5
+    void VSSRANI_W_D(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui6); // VdVjUk6
+    void VSSRANI_D_Q(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui7); // VdVjUk7
     void VSSRANI_BU_H(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui4); // VdVjUk4
     void VSSRANI_HU_W(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui5); // VdVjUk5
     void VSSRANI_WU_D(LoongArch64Reg vd, LoongArch64Reg vj, u8 ui6); // VdVjUk6
