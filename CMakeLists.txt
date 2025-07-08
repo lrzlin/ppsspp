@@ -2452,6 +2452,8 @@ add_library(${CoreLibName} ${CoreLinkType}
 	ext/disarm.h
 	ext/riscv-disas.cpp
 	ext/riscv-disas.h
+	ext/loongarch-disasm.c
+	ext/loongarch-disasm.h
 	${CMAKE_CURRENT_BINARY_DIR}/git-version.cpp
 )
 

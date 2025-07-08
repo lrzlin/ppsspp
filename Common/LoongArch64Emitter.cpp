@@ -1716,11 +1716,7 @@ void LoongArch64Emitter::FlushIcache() {
 
 void LoongArch64Emitter::FlushIcacheSection(const u8 *start, const u8 *end) {
 #if PPSSPP_ARCH(LOONGARCH64)
-#if defined(__clang__)
-	__clear_cache(start, end);
-#else
 	__builtin___clear_cache((char *)start, (char *)end);
-#endif
 #endif
 }
 
@@ -1841,16 +1837,16 @@ void LoongArch64Emitter::SetRegToImmediate(LoongArch64Reg rd, uint64_t value) {
 	}
 
 	if (svalue <= 0x7fffffffl && svalue >= -0x80000000l) {
- // Use lu12i.w/ori to load 32-bits immediate.
+        // Use lu12i.w/ori to load 32-bits immediate.
 		LU12I_W(rd, (s32)((svalue & 0xffffffff) >> 12));
 		ORI(rd, rd, (s16)(svalue & 0xFFF));
- return;
+        return;
 	} else if (svalue <= 0x7ffffffffffffl && svalue >= -0x8000000000000l) {
- // Use lu12i.w/ori/lu32i.d to load 52-bits immediate.
+        // Use lu12i.w/ori/lu32i.d to load 52-bits immediate.
 		LU12I_W(rd, (s32)((svalue & 0xffffffff) >> 12));
 		ORI(rd, rd, (s16)(svalue & 0xFFF));
 		LU32I_D(rd, (s32)((svalue >> 32) & 0xfffff));
- return;
+        return;
 	}
     // Use lu12i.w/ori/lu32i.d/lu52i.d to load 64-bits immediate.
 	LU12I_W(rd, (s32)((svalue & 0xffffffff) >> 12));
@@ -3495,30 +3491,6 @@ void LoongArch64Emitter::VFCMP_CAF_S(LoongArch64Reg vd, LoongArch64Reg vj, Loong
 
 void LoongArch64Emitter::VFCMP_SAF_S(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
 	Write32(EncodeVdVjVk(Opcode32::VFCMP_SAF_S, vd, vj, vk));
-}
-
-void LoongArch64Emitter::VFCMP_CLT_S(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
-	Write32(EncodeVdVjVk(Opcode32::VFCMP_CLT_S, vd, vj, vk));
-}
-
-void LoongArch64Emitter::VFCMP_SLT_S(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
-	Write32(EncodeVdVjVk(Opcode32::VFCMP_SLT_S, vd, vj, vk));
-}
-
-void LoongArch64Emitter::VFCMP_CEQ_S(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
-	Write32(EncodeVdVjVk(Opcode32::VFCMP_CEQ_S, vd, vj, vk));
-}
-
-void LoongArch64Emitter::VFCMP_SEQ_S(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
-	Write32(EncodeVdVjVk(Opcode32::VFCMP_SEQ_S, vd, vj, vk));
-}
-
-void LoongArch64Emitter::VFCMP_CLE_S(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
-	Write32(EncodeVdVjVk(Opcode32::VFCMP_CLE_S, vd, vj, vk));
-}
-
-void LoongArch64Emitter::VFCMP_SLE_S(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {
-	Write32(EncodeVdVjVk(Opcode32::VFCMP_SLE_S, vd, vj, vk));
 }
 
 void LoongArch64Emitter::VFCMP_CLT_S(LoongArch64Reg vd, LoongArch64Reg vj, LoongArch64Reg vk) {

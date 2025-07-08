@@ -224,14 +224,10 @@ void LoongArch64JitBackend::GenerateFixedCode(MIPSState *mipsState) {
 	// Leave this at the end, add more stuff above.
 	if (enableDisasm) {
 #if PPSSPP_ARCH(LOONGARCH64)
-		// Currently do not support disassemble LoongArch64.
-		ERROR_LOG(Log::JIT, "start: %16lx, end: %16ld", start, GetCodePtr() - start);
-		/*
 		std::vector<std::string> lines = DisassembleLA64(start, GetCodePtr() - start);
 		for (auto s : lines) {
 			INFO_LOG(Log::JIT, "%s", s.c_str());
 		}
-		*/
 #endif
 	}
 

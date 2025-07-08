@@ -157,6 +157,11 @@ bool LoongArch64JitBackend::CompileBlock(IRBlockCache *irBlockCache, int block_n
 			auto next = std::next(it);
 			const u8 *nextp = next == addressesLookup.end() ? GetCodePointer() : next->first;
 
+#if PPSSPP_ARCH(LOONGARCH64)
+			auto lines = DisassembleLA64(p, (int)(nextp - p));
+			for (const auto &line : lines)
+				INFO_LOG(Log::JIT, "LA: %s", line.c_str());
+#endif
 			p = nextp;
 		}
 	}
