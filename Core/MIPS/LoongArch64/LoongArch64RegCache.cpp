@@ -412,7 +412,7 @@ LoongArch64Reg LoongArch64RegCache::RPtr(IRReg mipsReg) {
 		return (LoongArch64Reg)mr[mipsReg].nReg;
 	} else if (mr[mipsReg].loc == MIPSLoc::REG || mr[mipsReg].loc == MIPSLoc::REG_IMM) {
 		int la = mr[mipsReg].nReg;
-		_dbg_assert_(nr[la]].pointerified);
+		_dbg_assert_(nr[la].pointerified);
 		if (nr[la].pointerified) {
 			return (LoongArch64Reg)mr[mipsReg].nReg;
 		} else {
