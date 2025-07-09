@@ -209,13 +209,18 @@ void LoongArch64JitBackend::CompIR_System(IRInst inst) {
 		WriteDebugProfilerStatus(IRProfilerStatus::IN_JIT);
 		LoadStaticRegisters();
 
-		regs_.Map(inst);
-		SRAI_W(regs_.R(inst.dest), R4, 31);
-
+		// Do not violate value in R4
+		MOVE(SCRATCH1, R4);
+		SRAI_W(SCRATCH2, R4, 31);
 		// Absolute value trick: if neg, abs(x) == (x ^ -1) + 1.
-		XOR(R4, R4, regs_.R(inst.dest));
-		SUB_W(R4, R4, regs_.R(inst.dest));
-		SUB_D(DOWNCOUNTREG, DOWNCOUNTREG, R4);
+		XOR(SCRATCH1, SCRATCH1, SCRATCH2);
+		SUB_W(SCRATCH1, SCRATCH1, SCRATCH2);
+		SUB_D(DOWNCOUNTREG, DOWNCOUNTREG, SCRATCH1);
+
+		// R4 might be the mapped reg, but there's only one.
+		// Set dest reg to the sign of the result.
+		regs_.Map(inst);
+		MOVE(regs_.R(inst.dest), SCRATCH2);
 		break;
 
 	case IROp::Break:

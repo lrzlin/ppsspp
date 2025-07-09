@@ -46,7 +46,6 @@ void LoongArch64JitBackend::CompIR_VecAssign(IRInst inst) {
 	case IROp::Vec4Init:
 		regs_.Map(inst);
 
-		// TODO: Check if FCVT/FMV/FL is better.
 		switch ((Vec4Init)inst.src1) {
 		case Vec4Init::AllZERO:
 			for (int i = 0; i < 4; ++i)
@@ -391,7 +390,7 @@ void LoongArch64JitBackend::CompIR_VecClamp(IRInst inst) {
 		for (int i = 0; i < 4; i++) {
 			MOVFR2GR_S(SCRATCH1, regs_.F(inst.src1 + i));
 			SRAI_W(SCRATCH2, SCRATCH1, 31);
-			SUB_D(SCRATCH2, R_ZERO, SCRATCH2);
+			ORN(SCRATCH2, R_ZERO, SCRATCH2);
 			AND(SCRATCH1, SCRATCH1, SCRATCH2);
 			MOVGR2FR_W(regs_.F(inst.dest + i), SCRATCH1);
 		}

@@ -562,7 +562,7 @@ void LoongArch64JitBackend::CompIR_FSpecial(IRInst inst) {
 			FMOV_S(F0, regs_.F(inst.src1));
 		} else {
 			int offset = offsetof(MIPSState, f) + inst.src1 * 4;
-			FLD_S(F10, CTXREG, offset);
+			FLD_S(F0, CTXREG, offset);
 		}
 		QuickCallFunction(func, SCRATCH1);
 
