@@ -399,7 +399,6 @@ void LoongArch64JitBackend::NormalizeSrc12(IRInst inst, LoongArch64Reg *lhs, Loo
 LoongArch64Reg LoongArch64JitBackend::NormalizeR(IRReg rs, IRReg rd, LoongArch64Reg tempReg) {
 	// For proper compare, we must sign extend so they both match or don't match.
 	// But don't change pointers, in case one is SP (happens in LittleBigPlanet.)
-	// -- Not verified on LoongArch64 --
 	if (regs_.IsGPRImm(rs) && regs_.GetGPRImm(rs) == 0) {
 		return R_ZERO;
 	} else if (regs_.IsGPRMappedAsPointer(rs) || rs == rd) {

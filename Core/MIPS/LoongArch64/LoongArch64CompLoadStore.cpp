@@ -199,10 +199,15 @@ void LoongArch64JitBackend::CompIR_VecLoad(IRInst inst) {
 
 	switch (inst.op) {
 	case IROp::LoadVec4:
-		for (int i = 0; i < 4; ++i) {
-			// Spilling is okay.
-			regs_.MapFPR(inst.dest + i, MIPSMap::NOINIT);
-			FLD_S(regs_.F(inst.dest + i), addrReg, imm + 4 * i);
+		if (cpu_info.LOONGARCH_LSX) {
+			regs_.MapVec4(inst.dest, MIPSMap::NOINIT);
+			VLD(regs_.V(inst.dest), addrReg, imm);
+		} else {
+			for (int i = 0; i < 4; ++i) {
+				// Spilling is okay.
+				regs_.MapFPR(inst.dest + i, MIPSMap::NOINIT);
+				FLD_S(regs_.F(inst.dest + i), addrReg, imm + 4 * i);
+			}
 		}
 		break;
 
@@ -370,10 +375,15 @@ void LoongArch64JitBackend::CompIR_VecStore(IRInst inst) {
 
 	switch (inst.op) {
 	case IROp::StoreVec4:
-		for (int i = 0; i < 4; ++i) {
-			// Spilling is okay, though not ideal.
-			regs_.MapFPR(inst.src3 + i);
-			FST_S(regs_.F(inst.src3 + i), addrReg, imm + 4 * i);
+		if (cpu_info.LOONGARCH_LSX) {
+			regs_.MapVec4(inst.src3);
+			VST(regs_.V(inst.src3), addrReg, imm);
+		} else {
+			for (int i = 0; i < 4; ++i) {
+				// Spilling is okay, though not ideal.
+				regs_.MapFPR(inst.src3 + i);
+				FST_S(regs_.F(inst.src3 + i), addrReg, imm + 4 * i);
+			}
 		}
 		break;
 

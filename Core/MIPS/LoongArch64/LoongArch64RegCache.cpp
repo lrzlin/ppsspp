@@ -320,13 +320,15 @@ void LoongArch64RegCache::LoadNativeReg(IRNativeReg nreg, IRReg first, int lanes
 		nr[nreg].normalized32 = true;
 	} else {
 		_dbg_assert_(r >= F0 && r <= F31);
-		// Multilane not yet supported.
-		_assert_(lanes == 1);
-		if (mr[first].loc == MIPSLoc::FREG) {
+		_assert_msg_(mr[first].loc == MIPSLoc::FREG, "Cannot store this type: %d", (int)mr[first].loc);
+		if (lanes == 1)
 			emit_->FLD_S(r, CTXREG, GetMipsRegOffset(first));
-		} else {
-			_assert_msg_(mr[first].loc == MIPSLoc::FREG, "Cannot store this type: %d", (int)mr[first].loc);
-		}
+		else if (lanes == 2)
+			emit_->FLD_D(r, CTXREG, GetMipsRegOffset(first));
+		else if (lanes == 4)
+			emit_->VLD(r, CTXREG, GetMipsRegOffset(first));
+		else
+			_assert_(false);
 	}
 }
 
@@ -335,7 +337,6 @@ void LoongArch64RegCache::StoreNativeReg(IRNativeReg nreg, IRReg first, int lane
 	_dbg_assert_(r > R0);
 	_dbg_assert_(first != MIPS_REG_ZERO);
 	if (r <= R31) {
-		// Multilane not yet supported.
 		_assert_(lanes == 1 || (lanes == 2 && first == IRREG_LO));
 		_assert_(mr[first].loc == MIPSLoc::REG || mr[first].loc == MIPSLoc::REG_IMM);
 		if (lanes == 1)
@@ -346,13 +347,15 @@ void LoongArch64RegCache::StoreNativeReg(IRNativeReg nreg, IRReg first, int lane
 			_assert_(false);
 	} else {
 		_dbg_assert_(r >= F0 && r <= F31);
-		// Multilane not yet supported.
-		_assert_(lanes == 1);
-		if (mr[first].loc == MIPSLoc::FREG) {
+		_assert_msg_(mr[first].loc == MIPSLoc::FREG, "Cannot store this type: %d", (int)mr[first].loc);
+		if (lanes == 1)
 			emit_->FST_S(r, CTXREG, GetMipsRegOffset(first));
-		} else {
-			_assert_msg_(mr[first].loc == MIPSLoc::FREG, "Cannot store this type: %d", (int)mr[first].loc);
-		}
+		else if (lanes == 2)
+			emit_->FST_D(r, CTXREG, GetMipsRegOffset(first));
+		else if (lanes == 4)
+			emit_->VST(r, CTXREG, GetMipsRegOffset(first));
+		else
+			_assert_(false);
 	}
 }
 
