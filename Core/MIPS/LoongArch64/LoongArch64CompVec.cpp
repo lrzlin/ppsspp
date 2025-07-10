@@ -219,14 +219,19 @@ void LoongArch64JitBackend::CompIR_VecAssign(IRInst inst) {
 	case IROp::Vec4Blend:
 		regs_.Map(inst);
 		if (cpu_info.LOONGARCH_LSX) {
-			if (inst.dest == inst.src1) {
-				VPERMI_W(regs_.V(inst.dest), regs_.V(inst.src2), (uint8_t)inst.constant);
-			} else if (inst.dest == inst.src2) {
-				VPERMI_W(regs_.V(inst.dest), regs_.V(inst.src1), (uint8_t)~inst.constant);
-			} else {
-				VBSLL_V(regs_.V(inst.dest), regs_.V(inst.src1), 0);
-				VPERMI_W(regs_.V(inst.dest), regs_.V(inst.src2), (uint8_t)inst.constant);
-			}
+			LoongArch64Reg src = regs_.V(inst.src1);;
+			uint8_t imm = inst.constant;
+			if (inst.dest == inst.src1)
+				src = regs_.V(inst.src2);
+			else if (inst.dest == inst.src2)
+				imm = ~imm;
+			else
+				VOR_V(regs_.V(inst.dest), src, src);
+
+			for (int i = 0; i < 4; ++i)
+				if (imm & (1 << i)) {
+					VEXTRINS_W(regs_.V(inst.dest), src, (i << 4) | i);
+				}
 		} else {
 			for (int i = 0; i < 4; ++i) {
 				int which = (inst.constant >> i) & 1;
@@ -241,7 +246,7 @@ void LoongArch64JitBackend::CompIR_VecAssign(IRInst inst) {
 		if (inst.dest != inst.src1) {
 			regs_.Map(inst);
 			if (cpu_info.LOONGARCH_LSX)
-				VBSLL_V(regs_.V(inst.dest), regs_.V(inst.src1), 0);
+				VOR_V(regs_.V(inst.dest), regs_.V(inst.src1), regs_.V(inst.src1));
 			else
 				for (int i = 0; i < 4; ++i)
 					FMOV_S(regs_.F(inst.dest + i), regs_.F(inst.src1 + i));
@@ -261,7 +266,7 @@ void LoongArch64JitBackend::CompIR_VecArith(IRInst inst) {
 	case IROp::Vec4Add:
 		regs_.Map(inst);
 		if (cpu_info.LOONGARCH_LSX)
-			VADD_W(regs_.V(inst.dest), regs_.V(inst.src1), regs_.V(inst.src2));
+			VFADD_S(regs_.V(inst.dest), regs_.V(inst.src1), regs_.V(inst.src2));
 		else
 			for (int i = 0; i < 4; ++i)
 				FADD_S(regs_.F(inst.dest + i), regs_.F(inst.src1 + i), regs_.F(inst.src2 + i));
@@ -270,7 +275,7 @@ void LoongArch64JitBackend::CompIR_VecArith(IRInst inst) {
 	case IROp::Vec4Sub:
 		regs_.Map(inst);
 		if (cpu_info.LOONGARCH_LSX)
-			VSUB_W(regs_.V(inst.dest), regs_.V(inst.src1), regs_.V(inst.src2));
+			VFSUB_S(regs_.V(inst.dest), regs_.V(inst.src1), regs_.V(inst.src2));
 		else
 			for (int i = 0; i < 4; ++i)
 				FSUB_S(regs_.F(inst.dest + i), regs_.F(inst.src1 + i), regs_.F(inst.src2 + i));
@@ -300,6 +305,7 @@ void LoongArch64JitBackend::CompIR_VecArith(IRInst inst) {
 			if (Overlap(inst.dest, 4, inst.src2, 1) || Overlap(inst.src1, 4, inst.src2, 1))
 				DISABLE;
 
+			VSHUF4I_W(regs_.V(inst.src2), regs_.V(inst.src2), 0);
 			VFMUL_S(regs_.V(inst.dest), regs_.V(inst.src1), regs_.V(inst.src2));
 		} else {
 			if (Overlap(inst.src2, 1, inst.dest, 3)) {
@@ -331,7 +337,7 @@ void LoongArch64JitBackend::CompIR_VecArith(IRInst inst) {
 	case IROp::Vec4Abs:
 		regs_.Map(inst);
 		if (cpu_info.LOONGARCH_LSX)
-			VBITSETI_W(regs_.F(inst.dest), regs_.F(inst.src1), 31);
+			VBITSETI_W(regs_.V(inst.dest), regs_.V(inst.src1), 31);
 		else
 			for (int i = 0; i < 4; ++i)
 				FABS_S(regs_.F(inst.dest + i), regs_.F(inst.src1 + i));
@@ -354,7 +360,12 @@ void LoongArch64JitBackend::CompIR_VecHoriz(IRInst inst) {
 				DISABLE;
 
 			VFMUL_S(regs_.V(inst.dest), regs_.V(inst.src1), regs_.V(inst.src2));
-			VFMADD_S(regs_.V(inst.dest), regs_.V(inst.src1), regs_.V(inst.src2), regs_.V(inst.dest));
+			VOR_V(EncodeRegToV(SCRATCHF1), regs_.V(inst.dest), regs_.V(inst.dest));
+			VSHUF4I_W(EncodeRegToV(SCRATCHF1), regs_.V(inst.dest), VFPU_SWIZZLE(1, 0, 3, 2));
+			VFADD_S(regs_.V(inst.dest), regs_.V(inst.dest), EncodeRegToV(SCRATCHF1));
+			VEXTRINS_D(EncodeRegToV(SCRATCHF1), regs_.V(inst.dest), 1);
+			// Do we need care about upper 96 bits?
+			VFADD_S(regs_.V(inst.dest), regs_.V(inst.dest), EncodeRegToV(SCRATCHF1));
 		} else {
 			if (Overlap(inst.dest, 1, inst.src1, 4) || Overlap(inst.dest, 1, inst.src2, 4)) {
 				// This means inst.dest overlaps one of src1 or src2.  We have to do that one first.

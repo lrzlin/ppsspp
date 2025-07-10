@@ -31,10 +31,11 @@ using namespace LoongArch64JitConstants;
 
 LoongArch64RegCache::LoongArch64RegCache(MIPSComp::JitOptions *jo)
 	: IRNativeRegCacheBase(jo) {
-	// TODO: Update these when using LSX/LASX.
+	// The V(LSX) regs overlap F regs, so we just use one slot.
 	config_.totalNativeRegs = NUM_LAGPR + NUM_LAFPR;
+	// F regs are used for both FPU and Vec, so we don't need VREGs.
 	config_.mapUseVRegs = false;
-	config_.mapFPUSIMD = false;
+	config_.mapFPUSIMD = true;
 }
 
 void LoongArch64RegCache::Init(LoongArch64Emitter *emitter) {
@@ -326,7 +327,7 @@ void LoongArch64RegCache::LoadNativeReg(IRNativeReg nreg, IRReg first, int lanes
 		else if (lanes == 2)
 			emit_->FLD_D(r, CTXREG, GetMipsRegOffset(first));
 		else if (lanes == 4)
-			emit_->VLD(r, CTXREG, GetMipsRegOffset(first));
+			emit_->VLD(EncodeRegToV(r), CTXREG, GetMipsRegOffset(first));
 		else
 			_assert_(false);
 	}
@@ -353,7 +354,7 @@ void LoongArch64RegCache::StoreNativeReg(IRNativeReg nreg, IRReg first, int lane
 		else if (lanes == 2)
 			emit_->FST_D(r, CTXREG, GetMipsRegOffset(first));
 		else if (lanes == 4)
-			emit_->VST(r, CTXREG, GetMipsRegOffset(first));
+			emit_->VST(EncodeRegToV(r), CTXREG, GetMipsRegOffset(first));
 		else
 			_assert_(false);
 	}
