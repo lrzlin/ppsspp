@@ -81,14 +81,22 @@ protected:
 	void StoreNativeReg(IRNativeReg nreg, IRReg first, int lanes) override;
 	void SetNativeRegValue(IRNativeReg nreg, uint32_t imm) override;
 	void StoreRegValue(IRReg mreg, uint32_t imm) override;
+	bool TransferNativeReg(IRNativeReg nreg, IRNativeReg dest, MIPSLoc type, IRReg first, int lanes, MIPSMap flags) override;
 
 private:
+	bool TransferVecTo1(IRNativeReg nreg, IRNativeReg dest, IRReg first, int oldlanes);
+	bool Transfer1ToVec(IRNativeReg nreg, IRNativeReg dest, IRReg first, int lanes);
+
+	LoongArch64Gen::LoongArch64Reg FromNativeReg(IRNativeReg r) {
+		if (r >= NUM_LAGPR)
+			return (LoongArch64Gen::LoongArch64Reg)(LoongArch64Gen::V0 + (r - NUM_LAGPR));
+		return (LoongArch64Gen::LoongArch64Reg)(LoongArch64Gen::R0 + r);
+	}
+
 	LoongArch64Gen::LoongArch64Emitter *emit_ = nullptr;
 
 	enum {
 		NUM_LAGPR = 32,
 		NUM_LAFPR = 32,
-		NUM_LAVPR = 32,
-        NUM_LAXPR = 32,
 	};
 };

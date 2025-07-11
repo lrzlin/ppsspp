@@ -398,6 +398,282 @@ void LoongArch64RegCache::StoreRegValue(IRReg mreg, uint32_t imm) {
 	emit_->ST_W(storeReg, CTXREG, GetMipsRegOffset(mreg));
 }
 
+bool LoongArch64RegCache::TransferNativeReg(IRNativeReg nreg, IRNativeReg dest, MIPSLoc type, IRReg first, int lanes, MIPSMap flags) {
+	bool allowed = !mr[nr[nreg].mipsReg].isStatic;
+	// There's currently no support for non-FREGs here.
+	allowed = allowed && type == MIPSLoc::FREG;
+
+	if (dest == -1)
+		dest = nreg;
+
+	if (allowed && (flags == MIPSMap::INIT || flags == MIPSMap::DIRTY)) {
+		// Alright, changing lane count (possibly including lane position.)
+		IRReg oldfirst = nr[nreg].mipsReg;
+		int oldlanes = 0;
+		while (mr[oldfirst + oldlanes].nReg == nreg)
+			oldlanes++;
+		_assert_msg_(oldlanes != 0, "TransferNativeReg encountered nreg mismatch");
+		_assert_msg_(oldlanes != lanes, "TransferNativeReg transfer to same lanecount, misaligned?");
+
+		if (lanes == 1 && TransferVecTo1(nreg, dest, first, oldlanes))
+			return true;
+		if (oldlanes == 1 && Transfer1ToVec(nreg, dest, first, lanes))
+			return true;
+	}
+
+	return IRNativeRegCacheBase::TransferNativeReg(nreg, dest, type, first, lanes, flags);
+}
+
+bool LoongArch64RegCache::TransferVecTo1(IRNativeReg nreg, IRNativeReg dest, IRReg first, int oldlanes) {
+	IRReg oldfirst = nr[nreg].mipsReg;
+
+	// Is it worth preserving any of the old regs?
+	int numKept = 0;
+	for (int i = 0; i < oldlanes; ++i) {
+		// Skip whichever one this is extracting.
+		if (oldfirst + i == first)
+			continue;
+		// If 0 isn't being transfered, easy to keep in its original reg.
+		if (i == 0 && dest != nreg) {
+			numKept++;
+			continue;
+		}
+
+		IRNativeReg freeReg = FindFreeReg(MIPSLoc::FREG, MIPSMap::INIT);
+		if (freeReg != -1 && IsRegRead(MIPSLoc::FREG, oldfirst + i)) {
+			// If there's one free, use it.  Don't modify nreg, though.
+			emit_->VREPLVEI_W(FromNativeReg(freeReg), FromNativeReg(nreg), i);
+
+			// Update accounting.
+			nr[freeReg].isDirty = nr[nreg].isDirty;
+			nr[freeReg].mipsReg = oldfirst + i;
+			mr[oldfirst + i].lane = -1;
+			mr[oldfirst + i].nReg = freeReg;
+			numKept++;
+		}
+	}
+
+	// Unless all other lanes were kept, store.
+	if (nr[nreg].isDirty && numKept < oldlanes - 1) {
+		StoreNativeReg(nreg, oldfirst, oldlanes);
+		// Set false even for regs that were split out, since they were flushed too.
+		for (int i = 0; i < oldlanes; ++i) {
+			if (mr[oldfirst + i].nReg != -1)
+				nr[mr[oldfirst + i].nReg].isDirty = false;
+		}
+	}
+
+	// Next, shuffle the desired element into first place.
+	if (mr[first].lane > 0) {
+		emit_->VREPLVEI_W(FromNativeReg(dest), FromNativeReg(nreg), mr[first].lane);
+	} else if (mr[first].lane <= 0 && dest != nreg) {
+		emit_->VREPLVEI_W(FromNativeReg(dest), FromNativeReg(nreg), 0);
+	}
+
+	// Now update accounting.
+	for (int i = 0; i < oldlanes; ++i) {
+		auto &mreg = mr[oldfirst + i];
+		if (oldfirst + i == first) {
+			mreg.lane = -1;
+			mreg.nReg = dest;
+		} else if (mreg.nReg == nreg && i == 0 && nreg != dest) {
+			// Still in the same register, but no longer a vec.
+			mreg.lane = -1;
+		} else if (mreg.nReg == nreg) {
+			// No longer in a register.
+			mreg.nReg = -1;
+			mreg.lane = -1;
+			mreg.loc = MIPSLoc::MEM;
+		}
+	}
+
+	if (dest != nreg) {
+		nr[dest].isDirty = nr[nreg].isDirty;
+		if (oldfirst == first) {
+			nr[nreg].mipsReg = -1;
+			nr[nreg].isDirty = false;
+		}
+	}
+	nr[dest].mipsReg = first;
+
+	return true;
+}
+
+bool LoongArch64RegCache::Transfer1ToVec(IRNativeReg nreg, IRNativeReg dest, IRReg first, int lanes) {
+	LoongArch64Reg destReg = FromNativeReg(dest);
+	LoongArch64Reg cur[4]{};
+	int numInRegs = 0;
+	u8 blendMask = 0;
+	for (int i = 0; i < lanes; ++i) {
+		if (mr[first + i].lane != -1 || (i != 0 && mr[first + i].spillLockIRIndex >= irIndex_)) {
+			// Can't do it, either double mapped or overlapping vec.
+			return false;
+		}
+
+		if (mr[first + i].nReg == -1) {
+			cur[i] = INVALID_REG;
+			blendMask |= 1 << i;
+		} else {
+			cur[i] = FromNativeReg(mr[first + i].nReg);
+			numInRegs++;
+		}
+	}
+
+	// Shouldn't happen, this should only get called to transfer one in a reg.
+	if (numInRegs == 0)
+		return false;
+
+	// If everything's currently in a reg, move it into this reg.
+	if (lanes == 4) {
+		// Go with an exhaustive approach, only 15 possibilities...
+		if (blendMask == 0) {
+			// y = yw##, x = xz##, dest = xyzw.
+			emit_->VILVL_W(EncodeRegToV(cur[1]), EncodeRegToV(cur[3]), EncodeRegToV(cur[1]));
+			emit_->VILVL_W(EncodeRegToV(cur[0]), EncodeRegToV(cur[2]), EncodeRegToV(cur[0]));
+			emit_->VILVL_W(EncodeRegToV(destReg), EncodeRegToV(cur[1]), EncodeRegToV(cur[0]));
+		} else if (blendMask == 0b0001) {
+			// y = yw##, w = x###, w = xz##, dest = xyzw.
+			emit_->VILVL_W(EncodeRegToV(cur[1]), EncodeRegToV(cur[3]), EncodeRegToV(cur[1]));
+			emit_->FLD_S( SCRATCHF1, CTXREG, GetMipsRegOffset(first + 0));
+			emit_->VEXTRINS_W(EncodeRegToV(cur[3]), EncodeRegToV(SCRATCHF1), 0);
+			emit_->VILVL_W(EncodeRegToV(cur[3]), EncodeRegToV(cur[2]), EncodeRegToV(cur[3]));
+			emit_->VILVL_W(EncodeRegToV(destReg), EncodeRegToV(cur[1]), EncodeRegToV(cur[3]));
+		} else if (blendMask == 0b0010) {
+			// x = xz##, z = y###, z = yw##, dest = xyzw.
+			emit_->VILVL_W(EncodeRegToV(cur[0]), EncodeRegToV(cur[2]), EncodeRegToV(cur[0]));
+			emit_->FLD_S( SCRATCHF1, CTXREG, GetMipsRegOffset(first + 1));
+			emit_->VEXTRINS_W(EncodeRegToV(cur[2]), EncodeRegToV(SCRATCHF1), 0);
+			emit_->VILVL_W(EncodeRegToV(cur[2]), EncodeRegToV(cur[3]), EncodeRegToV(cur[2]));
+			emit_->VILVL_W(EncodeRegToV(destReg), EncodeRegToV(cur[2]), EncodeRegToV(cur[0]));
+		} else if (blendMask == 0b0011 && (first & 1) == 0) {
+			// z = zw##, w = xy##, dest = xyzw.  Mixed lane sizes.
+			emit_->VILVL_W(EncodeRegToV(cur[2]), EncodeRegToV(cur[3]), EncodeRegToV(cur[2]));
+			emit_->FLD_D( SCRATCHF1, CTXREG, GetMipsRegOffset(first + 0));
+			emit_->VEXTRINS_D(EncodeRegToV(cur[3]), EncodeRegToV(SCRATCHF1), 0);
+			emit_->VILVL_W(EncodeRegToV(destReg), EncodeRegToV(cur[2]), EncodeRegToV(cur[3]));
+		} else if (blendMask == 0b0100) {
+			// y = yw##, w = z###, x = xz##, dest = xyzw.
+			emit_->VILVL_W(EncodeRegToV(cur[1]), EncodeRegToV(cur[3]), EncodeRegToV(cur[1]));
+			emit_->FLD_S( SCRATCHF1, CTXREG, GetMipsRegOffset(first + 2));
+			emit_->VEXTRINS_W(EncodeRegToV(cur[3]), EncodeRegToV(SCRATCHF1), 0);
+			emit_->VILVL_W(EncodeRegToV(cur[0]), EncodeRegToV(cur[3]), EncodeRegToV(cur[0]));
+			emit_->VILVL_W(EncodeRegToV(destReg), EncodeRegToV(cur[1]), EncodeRegToV(cur[0]));
+		} else if (blendMask == 0b0101 && (first & 3) == 0) {
+			// y = yw##, w=x#z#, w = xz##, dest = xyzw.
+			emit_->VILVL_W(EncodeRegToV(cur[1]), EncodeRegToV(cur[3]), EncodeRegToV(cur[1]));
+			emit_->VLD(EncodeRegToV(cur[3]), CTXREG, GetMipsRegOffset(first));
+			emit_->VPICKEV_W(EncodeRegToV(cur[3]), EncodeRegToV(cur[3]), EncodeRegToV(cur[3]));
+			emit_->VILVL_W(EncodeRegToV(destReg), EncodeRegToV(cur[1]), EncodeRegToV(cur[3]));
+		} else if (blendMask == 0b0110 && (first & 3) == 0) {
+			if (destReg == cur[0]) {
+				// w = wx##, dest = #yz#, dest = xyz#, dest = xyzw.
+				emit_->VILVL_W(EncodeRegToV(cur[3]), EncodeRegToV(cur[0]), EncodeRegToV(cur[3]));
+				emit_->VLD(EncodeRegToV(destReg), CTXREG, GetMipsRegOffset(first));
+				emit_->VEXTRINS_W(EncodeRegToV(destReg), EncodeRegToV(cur[3]), 1);
+				emit_->VEXTRINS_W(EncodeRegToV(destReg), EncodeRegToV(cur[3]), (3 << 4));
+			} else {
+				// Assumes destReg may equal cur[3].
+				// x = xw##, dest = #yz#, dest = xyz#, dest = xyzw.
+				emit_->VILVL_W(EncodeRegToV(cur[0]), EncodeRegToV(cur[3]), EncodeRegToV(cur[0]));
+				emit_->VLD(EncodeRegToV(destReg), CTXREG, GetMipsRegOffset(first));
+				emit_->VEXTRINS_W(EncodeRegToV(destReg), EncodeRegToV(cur[0]), 0);
+				emit_->VEXTRINS_W(EncodeRegToV(destReg), EncodeRegToV(cur[0]), (3 << 4 | 1));
+			}
+		} else if (blendMask == 0b0111 && (first & 3) == 0 && destReg != cur[3]) {
+			// dest = xyz#, dest = xyzw.
+			emit_->VLD(EncodeRegToV(destReg), CTXREG, GetMipsRegOffset(first));
+			emit_->VEXTRINS_W(EncodeRegToV(destReg), EncodeRegToV(cur[3]), (3 << 4));
+		} else if (blendMask == 0b1000) {
+			// x = xz##, z = w###, y = yw##, dest = xyzw.
+			emit_->VILVL_W(EncodeRegToV(cur[0]), EncodeRegToV(cur[2]), EncodeRegToV(cur[0]));
+			emit_->FLD_S(SCRATCHF1, CTXREG, GetMipsRegOffset(first + 3));
+			emit_->VEXTRINS_W(EncodeRegToV(cur[2]), EncodeRegToV(SCRATCHF1), 0);
+			emit_->VILVL_W(EncodeRegToV(cur[1]), EncodeRegToV(cur[2]), EncodeRegToV(cur[1]));
+			emit_->VILVL_W(EncodeRegToV(destReg), EncodeRegToV(cur[1]), EncodeRegToV(cur[0]));
+		} else if (blendMask == 0b1001 && (first & 3) == 0) {
+			if (destReg == cur[1]) {
+				// w = zy##, dest = x##w, dest = xy#w, dest = xyzw.
+				emit_->VILVL_W(EncodeRegToV(cur[2]), EncodeRegToV(cur[1]), EncodeRegToV(cur[2]));
+				emit_->VLD(EncodeRegToV(destReg), CTXREG, GetMipsRegOffset(first));
+				emit_->VEXTRINS_W(EncodeRegToV(destReg), EncodeRegToV(cur[2]), (1 << 4 | 1));
+				emit_->VEXTRINS_W(EncodeRegToV(destReg), EncodeRegToV(cur[2]), (2 << 4));
+			} else {
+				// Assumes destReg may equal cur[2].
+				// y = yz##, dest = x##w, dest = xy#w, dest = xyzw.
+				emit_->VILVL_W(EncodeRegToV(cur[1]), EncodeRegToV(cur[2]), EncodeRegToV(cur[1]));
+				emit_->VLD(EncodeRegToV(destReg), CTXREG, GetMipsRegOffset(first));
+				emit_->VEXTRINS_W(EncodeRegToV(destReg), EncodeRegToV(cur[1]), (1 << 4));
+				emit_->VEXTRINS_W(EncodeRegToV(destReg), EncodeRegToV(cur[1]), (2 << 4 | 1));
+			}
+		} else if (blendMask == 0b1010 && (first & 3) == 0) {
+			// x = xz##, z = #y#w, z=yw##, dest = xyzw.
+			emit_->VILVL_W(EncodeRegToV(cur[0]), EncodeRegToV(cur[2]), EncodeRegToV(cur[0]));
+			emit_->VLD(EncodeRegToV(cur[2]), CTXREG, GetMipsRegOffset(first));
+			emit_->VPICKOD_W(EncodeRegToV(cur[2]), EncodeRegToV(cur[2]), EncodeRegToV(cur[2]));
+			emit_->VILVL_W(EncodeRegToV(destReg), EncodeRegToV(cur[2]), EncodeRegToV(cur[0]));
+		} else if (blendMask == 0b1011 && (first & 3) == 0 && destReg != cur[2]) {
+			// dest = xy#w, dest = xyzw.
+			emit_->VLD(EncodeRegToV(destReg), CTXREG, GetMipsRegOffset(first));
+			emit_->VEXTRINS_W(EncodeRegToV(destReg), EncodeRegToV(cur[2]), (2 << 4));
+		} else if (blendMask == 0b1100 && (first & 1) == 0) {
+			// x = xy##, y = zw##, dest = xyzw.  Mixed lane sizes.
+			emit_->VILVL_W(EncodeRegToV(cur[0]), EncodeRegToV(cur[1]), EncodeRegToV(cur[0]));
+			emit_->FLD_D(SCRATCHF1, CTXREG, GetMipsRegOffset(first + 2));
+			emit_->VEXTRINS_D(EncodeRegToV(cur[1]), EncodeRegToV(SCRATCHF1), 0);
+			emit_->VILVL_D(EncodeRegToV(destReg), EncodeRegToV(cur[1]), EncodeRegToV(cur[0]));
+		} else if (blendMask == 0b1101 && (first & 3) == 0 && destReg != cur[1]) {
+			// dest = x#zw, dest = xyzw.
+			emit_->VLD(EncodeRegToV(destReg), CTXREG, GetMipsRegOffset(first));
+			emit_->VEXTRINS_W(EncodeRegToV(destReg), EncodeRegToV(cur[1]), (1 << 4));
+		} else if (blendMask == 0b1110 && (first & 3) == 0 && destReg != cur[0]) {
+			// dest = #yzw, dest = xyzw.
+			emit_->VLD(EncodeRegToV(destReg), CTXREG, GetMipsRegOffset(first));
+			emit_->VEXTRINS_W(EncodeRegToV(destReg), EncodeRegToV(cur[0]), 0);
+		} else if (blendMask == 0b1110 && (first & 3) == 0) {
+			// If dest == cur[0] (which may be common), we need a temp...
+			IRNativeReg freeReg = FindFreeReg(MIPSLoc::FREG, MIPSMap::INIT);
+			// Very unfortunate.
+			if (freeReg == INVALID_REG)
+				return false;
+
+			// free = x###, dest = #yzw, dest = xyzw.
+			emit_->VREPLVEI_W(EncodeRegToV(FromNativeReg(freeReg)), EncodeRegToV(cur[0]), 0);
+			emit_->VLD(EncodeRegToV(destReg), CTXREG, GetMipsRegOffset(first));
+			emit_->VEXTRINS_W(EncodeRegToV(destReg), EncodeRegToV(FromNativeReg(freeReg)), 0);
+		} else {
+			return false;
+		}
+	} else {
+		return false;
+	}
+
+	mr[first].lane = 0;
+	for (int i = 0; i < lanes; ++i) {
+		if (mr[first + i].nReg != -1) {
+			// If this was dirty, the combined reg is now dirty.
+			if (nr[mr[first + i].nReg].isDirty)
+				nr[dest].isDirty = true;
+
+			// Throw away the other register we're no longer using.
+			if (i != 0)
+				DiscardNativeReg(mr[first + i].nReg);
+		}
+
+		// And set it as using the new one.
+		mr[first + i].lane = i;
+		mr[first + i].loc = MIPSLoc::FREG;
+		mr[first + i].nReg = dest;
+	}
+
+	if (dest != nreg) {
+		nr[dest].mipsReg = first;
+		nr[nreg].mipsReg = -1;
+		nr[nreg].isDirty = false;
+	}
+
+	return true;
+}
+
 LoongArch64Reg LoongArch64RegCache::R(IRReg mipsReg) {
 	_dbg_assert_(IsValidGPR(mipsReg));
 	_dbg_assert_(mr[mipsReg].loc == MIPSLoc::REG || mr[mipsReg].loc == MIPSLoc::REG_IMM);
