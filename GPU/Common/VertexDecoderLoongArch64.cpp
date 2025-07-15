@@ -28,6 +28,14 @@
 
 alignas(16) static float bones[16 * 8];
 
+alignas(16) static const float by128_11[4] = {
+	1.0f / 128.0f, 1.0f / 128.0f, 1.0f, 1.0f,
+};
+
+alignas(16) static const float by32768_11[4] = {
+	1.0f / 32768.0f, 1.0f / 32768.0f, 1.0f, 1.0f,
+};
+
 static const float by128 = 1.0f / 128.0f;
 static const float by32768 = 1.0f / 32768.0f;
 static const float const65535 = 65535.0f;
@@ -36,11 +44,11 @@ using namespace LoongArch64Gen;
 
 static const LoongArch64Reg srcReg = R4;        // a0
 static const LoongArch64Reg dstReg = R5;        // a1
-static const LoongArch64Reg counterReg = R6;     // a2
-static const LoongArch64Reg uvScaleReg = R7;    // a3 - Unused
-static const LoongArch64Reg tempReg1 = R7;      // a3 
+static const LoongArch64Reg counterReg = R6;    // a2
+
+static const LoongArch64Reg tempReg1 = R7;      // a3
 static const LoongArch64Reg tempReg2 = R8;      // a4
-static const LoongArch64Reg tempReg3 = R9;     // a5
+static const LoongArch64Reg tempReg3 = R9;      // a5
 static const LoongArch64Reg scratchReg = R10;   // a6
 
 static const LoongArch64Reg morphBaseReg = R12; // t0
@@ -59,21 +67,22 @@ static const LoongArch64Reg fpScratchReg4 = F7;
 static const LoongArch64Reg lsxScratchReg = V2;
 static const LoongArch64Reg lsxScratchReg2 = V3;
 
+static const LoongArch64Reg fpSrc[4] = {F2, F3, F10, F11};
+
 static const LoongArch64Reg lsxScaleOffsetReg = V0;
-static const LoongArch64Reg lsxOffsetScaleReg = V0;
+static const LoongArch64Reg lsxOffsetScaleReg = V1;
 
 static const LoongArch64Reg srcLSX = V8;
 static const LoongArch64Reg accLSX = V9;
 
-static const LoongArch64Reg by128LSX = V8;
-static const LoongArch64Reg by32768LSX = V9;
+static const LoongArch64Reg by128LSX = V14;
+static const LoongArch64Reg by32768LSX = V15;
 
 static const LoongArch64Reg lsxWeightRegs[2] = { V12, V13 };
 
 // We need to save these fregs when using them. (for example, skinning)
 static constexpr LoongArch64Reg regs_to_save_fp[]{ F24, F25, F26, F27, F28, F29, F30, F31 };
 
-// Similar to ARM64
 // V4-V7 is the generated matrix that we multiply things by.
 // V8, V9 are accumulators/scratch for matrix mul.
 // V10, V11 are more scratch for matrix mul.
@@ -172,8 +181,12 @@ JittedVertexDecoder VertexDecoderJitCache::Compile(const VertexDecoder &dec, int
 		}
 	}
 
-    QuickFLI(32, by128LSX, by128, scratchReg);
-	QuickFLI(32, by32768LSX, by32768, scratchReg);
+    // Set rounding mode to RZ (Rounding to Zero)
+	SLTUI(scratchReg, R_ZERO, 1);
+	MOVGR2FCSR(FCSR3, scratchReg);
+
+    QuickFLI(32, F14, by128, scratchReg);
+	QuickFLI(32, F15, by32768, scratchReg);
     VREPLVEI_W(by128LSX, by128LSX, 0);
     VREPLVEI_W(by32768LSX, by32768LSX, 0);
 
@@ -189,31 +202,36 @@ JittedVertexDecoder VertexDecoderJitCache::Compile(const VertexDecoder &dec, int
         }
         _assert_(saveOffset <= saveSize);
     }
-    
+
     // Keep the scale/offset in a few fp registers if we need it.
 	if (prescaleStep) {
 		VLD(lsxScaleOffsetReg, R7, 0);
-        VSHUF4I_D(lsxOffsetScaleReg, lsxScaleOffsetReg, 1);
-        // TODO: deal with by128 and more
-        
-        
-        
+        if ((dec.VertexType() & GE_VTYPE_TC_MASK) == GE_VTYPE_TC_8BIT) {
+			LI(scratchReg, &by128_11[0]);
+			VLD(lsxScratchReg, scratchReg, 0);
+			VFMUL_S(lsxScaleOffsetReg, lsxScaleOffsetReg, lsxScratchReg);
+		} else if ((dec.VertexType() & GE_VTYPE_TC_MASK) == GE_VTYPE_TC_16BIT) {
+			LI(scratchReg, &by32768_11[0]);
+			VLD(lsxScratchReg, scratchReg, 0);
+			VFMUL_S(lsxScaleOffsetReg, lsxScaleOffsetReg, lsxScratchReg);
+        }
+        VSHUF4I_W(lsxOffsetScaleReg, lsxScaleOffsetReg, (1 << 6 | 0 << 4 | 3 << 2 | 2));
 	}
-	
+
     // Add code to convert matrices to 4x4.
     // Later we might want to do this when the matrices are loaded instead.
     if (dec.skinInDecode) {
 		// Copying from R7 to R8
-		LI(R7, gstate.boneMatrix);
+		LI(R7, &gstate.boneMatrix[0]);
 		// This is only used with more than 4 weights, and points to the first of them.
 		if (dec.nweights > 4)
 			LI(R8, &bones[16 * 4]);
 
 		// Construct a mask to zero out the top lane with.
-		VOR_V(V3 ,V3, V3);
-		VORN_V(V4, V3, V3);
+		VOR_V(V3, V3, V3);
+		VORN_V(V3, V3, V3);
         VINSGR2VR_W(V3, LoongArch64Gen::R_ZERO, 3);
-		
+
 		for (int i = 0; i < dec.nweights; i++) {
 			// This loads V4, V5, V6, V7 with 12 floats.
             // And sort those floats into 4 regs: ABCD EFGH IJKL -> ABC0 DEF0 GHI0 JKL0.
@@ -223,10 +241,6 @@ JittedVertexDecoder VertexDecoderJitCache::Compile(const VertexDecoder &dec, int
             VLD(V6, R7, 24);
             VLD(V7, R7,36);
             ADDI_D(R7, R7, 48);
-            VINSGR2VR_W(V4, LoongArch64Gen::R_ZERO, 3);
-            VINSGR2VR_W(V5, LoongArch64Gen::R_ZERO, 3);
-            VINSGR2VR_W(V6, LoongArch64Gen::R_ZERO, 3);
-            VINSGR2VR_W(V7, LoongArch64Gen::R_ZERO, 3);
 
 			LoongArch64Reg matrixRow[4]{ V4, V5, V6, V7 };
 			// First four matrices are in registers Q16+.
@@ -242,9 +256,10 @@ JittedVertexDecoder VertexDecoderJitCache::Compile(const VertexDecoder &dec, int
 
 			if (i >= 4) {
                 VST(matrixRow[0], R8, 0);
-                VST(matrixRow[0], R8, 16);
-                VST(matrixRow[0], R8, 32);
-                VST(matrixRow[0], R8, 48);
+                VST(matrixRow[1], R8, 16);
+                VST(matrixRow[2], R8, 32);
+                VST(matrixRow[3], R8, 48);
+                ADDI_D(R8, R8, 64);
             }
 		}
 	}
@@ -351,24 +366,24 @@ void VertexDecoderJitCache::Jit_ApplyWeights() {
 			break;
 		case 1:
             VREPLVEI_W(lsxScratchReg, lsxWeightRegs[0], 1);
-			VFMADD_S(V4, V20, lsxScratchReg, lsxScratchReg);
-			VFMADD_S(V5, V21, lsxScratchReg, lsxScratchReg);
-			VFMADD_S(V6, V22, lsxScratchReg, lsxScratchReg);
-			VFMADD_S(V7, V23, lsxScratchReg, lsxScratchReg);
+			VFMADD_S(V4, V20, lsxScratchReg, V4);
+			VFMADD_S(V5, V21, lsxScratchReg, V5);
+			VFMADD_S(V6, V22, lsxScratchReg, V6);
+			VFMADD_S(V7, V23, lsxScratchReg, V7);
 			break;
 		case 2:
 			VREPLVEI_W(lsxScratchReg, lsxWeightRegs[0], 2);
-			VFMADD_S(V4, V24, lsxScratchReg, lsxScratchReg);
-			VFMADD_S(V5, V25, lsxScratchReg, lsxScratchReg);
-			VFMADD_S(V6, V26, lsxScratchReg, lsxScratchReg);
-			VFMADD_S(V7, V27, lsxScratchReg, lsxScratchReg);
+			VFMADD_S(V4, V24, lsxScratchReg, V4);
+			VFMADD_S(V5, V25, lsxScratchReg, V5);
+			VFMADD_S(V6, V26, lsxScratchReg, V6);
+			VFMADD_S(V7, V27, lsxScratchReg, V7);
 			break;
 		case 3:
 			VREPLVEI_W(lsxScratchReg, lsxWeightRegs[0], 3);
-			VFMADD_S(V4, V28, lsxScratchReg, lsxScratchReg);
-			VFMADD_S(V5, V29, lsxScratchReg, lsxScratchReg);
-			VFMADD_S(V6, V30, lsxScratchReg, lsxScratchReg);
-			VFMADD_S(V7, V31, lsxScratchReg, lsxScratchReg);
+			VFMADD_S(V4, V28, lsxScratchReg, V4);
+			VFMADD_S(V5, V29, lsxScratchReg, V5);
+			VFMADD_S(V6, V30, lsxScratchReg, V6);
+			VFMADD_S(V7, V31, lsxScratchReg, V7);
 			break;
 		default:
 			// Matrices 4+ need to be loaded from memory.
@@ -376,11 +391,12 @@ void VertexDecoderJitCache::Jit_ApplyWeights() {
             VLD(V9, scratchReg, 16);
             VLD(V10, scratchReg, 32);
             VLD(V11, scratchReg, 48);
+            ADDI_D(scratchReg, scratchReg, 64);
             VREPLVEI_W(lsxScratchReg, lsxWeightRegs[i >> 2], i & 3);
-			VFMADD_S(V4, V8, lsxScratchReg, lsxScratchReg);
-			VFMADD_S(V5, V9, lsxScratchReg, lsxScratchReg);
-			VFMADD_S(V6, V10, lsxScratchReg, lsxScratchReg);
-			VFMADD_S(V7, V11, lsxScratchReg, lsxScratchReg);
+			VFMADD_S(V4, V8, lsxScratchReg, V4);
+			VFMADD_S(V5, V9, lsxScratchReg, V5);
+			VFMADD_S(V6, V10, lsxScratchReg, V6);
+			VFMADD_S(V7, V11, lsxScratchReg, V7);
 			break;
 		}
 	}
@@ -490,6 +506,389 @@ void VertexDecoderJitCache::Jit_WeightsU16Skin() {
         VFMUL_S(lsxWeightRegs[1], lsxWeightRegs[1], by32768LSX);
 	}
 	Jit_ApplyWeights();
+}
+
+void VertexDecoderJitCache::Jit_WeightsFloatSkin() {
+	switch (dec_->nweights) {
+	case 1:
+        FLD_S(F12, srcReg, 0); // Load 32-bits to lsxWeightRegs[0]
+		break;
+	case 2:
+        FLD_D(F12, srcReg, 0); // Load 64-bits to lsxWeightRegs[0]
+		break;
+	case 3:
+	case 4:
+		VLD(lsxWeightRegs[0], srcReg, 0);
+		break;
+
+	case 5:
+		VLD(lsxWeightRegs[0], srcReg, 0);
+		FLD_S(F13, srcReg, 16); // Load 32-bits to lsxWeightRegs[1]
+		break;
+	case 6:
+		VLD(lsxWeightRegs[0], srcReg, 0);
+		FLD_D(F13, srcReg, 16); // Load 64-bits to lsxWeightRegs[1]
+		break;
+	case 7:
+	case 8:
+		VLD(lsxWeightRegs[0], srcReg, 0);
+		VLD(lsxWeightRegs[1], srcReg, 16);
+		break;
+	}
+	Jit_ApplyWeights();
+}
+
+void VertexDecoderJitCache::Jit_Color8888() {
+	LD_WU(tempReg1, srcReg, dec_->coloff);
+
+	// Set tempReg2=-1 if full alpha, 0 otherwise.
+	SRLI_D(tempReg2, tempReg1, 24);
+	SLTUI(tempReg2, tempReg2, 0xFF);
+	ADDI_D(tempReg2, tempReg2, -1);
+
+	// Now use that as a mask to clear fullAlpha.
+	AND(fullAlphaReg, fullAlphaReg, tempReg2);
+
+	ST_W(tempReg1, dstReg, dec_->decFmt.c0off);
+}
+
+void VertexDecoderJitCache::Jit_Color4444() {
+	LD_HU(tempReg1, srcReg, dec_->coloff);
+
+	// Red...
+	ANDI(tempReg2, tempReg1, 0x0F);
+	// Move green left to position 8.
+	ANDI(tempReg3, tempReg1, 0xF0);
+	SLLI_D(tempReg3, tempReg3, 4);
+	OR(tempReg2, tempReg2, tempReg3);
+	// For blue, we modify tempReg1 since immediates are sign extended after 11 bits.
+	SRLI_D(tempReg1, tempReg1, 8);
+	ANDI(tempReg3, tempReg1, 0x0F);
+	SLLI_D(tempReg3, tempReg3, 16);
+	OR(tempReg2, tempReg2, tempReg3);
+	// And now alpha, moves 20 to get to 24.
+	ANDI(tempReg3, tempReg1, 0xF0);
+	SLLI_D(tempReg3, tempReg3, 20);
+	OR(tempReg2, tempReg2, tempReg3);
+
+	// Now we swizzle.
+	SLLI_D(tempReg3, tempReg2, 4);
+	OR(tempReg2, tempReg2, tempReg3);
+
+	// Color is down, now let's say the fullAlphaReg flag from tempReg1 (still has alpha.)
+	// Set tempReg1=-1 if full alpha, 0 otherwise.
+	SLTUI(tempReg1, tempReg1, 0xF0);
+	ADDI_D(tempReg1, tempReg1, -1);
+
+	// Now use that as a mask to clear fullAlpha.
+	AND(fullAlphaReg, fullAlphaReg, tempReg1);
+
+	ST_W(tempReg2, dstReg, dec_->decFmt.c0off);
+}
+
+void VertexDecoderJitCache::Jit_Color565() {
+	LD_HU(tempReg1, srcReg, dec_->coloff);
+
+	// Start by extracting green.
+	SRLI_D(tempReg2, tempReg1, 5);
+	ANDI(tempReg2, tempReg2, 0x3F);
+	// And now swizzle 6 -> 8, using a wall to clear bits.
+	SRLI_D(tempReg3, tempReg2, 4);
+	SLLI_D(tempReg3, tempReg3, 8);
+	SLLI_D(tempReg2, tempReg2, 2 + 8);
+	OR(tempReg2, tempReg2, tempReg3);
+
+	// Now pull blue out using a wall to isolate it.
+	SRLI_D(tempReg3, tempReg1, 11);
+	// And now isolate red and combine them.
+	ANDI(tempReg1, tempReg1, 0x1F);
+	SLLI_D(tempReg3, tempReg3, 16);
+	OR(tempReg1, tempReg1, tempReg3);
+	// Now we swizzle them together.
+	SRLI_D(tempReg3, tempReg1, 2);
+	SLLI_D(tempReg1, tempReg1, 3);
+	OR(tempReg1, tempReg1, tempReg3);
+	// But we have to clear the bits now which is annoying.
+	LI(tempReg3, 0x00FF00FF);
+	AND(tempReg1, tempReg1, tempReg3);
+
+	// Now add green back in, and then make an alpha FF and add it too.
+	OR(tempReg1, tempReg1, tempReg2);
+	LI(tempReg3, (s32)0xFF000000);
+	OR(tempReg1, tempReg1, tempReg3);
+
+	ST_W(tempReg1, dstReg, dec_->decFmt.c0off);
+}
+
+void VertexDecoderJitCache::Jit_Color5551() {
+	LD_HU(tempReg1, srcReg, dec_->coloff);
+
+	// Separate each color.
+	SRLI_D(tempReg2, tempReg1, 5);
+	SRLI_D(tempReg3, tempReg1, 10);
+
+	// Set scratchReg to -1 if the alpha bit is set.
+	SLLI_W(scratchReg, tempReg1, 16);
+	SRAI_W(scratchReg, scratchReg, 31);
+	// Now we can mask the flag.
+	AND(fullAlphaReg, fullAlphaReg, scratchReg);
+
+	// Let's move alpha into position.
+	SLLI_D(scratchReg, scratchReg, 24);
+
+	// Mask each.
+	ANDI(tempReg1, tempReg1, 0x1F);
+	ANDI(tempReg2, tempReg2, 0x1F);
+	ANDI(tempReg3, tempReg3, 0x1F);
+	// And shift into position.
+	SLLI_D(tempReg2, tempReg2, 8);
+	SLLI_D(tempReg3, tempReg3, 16);
+	// Combine RGB together.
+	OR(tempReg1, tempReg1, tempReg2);
+	OR(tempReg1, tempReg1, tempReg3);
+	// Swizzle our 5 -> 8
+	SRLI_D(tempReg2, tempReg1, 2);
+	SLLI_D(tempReg1, tempReg1, 3);
+	// Mask out the overflow in tempReg2 and combine.
+	LI(tempReg3, 0x00070707);
+	AND(tempReg2, tempReg2, tempReg3);
+	OR(tempReg1, tempReg1, tempReg2);
+
+	// Add in alpha and we're done.
+	OR(tempReg1, tempReg1, scratchReg);
+
+	ST_W(tempReg1, dstReg, dec_->decFmt.c0off);
+}
+
+void VertexDecoderJitCache::Jit_TcU16ThroughToFloat() {
+	LD_HU(tempReg1, srcReg, dec_->tcoff + 0);
+	LD_HU(tempReg2, srcReg, dec_->tcoff + 2);
+
+	auto updateSide = [&](LoongArch64Reg src, bool greater, LoongArch64Reg dst) {
+		FixupBranch skip = BLT(greater ? dst : src, greater ? src : dst);
+		MOVE(dst, src);
+		SetJumpTarget(skip);
+	};
+
+	updateSide(tempReg1, false, boundsMinUReg);
+	updateSide(tempReg1, true, boundsMaxUReg);
+	updateSide(tempReg2, false, boundsMinVReg);
+	updateSide(tempReg2, true, boundsMaxVReg);
+
+    VINSGR2VR_W(lsxScratchReg, tempReg1, 0);
+    VINSGR2VR_W(lsxScratchReg, tempReg2, 1);
+	VFFINT_S_WU(lsxScratchReg, lsxScratchReg);
+	FST_D(fpSrc[0], dstReg, dec_->decFmt.uvoff);
+}
+
+void VertexDecoderJitCache::Jit_TcFloatThrough() {
+	// Just copy 64 bits.  Might be nice if we could detect misaligned load perf.
+	LD_W(tempReg1, srcReg, dec_->tcoff);
+	LD_W(tempReg2, srcReg, dec_->tcoff + 4);
+	ST_W(tempReg1, dstReg, dec_->decFmt.uvoff);
+	ST_W(tempReg2, dstReg, dec_->decFmt.uvoff + 4);
+}
+
+void VertexDecoderJitCache::Jit_TcFloat() {
+	// Just copy 64 bits.  Might be nice if we could detect misaligned load perf.
+	LD_W(tempReg1, srcReg, dec_->tcoff);
+	LD_W(tempReg2, srcReg, dec_->tcoff + 4);
+	ST_W(tempReg1, dstReg, dec_->decFmt.uvoff);
+	ST_W(tempReg2, dstReg, dec_->decFmt.uvoff + 4);
+}
+
+void VertexDecoderJitCache::Jit_TcU8Prescale() {
+	LD_HU(scratchReg, srcReg, dec_->tcoff);
+	VINSGR2VR_H(lsxScratchReg, scratchReg, 0);
+	VSLLWIL_HU_BU(lsxScratchReg, lsxScratchReg, 0); // Widen to 16-bit
+	VSLLWIL_WU_HU(lsxScratchReg, lsxScratchReg, 0); // Widen to 32-bit
+	VFFINT_S_WU(lsxScratchReg, lsxScratchReg);
+	VFMADD_S(lsxScratchReg, lsxScratchReg, lsxScaleOffsetReg, lsxOffsetScaleReg);
+	FST_D(fpSrc[0], dstReg, dec_->decFmt.uvoff); // save the lower 64-bit of lsxScratchReg
+}
+
+void VertexDecoderJitCache::Jit_TcU8ToFloat() {
+	LD_HU(scratchReg, srcReg, dec_->tcoff);
+	VINSGR2VR_H(lsxScratchReg, scratchReg, 0);
+	VSLLWIL_HU_BU(lsxScratchReg, lsxScratchReg, 0); // Widen to 16-bit
+	VSLLWIL_WU_HU(lsxScratchReg, lsxScratchReg, 0); // Widen to 32-bit
+	VFFINT_S_WU(lsxScratchReg, lsxScratchReg);
+	VFMUL_S(lsxScratchReg, lsxScratchReg, by128LSX);
+	FST_D(fpSrc[0], dstReg, dec_->decFmt.uvoff); // save the lower 64-bit of lsxScratchReg
+}
+
+void VertexDecoderJitCache::Jit_TcU16Prescale() {
+    FLD_S(fpSrc[0], srcReg, dec_->tcoff);
+	VSLLWIL_WU_HU(lsxScratchReg, lsxScratchReg, 0); // Widen to 32-bit
+	VFFINT_S_WU(lsxScratchReg, lsxScratchReg);
+	VFMADD_S(lsxScratchReg, lsxScratchReg, lsxScaleOffsetReg, lsxOffsetScaleReg);
+	FST_D(fpSrc[0], dstReg, dec_->decFmt.uvoff); // save the lower 64-bit of lsxScratchReg
+}
+
+void VertexDecoderJitCache::Jit_TcU16ToFloat() {
+    FLD_S(fpSrc[0], srcReg, dec_->tcoff);
+	VSLLWIL_WU_HU(lsxScratchReg, lsxScratchReg, 0); // Widen to 32-bit
+	VFFINT_S_WU(lsxScratchReg, lsxScratchReg);
+	VFMUL_S(lsxScratchReg, lsxScratchReg, by32768LSX);
+	FST_D(fpSrc[0], dstReg, dec_->decFmt.uvoff); // save the lower 64-bit of lsxScratchReg
+}
+
+void VertexDecoderJitCache::Jit_TcFloatPrescale() {
+	FLD_D(fpSrc[0], srcReg, dec_->tcoff); // load to the lower 64-bit of lsxScratchReg
+	VFMADD_S(lsxScratchReg, lsxScratchReg, lsxScaleOffsetReg, lsxOffsetScaleReg);
+	FST_D(fpSrc[0], dstReg, dec_->decFmt.uvoff); // save the lower 64-bit of lsxScratchReg
+}
+
+void VertexDecoderJitCache::Jit_PosS8() {
+	Jit_AnyS8ToFloat(dec_->posoff);
+	VST(lsxScratchReg, dstReg, dec_->decFmt.posoff);
+}
+
+void VertexDecoderJitCache::Jit_PosS16() {
+	Jit_AnyS16ToFloat(dec_->posoff);
+	VST(lsxScratchReg, dstReg, dec_->decFmt.posoff);
+}
+
+void VertexDecoderJitCache::Jit_PosFloat() {
+	// Just copy 12 bytes, play with over read/write later.
+	LD_W(tempReg1, srcReg, dec_->posoff + 0);
+	LD_W(tempReg2, srcReg, dec_->posoff + 4);
+	LD_W(tempReg3, srcReg, dec_->posoff + 8);
+	ST_W(tempReg1, dstReg, dec_->decFmt.posoff + 0);
+	ST_W(tempReg2, dstReg, dec_->decFmt.posoff + 4);
+	ST_W(tempReg3, dstReg, dec_->decFmt.posoff + 8);
+}
+
+void VertexDecoderJitCache::Jit_PosS8Through() {
+	// 8-bit positions in throughmode always decode to 0, depth included.
+	ST_W(R_ZERO, dstReg, dec_->decFmt.posoff + 0);
+	ST_W(R_ZERO, dstReg, dec_->decFmt.posoff + 4);
+	ST_W(R_ZERO, dstReg, dec_->decFmt.posoff + 8);
+}
+
+void VertexDecoderJitCache::Jit_PosS16Through() {
+	// Start with X and Y (which are signed.)
+	LD_H(tempReg1, srcReg, dec_->posoff + 0);
+	LD_H(tempReg2, srcReg, dec_->posoff + 2);
+	// This one, Z, has to be unsigned.
+	LD_HU(tempReg3, srcReg, dec_->posoff + 4);
+	MOVGR2FR_W(fpSrc[0], tempReg1);
+	MOVGR2FR_W(fpSrc[1], tempReg2);
+	MOVGR2FR_W(fpSrc[2], tempReg3);
+	FFINT_S_W(fpSrc[0], fpSrc[0]);
+	FFINT_S_W(fpSrc[1], fpSrc[1]);
+	FFINT_S_W(fpSrc[2], fpSrc[2]);
+	FST_S(fpSrc[0], dstReg, dec_->decFmt.posoff + 0);
+	FST_S(fpSrc[1], dstReg, dec_->decFmt.posoff + 4);
+	FST_S(fpSrc[2], dstReg, dec_->decFmt.posoff + 8);
+}
+
+void VertexDecoderJitCache::Jit_PosFloatThrough() {
+	// Start by copying 8 bytes, then handle Z separately to clamp it.
+	LD_W(tempReg1, srcReg, dec_->posoff + 0);
+	LD_W(tempReg2, srcReg, dec_->posoff + 4);
+	FLD_S(fpSrc[2], srcReg, dec_->posoff + 8);
+	ST_W(tempReg1, dstReg, dec_->decFmt.posoff + 0);
+	ST_W(tempReg2, dstReg, dec_->decFmt.posoff + 4);
+
+	// Load the constant zero and clamp.
+	MOVGR2FR_W(fpScratchReg, R_ZERO);
+	// Is it worth a seperate reg?
+	LI(scratchReg, const65535);
+	MOVGR2FR_W(fpScratchReg2, scratchReg);
+	FMAX_S(fpSrc[2], fpSrc[2], fpScratchReg);
+	FMIN_S(fpSrc[2], fpSrc[2], fpScratchReg2);
+	FST_S(fpSrc[2], dstReg, dec_->decFmt.posoff + 8);
+}
+
+void VertexDecoderJitCache::Jit_NormalS8() {
+	LD_B(tempReg1, srcReg, dec_->nrmoff + 0);
+	LD_B(tempReg2, srcReg, dec_->nrmoff + 1);
+	LD_B(tempReg3, srcReg, dec_->nrmoff + 2);
+	ST_B(tempReg1, dstReg, dec_->decFmt.nrmoff + 0);
+	ST_B(tempReg2, dstReg, dec_->decFmt.nrmoff + 1);
+	ST_B(tempReg3, dstReg, dec_->decFmt.nrmoff + 2);
+	ST_B(R_ZERO, dstReg, dec_->decFmt.nrmoff + 3);
+}
+
+// Copy 6 bytes and then 2 zeroes.
+void VertexDecoderJitCache::Jit_NormalS16() {
+	LD_H(tempReg1, srcReg, dec_->nrmoff + 0);
+	LD_H(tempReg2, srcReg, dec_->nrmoff + 2);
+	LD_H(tempReg3, srcReg, dec_->nrmoff + 4);
+	ST_H(tempReg1, dstReg, dec_->decFmt.nrmoff + 0);
+	ST_H(tempReg2, dstReg, dec_->decFmt.nrmoff + 2);
+	ST_H(tempReg3, dstReg, dec_->decFmt.nrmoff + 4);
+	ST_H(R_ZERO, dstReg, dec_->decFmt.nrmoff + 6);
+}
+
+void VertexDecoderJitCache::Jit_NormalFloat() {
+	// Just copy 12 bytes, play with over read/write later.
+	LD_W(tempReg1, srcReg, dec_->nrmoff + 0);
+	LD_W(tempReg2, srcReg, dec_->nrmoff + 4);
+	LD_W(tempReg3, srcReg, dec_->nrmoff + 8);
+	ST_W(tempReg1, dstReg, dec_->decFmt.nrmoff + 0);
+	ST_W(tempReg2, dstReg, dec_->decFmt.nrmoff + 4);
+	ST_W(tempReg3, dstReg, dec_->decFmt.nrmoff + 8);
+}
+
+void VertexDecoderJitCache::Jit_NormalS8Skin() {
+	Jit_AnyS8ToFloat(dec_->nrmoff);
+	Jit_WriteMatrixMul(dec_->decFmt.nrmoff, false);
+}
+
+void VertexDecoderJitCache::Jit_NormalS16Skin() {
+	Jit_AnyS16ToFloat(dec_->nrmoff);
+	Jit_WriteMatrixMul(dec_->decFmt.nrmoff, false);
+}
+
+void VertexDecoderJitCache::Jit_NormalFloatSkin() {
+	VLD(lsxScratchReg, srcReg, dec_->nrmoff);
+	Jit_WriteMatrixMul(dec_->decFmt.nrmoff, false);
+}
+
+void VertexDecoderJitCache::Jit_PosS8Skin() {
+	Jit_AnyS8ToFloat(dec_->posoff);
+	Jit_WriteMatrixMul(dec_->decFmt.posoff, true);
+}
+
+void VertexDecoderJitCache::Jit_PosS16Skin() {
+	Jit_AnyS16ToFloat(dec_->posoff);
+	Jit_WriteMatrixMul(dec_->decFmt.posoff, true);
+}
+
+void VertexDecoderJitCache::Jit_PosFloatSkin() {
+	VLD(lsxScratchReg, srcReg, dec_->posoff);
+	Jit_WriteMatrixMul(dec_->decFmt.posoff, true);
+}
+
+void VertexDecoderJitCache::Jit_AnyS8ToFloat(int srcoff) {
+	FLD_S(fpSrc[0], srcReg, srcoff); // Directly load to lsxScratchReg.
+	VSLLWIL_H_B(lsxScratchReg, lsxScratchReg, 0);
+	VSLLWIL_W_H(lsxScratchReg, lsxScratchReg, 0);
+	VFFINT_S_W(lsxScratchReg, lsxScratchReg);
+	VFMUL_S(lsxScratchReg, lsxScratchReg, by128LSX);
+}
+
+void VertexDecoderJitCache::Jit_AnyS16ToFloat(int srcoff) {
+	FLD_D(fpSrc[0], srcReg, srcoff); // Directly load to lsxScratchReg.
+	VSLLWIL_W_H(lsxScratchReg, lsxScratchReg, 0);
+	VFFINT_S_W(lsxScratchReg, lsxScratchReg);
+	VFMUL_S(lsxScratchReg, lsxScratchReg, by32768LSX);
+}
+
+void VertexDecoderJitCache::Jit_WriteMatrixMul(int outOff, bool pos) {
+	// Multiply lsxScratchReg with the matrix sitting in V4-V7.
+    VREPLVEI_W(lsxScratchReg2, lsxScratchReg, 0);
+	VFMUL_S(accLSX, V4, lsxScratchReg2);
+	VREPLVEI_W(lsxScratchReg2, lsxScratchReg, 1);
+	VFMADD_S(accLSX, V5, lsxScratchReg2, accLSX);
+	VREPLVEI_W(lsxScratchReg2, lsxScratchReg, 2);
+	VFMADD_S(accLSX, V6, lsxScratchReg2, accLSX);
+	if (pos) {
+		VFADD_S(accLSX, accLSX, V7);
+	}
+	VST(accLSX, dstReg, outOff);
 }
 
 #endif // PPSSPP_ARCH(LOONGARCH64)

@@ -66,7 +66,7 @@ typedef MIPSGen::MIPSCodeBlock BaseCodeBlock;
 #elif PPSSPP_ARCH(RISCV64)
 typedef RiscVGen::RiscVCodeBlock BaseCodeBlock;
 #elif PPSSPP_ARCH(LOONGARCH64) 
-LoongArch64Gen::LoongArch64CodeBlock BaseCodeBlock;
+typedef LoongArch64Gen::LoongArch64CodeBlock BaseCodeBlock;
 #else
 typedef FakeGen::FakeXCodeBlock BaseCodeBlock;
 #endif
