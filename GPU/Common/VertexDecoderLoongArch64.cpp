@@ -802,34 +802,24 @@ void VertexDecoderJitCache::Jit_PosFloatThrough() {
 }
 
 void VertexDecoderJitCache::Jit_NormalS8() {
-	LD_B(tempReg1, srcReg, dec_->nrmoff + 0);
-	LD_B(tempReg2, srcReg, dec_->nrmoff + 1);
-	LD_B(tempReg3, srcReg, dec_->nrmoff + 2);
-	ST_B(tempReg1, dstReg, dec_->decFmt.nrmoff + 0);
-	ST_B(tempReg2, dstReg, dec_->decFmt.nrmoff + 1);
-	ST_B(tempReg3, dstReg, dec_->decFmt.nrmoff + 2);
-	ST_B(R_ZERO, dstReg, dec_->decFmt.nrmoff + 3);
+	LD_W(tempReg1, srcReg, dec_->nrmoff + 0);
+	BSTRINS_D(tempReg1, R_ZERO, 31, 24);
+	ST_W(tempReg1, dstReg, dec_->decFmt.nrmoff + 0);
 }
 
 // Copy 6 bytes and then 2 zeroes.
 void VertexDecoderJitCache::Jit_NormalS16() {
-	LD_H(tempReg1, srcReg, dec_->nrmoff + 0);
-	LD_H(tempReg2, srcReg, dec_->nrmoff + 2);
-	LD_H(tempReg3, srcReg, dec_->nrmoff + 4);
-	ST_H(tempReg1, dstReg, dec_->decFmt.nrmoff + 0);
-	ST_H(tempReg2, dstReg, dec_->decFmt.nrmoff + 2);
-	ST_H(tempReg3, dstReg, dec_->decFmt.nrmoff + 4);
-	ST_H(R_ZERO, dstReg, dec_->decFmt.nrmoff + 6);
+	LD_D(tempReg1, srcReg, dec_->nrmoff + 0);
+	BSTRINS_D(tempReg1, R_ZERO, 63, 48);
+	ST_D(tempReg1, dstReg, dec_->decFmt.nrmoff + 0);
 }
 
 void VertexDecoderJitCache::Jit_NormalFloat() {
 	// Just copy 12 bytes, play with over read/write later.
-	LD_W(tempReg1, srcReg, dec_->nrmoff + 0);
-	LD_W(tempReg2, srcReg, dec_->nrmoff + 4);
-	LD_W(tempReg3, srcReg, dec_->nrmoff + 8);
-	ST_W(tempReg1, dstReg, dec_->decFmt.nrmoff + 0);
-	ST_W(tempReg2, dstReg, dec_->decFmt.nrmoff + 4);
-	ST_W(tempReg3, dstReg, dec_->decFmt.nrmoff + 8);
+	LD_D(tempReg1, srcReg, dec_->nrmoff + 0);
+	LD_W(tempReg2, srcReg, dec_->nrmoff + 8);
+	ST_D(tempReg1, dstReg, dec_->decFmt.nrmoff + 0);
+	ST_W(tempReg2, dstReg, dec_->decFmt.nrmoff + 8);
 }
 
 void VertexDecoderJitCache::Jit_NormalS8Skin() {
